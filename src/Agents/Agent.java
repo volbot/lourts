@@ -1,14 +1,25 @@
 package Agents;
 
-public class Agent {
-    private final Reputation facmap;
-    private final Reputation charmap;
-    private final Reputation locmap;
+import Data.Reputation;
 
-    public Agent() {
+public class Agent {
+    private final Reputation rep;
+    private String name;
+
+    public Agent(String name) {
         super();
-        facmap = new Reputation();
-        charmap = new Reputation();
-        locmap = new Reputation();
+        rep = new Reputation();
+        this.name = name;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public int getReputation(Agent agent) {
+        if(rep.isset(agent.getName())){
+            return rep.get(agent.getName());
+        }
+        return rep.get(agent.getName());
     }
 }
