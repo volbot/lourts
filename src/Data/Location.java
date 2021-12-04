@@ -1,9 +1,13 @@
 package Data;
 
-public class Location {
+import Agents.Agent;
 
-    public Location(){
+public class Location extends Agent {
+    private int population;
+    private int wealth;
 
+    public Location(String name){
+        super(name);
     }
 
 }

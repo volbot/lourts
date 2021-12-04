@@ -11,7 +11,7 @@ public class Hero extends Individual {
     public Hero(String name) {
         super(name);
         personality = new Personality(0, 0, 0, 0);
-        background = new Background(new Location(), 0);
+        background = new Background(new Location("Nowhere"), 0);
     }
 
     public Personality getPersonality() {
