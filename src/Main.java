@@ -40,6 +40,8 @@ public class Main {
         if(window==NULL){
             throw new RuntimeException("Failed to create the GLFW window");
         }
+        glfwMakeContextCurrent(window);
+        GL.createCapabilities();
 
         //grab mouse
         //glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
@@ -66,9 +68,14 @@ public class Main {
                     (vidmode.height() - pHeight.get(0)) / 2
             );
         }
-        glfwMakeContextCurrent(window);
         glfwSwapInterval(1);
         glfwShowWindow(window);
+
+        //initialize projection matrix
+        glMatrixMode(GL_PROJECTION);
+        glLoadIdentity();
+        glOrtho(0,640,480,0,1,-1);
+        glMatrixMode(GL_MODELVIEW);
     }
 
     private void loop() {
@@ -79,6 +86,13 @@ public class Main {
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
             glfwSwapBuffers(window);
             glfwPollEvents();
+            //triangle
+            glBegin(GL_TRIANGLES);
+            glColor3f(0,1,0);
+            glVertex2d(20,20);
+            glVertex2d(400,200);
+            glVertex2d(600,60);
+            glEnd();
         }
     }
 
