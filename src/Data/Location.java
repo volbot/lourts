@@ -8,6 +8,8 @@ public class Location extends Agent {
 
     public Location(String name){
         super(name);
+        population=0;
+        wealth=0;
     }
 
 }

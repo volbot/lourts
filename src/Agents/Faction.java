@@ -4,7 +4,6 @@ import Data.Personality;
 import Data.Reputation;
 
 public class Faction extends Agent{
-    private String name;
     private Hero leader;
     private int wealth;
     private Personality personality;
