@@ -32,16 +32,19 @@ public class Main extends ApplicationAdapter {
 		ScreenUtils.clear(1, 0, 0, 1);
 		batch.begin();
 
+		/*//gras moving really fast
 		batch.draw(grass,grassguy.x,grassguy.y);
 		grassguy.x+=20;
 		if(grassguy.x>640) grassguy.x=0;
-		/* 640x480 grass grid
+		*/
+
+		// 640x480 grass grid
 		for(int x = 0; x < 640; x+=20){
 			for(int y = 0; y < 480; y+=20){
 				batch.draw(grass,x,y);
 			}
 		}
-		 */
+
 		batch.end();
 	}
 	
