@@ -14,6 +14,14 @@ public class Hero extends Individual {
         background = new Background(new Location("Nowhere"), 0);
     }
 
+    public Hero(String name, Location origin) {
+        super(name);
+        personality = new Personality(0, 0, 0, 0);
+        background = new Background(origin, 0);
+        x=origin.x;
+        y=origin.y;
+    }
+
     public Personality getPersonality() {
         return personality;
     }

@@ -4,10 +4,10 @@ import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.ScreenUtils;
-import com.volbot.lourts.Agents.Agent;
+import com.volbot.lourts.Agents.Hero;
 import com.volbot.lourts.Agents.Individual;
+import com.volbot.lourts.Data.Location;
 import com.volbot.lourts.Input.InputManager;
 
 public class Main extends ApplicationAdapter {
@@ -18,6 +18,8 @@ public class Main extends ApplicationAdapter {
 	Texture grassTex;
 	Texture crabwizardTex;
 	Individual crabwizard;
+	Hero skeletrex;
+	Location boneland;
 
 	@Override
 	public void create () {
@@ -27,6 +29,10 @@ public class Main extends ApplicationAdapter {
 		crabwizard = new Individual("crabwizard");
 		crabwizard.x=0;
 		crabwizard.y=0;
+		boneland = new Location("crabwizard",200,200);
+		skeletrex = boneland.getFigurehead();
+		skeletrex.setGoalPos(new int[]{-300, 100});
+		skeletrex.setMoveSpeed(140);
 		cam = new OrthographicCamera();
 		cam.setToOrtho(false,640,480);
 		cam.position.x=320;
@@ -48,10 +54,13 @@ public class Main extends ApplicationAdapter {
 		}
 
 		crabwizard.think();
+		skeletrex.think();
 		inputs.parseCameraMovement(300);
 		inputs.parsePlayerMovement(crabwizard);
 
 
+		batch.draw(crabwizardTex, cam.position.x+boneland.x-10, cam.position.y+boneland.y-10);
+		batch.draw(crabwizardTex, cam.position.x+skeletrex.x-10, cam.position.y+skeletrex.y-10);
 		batch.draw(crabwizardTex, cam.position.x+crabwizard.x-10, cam.position.y+crabwizard.y-10);
 
 		batch.end();

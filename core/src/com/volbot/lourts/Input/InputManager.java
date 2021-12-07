@@ -6,8 +6,6 @@ import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.math.Vector3;
 import com.volbot.lourts.Agents.Individual;
 
-import java.util.Arrays;
-
 public class InputManager {
 
     Camera cam;
@@ -29,7 +27,7 @@ public class InputManager {
             Vector3 touchPos = new Vector3(Gdx.input.getX(),Gdx.input.getY(),0);
             cam.unproject(touchPos);
             touchPos = positionClick(touchPos);
-            player.setGoal(new int[]{
+            player.setGoalPos(new int[]{
                     (int)(touchPos.x),
                     (int)(touchPos.y)}
             );
