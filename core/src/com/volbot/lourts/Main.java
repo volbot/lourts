@@ -1,68 +1,60 @@
 package com.volbot.lourts;
 
 import com.badlogic.gdx.ApplicationAdapter;
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.ScreenUtils;
+import com.volbot.lourts.Agents.Agent;
+import com.volbot.lourts.Agents.Individual;
+import com.volbot.lourts.Input.InputManager;
 
 public class Main extends ApplicationAdapter {
 
 	private OrthographicCamera cam;
+	private InputManager inputs;
 	private SpriteBatch batch;
 	Texture grassTex;
 	Texture crabwizardTex;
-	Rectangle crabwizard;
-
-	int walkSpeed = 2;
+	Individual crabwizard;
 
 	@Override
 	public void create () {
 		batch = new SpriteBatch();
 		grassTex = new Texture("grass.png");
 		crabwizardTex = new Texture("crabwizard.png");
-		crabwizard =new Rectangle();
-		crabwizard.x=320;
-		crabwizard.y=240;
-		crabwizard.width=20;
-		crabwizard.height=20;
+		crabwizard = new Individual("crabwizard");
+		crabwizard.x=0;
+		crabwizard.y=0;
 		cam = new OrthographicCamera();
 		cam.setToOrtho(false,640,480);
+		cam.position.x=320;
+		cam.position.y=240;
+		inputs = new InputManager(cam);
 	}
 
 	@Override
 	public void render () {
 		ScreenUtils.clear(1, 0, 0, 1);
 		batch.begin();
+		batch.setProjectionMatrix(cam.combined);
 
 		// 640x480 grass grid
 		for(int x = 0; x < 640; x+=20){
 			for(int y = 0; y < 480; y+=20){
-				batch.draw(grassTex,x,y);
+				batch.draw(grassTex,cam.position.x-cam.viewportWidth/2+x,cam.position.y-cam.viewportHeight/2+y);
 			}
 		}
 
-		batch.draw(crabwizardTex, crabwizard.x, crabwizard.y);
+		crabwizard.think();
+		inputs.parseCameraMovement(300);
+		inputs.parsePlayerMovement(crabwizard);
+
+
+		batch.draw(crabwizardTex, cam.position.x+crabwizard.x-10, cam.position.y+crabwizard.y-10);
 
 		batch.end();
-
-		// Arrow keys
-		if(Gdx.input.isKeyPressed(Input.Keys.UP)){
-			crabwizard.y+=walkSpeed;
-		}
-		if(Gdx.input.isKeyPressed(Input.Keys.DOWN)){
-			crabwizard.y-=walkSpeed;
-		}
-		if(Gdx.input.isKeyPressed(Input.Keys.LEFT)){
-			crabwizard.x-=walkSpeed;
-		}
-		if(Gdx.input.isKeyPressed(Input.Keys.RIGHT)){
-			crabwizard.x+=walkSpeed;
-		}
-
 	}
 	
 	@Override
