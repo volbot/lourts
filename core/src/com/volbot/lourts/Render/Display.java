@@ -1,6 +1,8 @@
 package com.volbot.lourts.Render;
 
 import com.badlogic.gdx.graphics.Camera;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.volbot.lourts.Agents.Agent;
@@ -14,6 +16,8 @@ public class Display {
     private final SpriteBatch batch;
     private final Camera cam;
     private final ArrayList<Agent> entities;
+
+    private final BitmapFont font = new BitmapFont();
 
     public Display(Camera camera) {
         cam = camera;
@@ -30,6 +34,7 @@ public class Display {
         for (Agent a : entities) {
             batch.draw(texLoader.heroes.get(0), cam.position.x + a.x - 10, cam.position.y + a.y - 10);
         }
+        drawNames();
         batch.end();
     }
 
@@ -48,6 +53,13 @@ public class Display {
                         drawx*20-posx, drawy*20-posy
                 );
             }
+        }
+    }
+
+    private void drawNames() {
+        for(Agent a : entities){
+            GlyphLayout layout = new GlyphLayout(font,a.getName());
+            font.draw(batch, layout, cam.position.x + a.x - layout.width/2, cam.position.y + a.y + 35);
         }
     }
 
