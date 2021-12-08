@@ -10,10 +10,10 @@ import java.util.ArrayList;
 
 public class Display {
 
-    private TexLoader texLoader;
-    private SpriteBatch batch;
-    private Camera cam;
-    private ArrayList<Agent> entities;
+    private final TexLoader texLoader;
+    private final SpriteBatch batch;
+    private final Camera cam;
+    private final ArrayList<Agent> entities;
 
     public Display(Camera camera) {
         cam = camera;
@@ -31,6 +31,24 @@ public class Display {
             batch.draw(texLoader.heroes.get(0), cam.position.x + a.x - 10, cam.position.y + a.y - 10);
         }
         batch.end();
+    }
+
+    private void drawChunk(int chunkx, int chunky) {
+        int posx = (chunkx*(int)cam.viewportWidth)-(int)cam.position.x;
+        int posy;
+        for (int drawx = 0; drawx < 24; drawx++) {
+            posy = (chunky*(int)cam.viewportHeight)-(int)cam.position.y;
+            for (int drawy = 0; drawy < 24; drawy++) {
+                batch.draw(
+                        texLoader.tiles.get(
+                                Main.map.chunks
+                                        .get(chunkx)
+                                        .get(chunky)
+                                        [drawx][drawy]),
+                        drawx*20-posx, drawy*20-posy
+                );
+            }
+        }
     }
 
     private void drawMap() {
@@ -54,8 +72,6 @@ public class Display {
             }
             counter += 20;
         }
-        int posx;
-        int posy;
         for (int chunkx : chunksx) {
             if (chunkx >= Main.map.chunks.size()) {
                 continue;
@@ -64,20 +80,7 @@ public class Display {
                 if (chunky >= Main.map.chunks.get(chunkx).size()) {
                     continue;
                 }
-                for (int drawx = 0; drawx < 24; drawx++) {
-                    posx = drawx*20-(chunkx*(int)cam.viewportHeight)+((int)cam.position.x);
-                    for (int drawy = 0; drawy < 24; drawy++) {
-                        posy = drawy*20-(chunky*(int)cam.viewportHeight)+((int)cam.position.y);
-                        batch.draw(
-                                texLoader.tiles.get(
-                                        Main.map.chunks
-                                                .get(chunkx)
-                                                .get(chunky)
-                                                [drawx][drawy]),
-                                posx, posy
-                        );
-                    }
-                }
+                drawChunk(chunkx,chunky);
             }
         }
     }
