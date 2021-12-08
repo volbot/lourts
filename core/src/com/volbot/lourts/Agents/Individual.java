@@ -11,9 +11,10 @@ public class Individual extends Agent{
     public Individual(String name){
         super(name);
         stats = new Stats();
-        moveSpeed = 140;
+        moveSpeed = 100;
     }
 
+    @Override
     public void think() {
         if (goalPos != null) {
             move(goalPos[0], goalPos[1]);

@@ -5,6 +5,7 @@ import com.volbot.lourts.Agents.Hero;
 import com.volbot.lourts.Agents.Individual;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 public class Location extends Agent {
     private Hero figurehead;
@@ -32,6 +33,14 @@ public class Location extends Agent {
         figurehead=new Hero("Skeletrex",this);
         heroes.add(figurehead);
         personality=figurehead.getPersonality();
+    }
+
+    @Override
+    public void think() {
+        population+=new Random().nextInt((2*population) + 1) - population;
+        if(population==0){
+            //towndies
+        }
     }
 
     public Personality getPersonality() {

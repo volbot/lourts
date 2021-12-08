@@ -3,6 +3,8 @@ package com.volbot.lourts.Agents;
 import com.badlogic.gdx.Gdx;
 import com.volbot.lourts.Data.Reputation;
 
+import java.util.ArrayList;
+
 public class Agent {
 
     public int x;
@@ -11,9 +13,20 @@ public class Agent {
     private final Reputation rep;
     private String name;
 
-    public Agent(String name) {
+    protected Agent(String name) {
         rep = new Reputation();
         this.name = name;
+    }
+
+    public void think() { }
+
+    public ArrayList<String> getInteractOptions(Individual a) {
+        ArrayList<String> options = new ArrayList<>();
+        options.add("Talk");
+        options.add("Go");
+        options.add("Follow");
+        options.add("Attack");
+        return options;
     }
 
     public String getName() {
