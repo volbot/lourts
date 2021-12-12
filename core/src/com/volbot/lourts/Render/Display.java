@@ -10,6 +10,7 @@ import com.volbot.lourts.Agents.Individual;
 import com.volbot.lourts.Data.Location;
 import com.volbot.lourts.GUI.GameMenu;
 import com.volbot.lourts.GUI.InteractMenu;
+import com.volbot.lourts.GUI.TalkWindow;
 import com.volbot.lourts.Main;
 
 import java.util.ArrayList;
@@ -56,6 +57,9 @@ public class Display {
                 if (hovered != null && hovered != menu.getAgent()) {
                     drawName(hovered);
                 }
+            } else if(tempMenu instanceof TalkWindow) {
+                TalkWindow menu = (TalkWindow) tempMenu;
+                menu.drawMenu(batch, cam);
             }
         } else {
             if (hovered != null) {

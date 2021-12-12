@@ -8,5 +8,11 @@ public abstract class GameMenu {
 
     public Button[] buttons;
 
-    public abstract void drawMenu(SpriteBatch batch, Camera cam);
+    public void drawMenu(SpriteBatch batch, Camera cam) {
+        if(buttons!=null){
+            for(Button button : buttons){
+                button.draw(batch,1);
+            }
+        }
+    }
 }

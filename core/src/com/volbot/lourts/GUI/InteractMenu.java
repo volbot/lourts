@@ -15,12 +15,12 @@ public class InteractMenu extends GameMenu {
         buttons=new Button[2];
         this.entity=entity;
         Button.ButtonStyle buttonStyle = new Button.ButtonStyle();
-        buttonStyle.up = new TextureRegionDrawable(new TextureRegion(new Texture("GUI/talkbutton.png")));
-        buttonStyle.checked = new TextureRegionDrawable(new TextureRegion(new Texture("GUI/talkbuttondown.png")));
+        buttonStyle.up = new TextureRegionDrawable(new TextureRegion(new Texture("GUI/menus/interact/talkbutton.png")));
+        buttonStyle.checked = new TextureRegionDrawable(new TextureRegion(new Texture("GUI/menus/interact/talkbuttondown.png")));
         buttons[0]=new Button(buttonStyle);
         Button.ButtonStyle buttonStyle2 = new Button.ButtonStyle();
-        buttonStyle2.up=new TextureRegionDrawable(new TextureRegion(new Texture("GUI/fightbutton.png")));
-        buttonStyle2.checked=new TextureRegionDrawable(new TextureRegion(new Texture("GUI/fightbuttondown.png")));
+        buttonStyle2.up=new TextureRegionDrawable(new TextureRegion(new Texture("GUI/menus/interact/fightbutton.png")));
+        buttonStyle2.checked=new TextureRegionDrawable(new TextureRegion(new Texture("GUI/menus/interact/fightbuttondown.png")));
         buttons[1]=new Button(buttonStyle2);
     }
 
@@ -30,9 +30,7 @@ public class InteractMenu extends GameMenu {
         buttons[0].setY(cam.position.y+entity.y-10);
         buttons[1].setX(cam.position.x+entity.x+25-10);
         buttons[1].setY(cam.position.y+entity.y-10);
-
-        buttons[0].draw(batch,1);
-        buttons[1].draw(batch,1);
+        super.drawMenu(batch,cam);
     }
 
     public Agent getAgent() {

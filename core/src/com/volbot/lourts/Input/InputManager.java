@@ -5,9 +5,12 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.volbot.lourts.Agents.Agent;
 import com.volbot.lourts.GUI.GameMenu;
+import com.volbot.lourts.GUI.GameWindow;
 import com.volbot.lourts.GUI.InteractMenu;
+import com.volbot.lourts.GUI.TalkWindow;
 import com.volbot.lourts.Main;
 
 public class InputManager implements InputProcessor {
@@ -127,34 +130,36 @@ public class InputManager implements InputProcessor {
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
         boolean returnval = false;
-        Vector3 temp = new Vector3(screenX, screenY, 0);
-        cam.unproject(temp);
-        Vector3 touchLoc = positionClick(temp);
+        Vector3 clickPos = new Vector3(screenX, screenY, 0);
+        cam.unproject(clickPos);
+        Vector3 touchLoc = positionClick(clickPos);
         Agent hoverAgent = entityHovered(touchLoc);
         switch (button) {
             case 0:
                 if (Main.gui.currmenu != null) {
-                    GameMenu tempmenu = Main.gui.currmenu;
-                    if(tempmenu instanceof InteractMenu) {
-                        InteractMenu menu = (InteractMenu)tempmenu;
-                        Agent menuAgent = menu.getAgent();
-                        if (hoverAgent == null) {
-                            if (touchLoc.y > menuAgent.y - 15 && touchLoc.y < menuAgent.y + 15) {
-                                if (touchLoc.x > menuAgent.x - 25 - 15 && touchLoc.x < menuAgent.x - 25 + 15) {
-                                    menu.buttons[0].setChecked(!menu.buttons[0].isChecked());
-                                    menu.buttons[1].setChecked(false);
-                                    returnval = true;
+                    GameMenu tempMenu = Main.gui.currmenu;
+                    if(tempMenu.buttons!=null){
+                        for(Button b : tempMenu.buttons){
+                            if(clickPos.x>b.getX()&&clickPos.x<b.getX()+b.getWidth()){
+                                if(clickPos.y>b.getY()&&clickPos.y<b.getY()+b.getHeight()){
+                                    b.setChecked(true);
+                                    for(Button b2 : tempMenu.buttons) if(b!=b2) b2.setChecked(false);
+                                    returnval=true;
                                 }
-                                if (touchLoc.x > menuAgent.x + 25 - 15 && touchLoc.x < menuAgent.x + 25 + 15) {
-                                    menu.buttons[1].setChecked(!menu.buttons[1].isChecked());
-                                    menu.buttons[0].setChecked(false);
-                                    returnval = true;
-                                }
+                            }
+                        }
+                    }
+                    if(tempMenu instanceof GameWindow){
+                        GameWindow menu = (GameWindow)tempMenu;
+                        if(clickPos.x>(cam.viewportWidth-menu.windowbg.getWidth())/2&&clickPos.x<(cam.viewportWidth-menu.windowbg.getWidth())/2 + menu.windowbg.getWidth()){
+                            if(clickPos.y>(cam.viewportHeight-menu.windowbg.getHeight())/2&&clickPos.y<(cam.viewportHeight-menu.windowbg.getHeight())/2 + menu.windowbg.getHeight()){
+                                returnval=true;
                             }
                         }
                     }
                 }
                 if (!returnval) {
+                    Main.gui.clearMenu();
                     if (hoverAgent != null && hoverAgent != Main.player) {
                         Main.gui.drawInteractMenu(hoverAgent);
                         Main.player.setDestination(hoverAgent);
@@ -163,15 +168,18 @@ public class InputManager implements InputProcessor {
                         Main.player.setDestination(touchLoc);
                     }
                 }
-                break;
+                return returnval;
             case 1:
                 if (hoverAgent != null) {
                     Main.player.setDestination(touchLoc);
                 }
+                if(Main.gui.currmenu instanceof GameWindow){
+                    Main.gui.clearMenu();
+                }
                 camHold = touchLoc;
-                break;
+                return returnval;
         }
-        return returnval;
+        return false;
     }
 
     @Override
@@ -188,7 +196,9 @@ public class InputManager implements InputProcessor {
             touchLoc.sub(camHold);
             cam.position.set(touchLoc);
         } else {
-            Main.player.setDestination(positionClick(touchLoc));
+            if(Main.player.getDestination()==null) {
+                Main.player.setDestination(positionClick(touchLoc));
+            }
         }
         return false;
     }

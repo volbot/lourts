@@ -22,7 +22,7 @@ public class Main extends ApplicationAdapter {
 
 	private OrthographicCamera cam;
 
-	TexLoader texLoader;
+	public static TexLoader texLoader;
 	Individual crabwizard;
 	Hero skeletrex;
 	Location boneland;

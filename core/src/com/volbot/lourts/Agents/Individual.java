@@ -23,24 +23,21 @@ public class Individual extends Agent{
 
     @Override
     public void think() {
-        if(this.getDestination()!=null){
+        //if(this.getName().compareToIgnoreCase("crabwizard")==0) System.out.println(dest==null);
+        if(dest!=null){
             Vector3 destLoc = new Vector3(dest.x,dest.y,0);
             if(!move(destLoc)){
-                if(Main.gui.currmenu!=null){
-                    GameMenu menu = Main.gui.currmenu;
-                    if(menu instanceof InteractMenu) {
+                if(Main.gui.currmenu!=null) {
+                    GameMenu tempmenu = Main.gui.currmenu;
+                    if (tempmenu instanceof InteractMenu) {
+                        InteractMenu menu = (InteractMenu) tempmenu;
                         if (menu.buttons[0].isChecked()) {
-                            System.out.println("TALK!");
-                            Main.gui.clearInteractMenu();
-                            dest = null;
+                            menu.buttons[0].setChecked(false);
+                            Main.gui.drawTalkMenu(menu.getAgent());
                         } else if (menu.buttons[1].isChecked()) {
-                            System.out.println("FIGHT!");
-                            Main.gui.clearInteractMenu();
-                            dest = null;
+                            menu.buttons[1].setChecked(false);
                         }
                     }
-                } else {
-                    Main.gui.drawInteractMenu(dest);
                 }
             }
         }

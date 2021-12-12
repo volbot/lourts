@@ -10,11 +10,19 @@ public class GUIManager {
 
     }
 
+    public void loop() {
+
+    }
+
     public void drawInteractMenu(Agent a) {
         currmenu = new InteractMenu(a);
     }
 
-    public void clearInteractMenu() {
+    public void drawTalkMenu(Agent a) {
+        currmenu = new TalkWindow(a);
+    }
+
+    public void clearMenu() {
         currmenu=null;
     }
 }
