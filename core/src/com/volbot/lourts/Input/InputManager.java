@@ -6,6 +6,7 @@ import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.math.Vector3;
 import com.volbot.lourts.Agents.Agent;
+import com.volbot.lourts.GUI.GameMenu;
 import com.volbot.lourts.GUI.InteractMenu;
 import com.volbot.lourts.Main;
 
@@ -149,19 +150,22 @@ public class InputManager implements InputProcessor {
         switch (button) {
             case 0:
                 if (Main.gui.currmenu != null) {
-                    InteractMenu menu = Main.gui.currmenu;
-                    Agent menuAgent = menu.getAgent();
-                    if (hoverAgent == null) {
-                        if (touchLoc.y > menuAgent.y - 15 && touchLoc.y < menuAgent.y + 15) {
-                            if (touchLoc.x > menuAgent.x - 25 - 15 && touchLoc.x < menuAgent.x - 25 + 15) {
-                                menu.buttons[0].setChecked(!menu.buttons[0].isChecked());
-                                menu.buttons[1].setChecked(false);
-                                returnval = true;
-                            }
-                            if (touchLoc.x > menuAgent.x + 25 - 15 && touchLoc.x < menuAgent.x + 25 + 15) {
-                                menu.buttons[1].setChecked(!menu.buttons[1].isChecked());
-                                menu.buttons[0].setChecked(false);
-                                returnval = true;
+                    GameMenu tempmenu = Main.gui.currmenu;
+                    if(tempmenu instanceof InteractMenu) {
+                        InteractMenu menu = (InteractMenu)tempmenu;
+                        Agent menuAgent = menu.getAgent();
+                        if (hoverAgent == null) {
+                            if (touchLoc.y > menuAgent.y - 15 && touchLoc.y < menuAgent.y + 15) {
+                                if (touchLoc.x > menuAgent.x - 25 - 15 && touchLoc.x < menuAgent.x - 25 + 15) {
+                                    menu.buttons[0].setChecked(!menu.buttons[0].isChecked());
+                                    menu.buttons[1].setChecked(false);
+                                    returnval = true;
+                                }
+                                if (touchLoc.x > menuAgent.x + 25 - 15 && touchLoc.x < menuAgent.x + 25 + 15) {
+                                    menu.buttons[1].setChecked(!menu.buttons[1].isChecked());
+                                    menu.buttons[0].setChecked(false);
+                                    returnval = true;
+                                }
                             }
                         }
                     }

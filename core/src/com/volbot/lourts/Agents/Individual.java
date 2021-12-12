@@ -3,6 +3,7 @@ package com.volbot.lourts.Agents;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector3;
 import com.volbot.lourts.Data.Stats;
+import com.volbot.lourts.GUI.GameMenu;
 import com.volbot.lourts.GUI.InteractMenu;
 import com.volbot.lourts.Main;
 
@@ -26,15 +27,17 @@ public class Individual extends Agent{
             Vector3 destLoc = new Vector3(dest.x,dest.y,0);
             if(!move(destLoc)){
                 if(Main.gui.currmenu!=null){
-                    InteractMenu menu = Main.gui.currmenu;
-                    if(menu.buttons[0].isChecked()){
-                        System.out.println("TALK!");
-                        Main.gui.clearInteractMenu();
-                        dest=null;
-                    } else if(menu.buttons[1].isChecked()){
-                        System.out.println("FIGHT!");
-                        Main.gui.clearInteractMenu();
-                        dest=null;
+                    GameMenu menu = Main.gui.currmenu;
+                    if(menu instanceof InteractMenu) {
+                        if (menu.buttons[0].isChecked()) {
+                            System.out.println("TALK!");
+                            Main.gui.clearInteractMenu();
+                            dest = null;
+                        } else if (menu.buttons[1].isChecked()) {
+                            System.out.println("FIGHT!");
+                            Main.gui.clearInteractMenu();
+                            dest = null;
+                        }
                     }
                 } else {
                     Main.gui.drawInteractMenu(dest);

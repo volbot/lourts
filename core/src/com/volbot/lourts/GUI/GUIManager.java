@@ -4,7 +4,7 @@ import com.volbot.lourts.Agents.Agent;
 
 public class GUIManager {
 
-    public InteractMenu currmenu = null;
+    public GameMenu currmenu = null;
 
     public GUIManager() {
 

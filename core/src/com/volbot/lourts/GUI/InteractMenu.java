@@ -8,11 +8,11 @@ import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.volbot.lourts.Agents.Agent;
 
-public class InteractMenu {
+public class InteractMenu extends GameMenu {
     Agent entity;
-    public Button[] buttons = new Button[2];
 
     public InteractMenu(Agent entity){
+        buttons=new Button[2];
         this.entity=entity;
         Button.ButtonStyle buttonStyle = new Button.ButtonStyle();
         buttonStyle.up = new TextureRegionDrawable(new TextureRegion(new Texture("GUI/talkbutton.png")));
@@ -24,7 +24,8 @@ public class InteractMenu {
         buttons[1]=new Button(buttonStyle2);
     }
 
-    public void drawButtons(SpriteBatch batch, Camera cam){
+    @Override
+    public void drawMenu(SpriteBatch batch, Camera cam){
         buttons[0].setX(cam.position.x+entity.x-25-10);
         buttons[0].setY(cam.position.y+entity.y-10);
         buttons[1].setX(cam.position.x+entity.x+25-10);

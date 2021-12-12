@@ -1,12 +1,12 @@
 package com.volbot.lourts.Render;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.volbot.lourts.Agents.Agent;
+import com.volbot.lourts.GUI.GameMenu;
 import com.volbot.lourts.GUI.InteractMenu;
 import com.volbot.lourts.Main;
 
@@ -37,14 +37,19 @@ public class Display {
         for (Agent a : entities) {
             batch.draw(texLoader.heroes.get(0), cam.position.x + a.x - 10, cam.position.y + a.y - 10);
         }
-        InteractMenu menu = Main.gui.currmenu;
+        GameMenu tempMenu = Main.gui.currmenu;
         Agent hovered = Main.inputs.entityHovered();
-        if(menu!=null) {
-            drawName(menu.getAgent());
-            menu.drawButtons(batch, cam);
-        }
-        if(hovered!=null){
-            if(menu == null || hovered != menu.getAgent()){
+        if(tempMenu!=null) {
+            if (tempMenu instanceof InteractMenu) {
+                InteractMenu menu = (InteractMenu) tempMenu;
+                drawName(menu.getAgent());
+                menu.drawMenu(batch, cam);
+                if(hovered!=null){
+                    drawName(hovered);
+                }
+            }
+        } else {
+            if (hovered != null) {
                 drawName(hovered);
             }
         }
