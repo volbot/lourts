@@ -1,11 +1,13 @@
 package com.volbot.lourts.Render;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.volbot.lourts.Agents.Agent;
+import com.volbot.lourts.GUI.InteractMenu;
 import com.volbot.lourts.Main;
 
 import java.util.ArrayList;
@@ -17,7 +19,7 @@ public class Display {
     private final Camera cam;
     private final ArrayList<Agent> entities;
 
-    private final BitmapFont font = new BitmapFont();
+    private final BitmapFont font;
 
     public Display(Camera camera) {
         cam = camera;
@@ -25,6 +27,7 @@ public class Display {
         batch = new SpriteBatch();
         batch.setProjectionMatrix(cam.combined);
         entities = new ArrayList<>();
+        font = new BitmapFont();
     }
 
     public void loop() {
@@ -34,15 +37,31 @@ public class Display {
         for (Agent a : entities) {
             batch.draw(texLoader.heroes.get(0), cam.position.x + a.x - 10, cam.position.y + a.y - 10);
         }
-        drawNames();
+        InteractMenu menu = Main.gui.currmenu;
+        Agent hovered = Main.inputs.entityHovered();
+        if(menu!=null) {
+            drawName(menu.getAgent());
+            menu.drawButtons(batch, cam);
+        }
+        if(hovered!=null){
+            if(menu == null || hovered != menu.getAgent()){
+                drawName(hovered);
+            }
+        }
         batch.end();
     }
 
+
+    public void drawName(Agent a) {
+        GlyphLayout layout = new GlyphLayout(font, a.getName());
+        font.draw(batch, layout, cam.position.x + a.x - layout.width / 2, cam.position.y + a.y + 30);
+    }
+
     private void drawChunk(int chunkx, int chunky) {
-        int posx = (chunkx*(int)cam.viewportWidth)-(int)cam.position.x;
+        int posx = (chunkx * (int) cam.viewportWidth) - (int) cam.position.x;
         int posy;
         for (int drawx = 0; drawx < 24; drawx++) {
-            posy = (chunky*(int)cam.viewportHeight)-(int)cam.position.y;
+            posy = (chunky * (int) cam.viewportHeight) - (int) cam.position.y;
             for (int drawy = 0; drawy < 24; drawy++) {
                 batch.draw(
                         texLoader.tiles.get(
@@ -50,16 +69,9 @@ public class Display {
                                         .get(chunkx)
                                         .get(chunky)
                                         [drawx][drawy]),
-                        drawx*20-posx, drawy*20-posy
+                        drawx * 20 - posx, drawy * 20 - posy
                 );
             }
-        }
-    }
-
-    private void drawNames() {
-        for(Agent a : entities){
-            GlyphLayout layout = new GlyphLayout(font,a.getName());
-            font.draw(batch, layout, cam.position.x + a.x - layout.width/2, cam.position.y + a.y + 35);
         }
     }
 
@@ -85,14 +97,14 @@ public class Display {
             counter += 20;
         }
         for (int chunkx : chunksx) {
-            if (chunkx >= Main.map.chunks.size()) {
+            if (chunkx >= Main.map.chunks.size() || chunkx<0) {
                 continue;
             }
             for (int chunky : chunksy) {
-                if (chunky >= Main.map.chunks.get(chunkx).size()) {
+                if (chunky >= Main.map.chunks.get(chunkx).size() || chunky<0) {
                     continue;
                 }
-                drawChunk(chunkx,chunky);
+                drawChunk(chunkx, chunky);
             }
         }
     }

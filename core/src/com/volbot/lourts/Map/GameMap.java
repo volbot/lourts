@@ -1,7 +1,6 @@
 package com.volbot.lourts.Map;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public class GameMap {
     public ArrayList<ArrayList<int[][]>> chunks = new ArrayList<>();

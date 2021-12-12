@@ -23,7 +23,6 @@ public class Agent {
     public ArrayList<String> getInteractOptions(Individual a) {
         ArrayList<String> options = new ArrayList<>();
         options.add("Talk");
-        options.add("Go");
         options.add("Follow");
         options.add("Attack");
         return options;
