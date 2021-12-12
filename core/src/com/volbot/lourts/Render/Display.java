@@ -6,6 +6,8 @@ import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.volbot.lourts.Agents.Agent;
+import com.volbot.lourts.Agents.Individual;
+import com.volbot.lourts.Data.Location;
 import com.volbot.lourts.GUI.GameMenu;
 import com.volbot.lourts.GUI.InteractMenu;
 import com.volbot.lourts.Main;
@@ -34,17 +36,24 @@ public class Display {
         ScreenUtils.clear(1, 0, 0, 1);
         batch.begin();
         drawMap();
+        int i = 0;
         for (Agent a : entities) {
-            batch.draw(texLoader.heroes.get(0), cam.position.x + a.x - 10, cam.position.y + a.y - 10);
+            if (a instanceof Individual) {
+                batch.draw(texLoader.heroes.get(i), cam.position.x + a.x - 10, cam.position.y + a.y - 10);
+                i++;
+            }
+            if (a instanceof Location) {
+                batch.draw(texLoader.heroes.get(0), cam.position.x + a.x - 10, cam.position.y + a.y - 10);
+            }
         }
         GameMenu tempMenu = Main.gui.currmenu;
         Agent hovered = Main.inputs.entityHovered();
-        if(tempMenu!=null) {
+        if (tempMenu != null) {
             if (tempMenu instanceof InteractMenu) {
                 InteractMenu menu = (InteractMenu) tempMenu;
                 drawName(menu.getAgent());
                 menu.drawMenu(batch, cam);
-                if(hovered!=null){
+                if (hovered != null && hovered != menu.getAgent()) {
                     drawName(hovered);
                 }
             }
@@ -63,10 +72,10 @@ public class Display {
     }
 
     private void drawChunk(int chunkx, int chunky) {
-        int posx = (chunkx * (int) cam.viewportWidth) - (int) cam.position.x;
+        int posx = (chunkx * 480) - (int) cam.position.x;
         int posy;
         for (int drawx = 0; drawx < 24; drawx++) {
-            posy = (chunky * (int) cam.viewportHeight) - (int) cam.position.y;
+            posy = (chunky * 480) - (int) cam.position.y;
             for (int drawy = 0; drawy < 24; drawy++) {
                 batch.draw(
                         texLoader.tiles.get(
@@ -81,32 +90,32 @@ public class Display {
     }
 
     private void drawMap() {
-        int camxstart = Math.round(cam.position.x);
-        int camystart = Math.round(cam.position.y);
-        int camxend = Math.round(camxstart + cam.viewportWidth);
-        int camyend = Math.round(camystart + cam.viewportHeight);
+        int camxstart = (int) Math.floor(cam.position.x - cam.viewportWidth);
+        int camystart = (int) Math.floor(cam.position.y - cam.viewportHeight);
+        int camxend = (int) Math.ceil(cam.position.x + cam.viewportWidth);
+        int camyend = (int) Math.ceil(cam.position.y + cam.viewportHeight);
         ArrayList<Integer> chunksx = new ArrayList<>();
         ArrayList<Integer> chunksy = new ArrayList<>();
-        int counter = camxstart;
-        while (counter <= camxend) {
-            if (!chunksx.contains(counter / 480)) {
-                chunksx.add(counter / 480);
-            }
-            counter += 20;
+        chunksx.add((int) Math.ceil(camxstart / 480));
+        chunksx.add((int) Math.ceil(camxend / 480));
+        int i = chunksx.get(0) + 1;
+        while (i < chunksx.get(1)) {
+            chunksx.add(i);
+            i++;
         }
-        counter = camystart;
-        while (counter <= camyend) {
-            if (!chunksy.contains(counter / 480)) {
-                chunksy.add(counter / 480);
-            }
-            counter += 20;
+        chunksy.add((int) Math.ceil(camystart / 480));
+        chunksy.add((int) Math.ceil(camyend / 480));
+        i = chunksy.get(0) + 1;
+        while (i < chunksy.get(1)) {
+            chunksy.add(i);
+            i++;
         }
         for (int chunkx : chunksx) {
-            if (chunkx >= Main.map.chunks.size() || chunkx<0) {
+            if (chunkx >= Main.map.chunks.size() || chunkx < 0) {
                 continue;
             }
             for (int chunky : chunksy) {
-                if (chunky >= Main.map.chunks.get(chunkx).size() || chunky<0) {
+                if (chunky >= Main.map.chunks.get(chunkx).size() || chunky < 0) {
                     continue;
                 }
                 drawChunk(chunkx, chunky);

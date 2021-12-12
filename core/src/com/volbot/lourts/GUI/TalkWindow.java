@@ -4,9 +4,11 @@ import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
-public abstract class TalkWindow extends GameWindow {
+public class TalkWindow extends GameWindow {
 
-    Texture windowbg;
+    public TalkWindow() {
+        windowbg=new Texture("GUI/menublank");
+    }
 
     @Override
     public void drawMenu(SpriteBatch batch, Camera cam) {

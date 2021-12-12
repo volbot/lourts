@@ -50,7 +50,7 @@ public class Main extends ApplicationAdapter {
 		entities.add(skeletrex);
 		skeletrex.setDestination(new Vector3(-300, 100,0));
 		cam = new OrthographicCamera();
-		cam.setToOrtho(false,480,480);
+		cam.setToOrtho(false,1024,576);
 		cam.position.x=320;
 		cam.position.y=240;
 		display = new Display(cam);

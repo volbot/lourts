@@ -80,22 +80,6 @@ public class InputManager implements InputProcessor {
             dirs++;
         }
 
-        camLockedToMap = false;
-        if (camLockedToMap) {
-            if (cam.position.y < 0 && inputs[0]) {
-                inputs[0] = false;
-            }
-            if (cam.position.y + cam.viewportHeight >= Main.map.chunks.get(0).size() * 480 && inputs[1]) {
-                inputs[1] = false;
-            }
-            if (cam.position.x + cam.viewportWidth >= Main.map.chunks.size() * 480 && inputs[2]) {
-                inputs[2] = false;
-            }
-            if (cam.position.x < 0 && inputs[3]) {
-                inputs[3] = false;
-            }
-        }
-
         if (inputs[0] && inputs[1]) {
             inputs[0] = false;
             inputs[1] = false;
@@ -171,7 +155,6 @@ public class InputManager implements InputProcessor {
                     }
                 }
                 if (!returnval) {
-                    Main.gui.clearInteractMenu();
                     if (hoverAgent != null && hoverAgent != Main.player) {
                         Main.gui.drawInteractMenu(hoverAgent);
                         Main.player.setDestination(hoverAgent);
@@ -199,11 +182,13 @@ public class InputManager implements InputProcessor {
 
     @Override
     public boolean touchDragged(int screenX, int screenY, int pointer) {
+        Vector3 touchLoc = new Vector3(screenX, screenY, 0);
+        touchLoc = cam.unproject(touchLoc);
         if(camHold!=null) {
-            Vector3 touchLoc = new Vector3(screenX, screenY, 0);
-            touchLoc = cam.unproject(touchLoc);
             touchLoc.sub(camHold);
             cam.position.set(touchLoc);
+        } else {
+            Main.player.setDestination(positionClick(touchLoc));
         }
         return false;
     }
