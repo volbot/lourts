@@ -44,7 +44,7 @@ public class Display {
                 i++;
             }
             if (a instanceof Location) {
-                batch.draw(texLoader.heroes.get(0), cam.position.x + a.x - 10, cam.position.y + a.y - 10);
+                batch.draw(texLoader.towns.get(0), cam.position.x + a.x - 10, cam.position.y + a.y - 10, 20, 20);
             }
         }
         GameMenu tempMenu = Main.gui.currmenu;
