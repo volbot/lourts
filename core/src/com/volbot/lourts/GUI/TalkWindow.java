@@ -17,6 +17,7 @@ import java.util.ArrayList;
 public class TalkWindow extends InteractWindow {
 
     public ArrayList<String> talkOptions;
+    public ArrayList<String> talkResponses;
 
     public TalkWindow(Agent a) {
         entity = a;
@@ -33,7 +34,10 @@ public class TalkWindow extends InteractWindow {
             buttons[i]=temp;
         }
 
-        talkOptions = a.getTalkOptions(Main.player);
+        this.greeting = a.rep.knows(Main.player) ? "Greetings, "+Main.player.getName()+"." : "I do not believe we've met.";
+        ArrayList<String>[] temp = a.getTalkOptions(Main.player);
+        talkOptions = temp[0];
+        talkResponses = temp[1];
     }
 
     @Override

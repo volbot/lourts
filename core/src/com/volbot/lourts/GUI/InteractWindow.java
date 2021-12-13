@@ -1,9 +1,11 @@
 package com.volbot.lourts.GUI;
 
 import com.badlogic.gdx.graphics.Camera;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.utils.Align;
 import com.volbot.lourts.Agents.Agent;
 import com.volbot.lourts.Data.Location;
 import com.volbot.lourts.Main;
@@ -11,6 +13,7 @@ import com.volbot.lourts.Main;
 public abstract class InteractWindow extends GameWindow {
     protected Agent entity;
     protected BitmapFont font = new BitmapFont();
+    protected String greeting;
 
     @Override
     public void drawMenu(SpriteBatch batch, Camera cam) {
@@ -31,5 +34,11 @@ public abstract class InteractWindow extends GameWindow {
                                                         "REP: " + repString + "\n" +
                                                         "PARTY: 1/1");
         font.draw(batch, layout, (xleft+windowbg.getWidth()*0.43f), (ybot+windowbg.getHeight()*.93f));
+        font.getData().setScale(1f);
+        GlyphLayout layout2 = new GlyphLayout(font,
+                greeting, Color.WHITE,
+                windowbg.getWidth()*0.5f, Align.topLeft, true
+                );
+        font.draw(batch, layout2, (xleft+windowbg.getWidth()*0.43f), (ybot+windowbg.getHeight()*.6f));
     }
 }
