@@ -1,6 +1,9 @@
 package com.volbot.lourts.Agents;
 
 import com.volbot.lourts.Data.Reputation;
+import com.volbot.lourts.Data.TalkOption;
+import com.volbot.lourts.Data.TalkResponse;
+import com.volbot.lourts.Main;
 
 import java.util.ArrayList;
 
@@ -21,33 +24,24 @@ public class Agent {
 
     public void think() { }
 
-    public ArrayList<String>[] getTalkOptions(Individual a) {
-        ArrayList<String> options = new ArrayList<>();
-        ArrayList<String> responses = new ArrayList<>();
+    public TalkResponse startConversation(Individual a) {
         if(rep.knows(a)) {
-            options.add("+EGood to see you again, "+getName()+".");
-            responses.add("Good to see you as well, "+a.getName()+".");
-            options.add("  ");
-            responses.add("  ");
-            options.add("  ");
-            responses.add("  ");
-            options.add(" EI must take my leave. <exit>");
-            responses.add("Good day, "+a.getName()+".");
+            return new TalkResponse("I don't believe we've met. I am "+getName(), new TalkOption[]{
+                    new TalkOption("+ Pleased to meet you, "+getName()+". I'm "+a.getName(),    new TalkResponse("Great to meet you too, "+a.getName()+". It's always good to see a friendly face out on the field.")),
+                    new TalkOption("U Your reputation precedes you, "+getName()+".",            new TalkResponse("I am afraid yours does not...?")),
+                    new TalkOption("- Your vibes disgust me.",                                  new TalkResponse("You are a scoundrel.")),
+                    new TalkOption("- I must take my leave. <exit>",                            new TalkResponse("Ok... Good day... to you, then?")),
+            });
         } else {
             rep.meet(a);
-            options.add("+EPleased to make your acquaintance - I am "+a.getName());
-            responses.add("Great to meet you, "+a.getName()+". I am "+getName()+". I hope to see you again on the field.");
-            options.add("UEYour reputation precedes you, "+getName()+".");
-            responses.add("I am afraid yours does not...?");
-            options.add("-EYour vibes disgust me.");
-            responses.add("You are a scoundrel.");
-            options.add("-EI must take my leave. <exit>");
-            responses.add("Ok... Good day... to you, then?");
+            a.rep.meet(this);
+            return new TalkResponse("I don't believe we've met. I am "+getName(), new TalkOption[]{
+                    new TalkOption("+ Pleased to meet you, "+getName()+". I'm "+a.getName(),    new TalkResponse("Great to meet you too, "+a.getName()+". It's always good to see a friendly face out on the field.")),
+                    new TalkOption("U Your reputation precedes you, "+getName()+".",            new TalkResponse("I am afraid yours does not...?")),
+                    new TalkOption("- Your vibes disgust me.",                                  new TalkResponse("You are a scoundrel.")),
+                    new TalkOption("- I must take my leave. <exit>",                            new TalkResponse("Ok... Good day... to you, then?")),
+            });
         }
-        ArrayList<String>[] returnval = new ArrayList[2];
-        returnval[0]=options;
-        returnval[1]=responses;
-        return returnval;
     }
 
     public String getName() {

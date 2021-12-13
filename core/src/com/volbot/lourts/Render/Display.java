@@ -58,7 +58,11 @@ public class Display {
                 }
             } else if(tempMenu instanceof TalkWindow) {
                 TalkWindow menu = (TalkWindow) tempMenu;
-                menu.drawMenu(batch, cam);
+                if(menu.conversation!=null) {
+                    menu.drawMenu(batch, cam);
+                } else {
+                    Main.gui.clearMenu();
+                }
             }
         } else {
             if (hovered != null) {
