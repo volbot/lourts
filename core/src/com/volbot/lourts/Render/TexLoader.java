@@ -16,38 +16,35 @@ public class TexLoader {
 
     public void dispose(){
         for(Texture tex : tiles){
-            tex.dispose();
             tiles.remove(tex);
+            tex.dispose();
         }
         for(Texture tex : towns){
-            tex.dispose();
             towns.remove(tex);
+            tex.dispose();
         }
         for(Texture tex : heroes){
-            tex.dispose();
             heroes.remove(tex);
+            tex.dispose();
         }
     }
 
     public void loadTextures(){
-        File townsFolder = new File("towns/");
         File[] townsFiles = new File("towns/").listFiles();
-        if(townsFiles!=null||townsFiles.length>0) {
-            for (File file : townsFolder.listFiles()) {
+        if(townsFiles!=null&&townsFiles.length>0) {
+            for (File file : townsFiles) {
                 towns.add(new Texture("towns/"+file.getName()));
             }
         }
-        File tilesFolder = new File("tiles/");
         File[] tilesFiles = new File("tiles/").listFiles();
-        if(tilesFiles!=null||tilesFiles.length>0) {
-            for (File file : tilesFolder.listFiles()) {
+        if(tilesFiles!=null&&tilesFiles.length>0) {
+            for (File file : tilesFiles) {
                 tiles.add(new Texture("tiles/"+file.getName()));
             }
         }
-        File heroesFolder = new File("heroes/");
         File[] heroesFiles = new File("heroes/").listFiles();
-        if(heroesFiles!=null||heroesFiles.length>0) {
-            for (File file : heroesFolder.listFiles()) {
+        if(heroesFiles!=null&&heroesFiles.length>0) {
+            for (File file : heroesFiles) {
                 heroes.add(new Texture("heroes/"+file.getName()));
             }
         }

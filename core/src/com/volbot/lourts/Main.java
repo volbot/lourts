@@ -51,7 +51,6 @@ public class Main extends ApplicationAdapter {
 		skeletrex = boneland.getFigurehead();
 		entities.add(skeletrex);
 		skeletrex.setDestination(new Vector3(-300, 100,0));
-		skeletrex.texID=1;
 		cam = new OrthographicCamera();
 		cam.setToOrtho(false,1024,576);
 		cam.position.x=320;
@@ -69,6 +68,9 @@ public class Main extends ApplicationAdapter {
 		ScreenUtils.clear(1, 0, 0, 1);
 		crabwizard.think();
 		skeletrex.think();
+		if(gui.currmenu!=null){
+			gui.loop();
+		}
 		inputs.parseCameraMovement();
 		display.loop();
 	}

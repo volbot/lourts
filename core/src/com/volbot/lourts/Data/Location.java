@@ -31,6 +31,7 @@ public class Location extends Agent {
         x=xpos;
         y=ypos;
         figurehead=new Hero("Skeletrex",this);
+        figurehead.texID=1;
         heroes.add(figurehead);
         personality=figurehead.getPersonality();
     }

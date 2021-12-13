@@ -1,5 +1,7 @@
 package com.volbot.lourts.Data;
 
+import com.volbot.lourts.Agents.Agent;
+
 import java.util.HashMap;
 
 public class Reputation {
@@ -8,15 +10,23 @@ public class Reputation {
     public Reputation() {
     }
 
-    public boolean isset(String key){
-        return repmap.containsKey(key);
+    public boolean knows(Agent key){
+        return repmap.containsKey(key.getName());
     }
 
-    public int get(String key) {
-        return repmap.get(key);
+    public int get(Agent key) {
+        return repmap.get(key.getName());
     }
 
-    public void meet(String name) {
-        repmap.put(name, 0);
+    public void meet(Agent a) {
+        repmap.put(a.getName(), 0);
+    }
+
+    public void impress(Agent a, int mag) {
+        String name = a.getName();
+        int newrep = repmap.get(name)+mag;
+        if(Math.abs(newrep)<=100){
+            repmap.put(name, newrep);
+        }
     }
 }

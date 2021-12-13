@@ -10,8 +10,6 @@ import com.volbot.lourts.Agents.Agent;
 import com.volbot.lourts.Data.Location;
 import com.volbot.lourts.GUI.GameMenu;
 import com.volbot.lourts.GUI.GameWindow;
-import com.volbot.lourts.GUI.InteractMenu;
-import com.volbot.lourts.GUI.TalkWindow;
 import com.volbot.lourts.Main;
 
 public class InputManager implements InputProcessor {
