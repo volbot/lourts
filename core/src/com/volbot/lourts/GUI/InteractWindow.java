@@ -9,7 +9,10 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.volbot.lourts.Agents.Agent;
+import com.volbot.lourts.Data.Location;
 import com.volbot.lourts.Main;
+
+import java.util.ArrayList;
 
 public abstract class InteractWindow extends GameWindow {
     protected Agent entity;
@@ -25,7 +28,8 @@ public abstract class InteractWindow extends GameWindow {
         int xleft = (int)(cam.viewportWidth-windowbg.getWidth())/2;
         int ybot = (int)(cam.viewportHeight-windowbg.getHeight())/2;
         int scalefac = 10;
-        batch.draw(Main.texLoader.heroes.get(1), xleft+windowbg.getWidth()*0.05f, ybot+windowbg.getHeight()*0.5f, 20*scalefac, 20*scalefac);
+        ArrayList<Texture> texList = entity instanceof Location ? Main.texLoader.towns : Main.texLoader.heroes;
+        batch.draw(texList.get(entity.texID), xleft+windowbg.getWidth()*0.05f, ybot+windowbg.getHeight()*0.5f, 20*scalefac, 20*scalefac);
         font.getData().setScale(2f);
         GlyphLayout layout = new GlyphLayout(font, entity.getName() + "\n" +
                                                         "FACTION: n/a" + "\n" +

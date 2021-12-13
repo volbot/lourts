@@ -7,6 +7,8 @@ import java.util.ArrayList;
 
 public class Agent {
 
+    public int texID;
+
     public int x;
     public int y;
 

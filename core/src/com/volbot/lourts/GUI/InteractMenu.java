@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.volbot.lourts.Agents.Agent;
+import com.volbot.lourts.Data.Location;
 
 public class InteractMenu extends GameMenu {
     Agent entity;
@@ -26,9 +27,10 @@ public class InteractMenu extends GameMenu {
 
     @Override
     public void drawMenu(SpriteBatch batch, Camera cam){
-        buttons[0].setX(cam.position.x+entity.x-25-10);
+        int texSize = entity instanceof Location ? 32 : 20;
+        buttons[0].setX(cam.position.x+entity.x-(texSize*1.2f)-10);
         buttons[0].setY(cam.position.y+entity.y-10);
-        buttons[1].setX(cam.position.x+entity.x+25-10);
+        buttons[1].setX(cam.position.x+entity.x+(texSize*1.2f)-10);
         buttons[1].setY(cam.position.y+entity.y-10);
         super.drawMenu(batch,cam);
     }

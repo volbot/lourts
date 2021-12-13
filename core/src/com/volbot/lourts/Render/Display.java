@@ -37,16 +37,15 @@ public class Display {
         ScreenUtils.clear(1, 0, 0, 1);
         batch.begin();
         drawMap();
-        int i = 0;
         for (Agent a : entities) {
             if (a instanceof Individual) {
-                batch.draw(texLoader.heroes.get(i), cam.position.x + a.x - 10, cam.position.y + a.y - 10);
-                i++;
+                if(a != Main.player) batch.draw(texLoader.heroes.get(a.texID), cam.position.x + a.x - 10, cam.position.y + a.y - 10);
             }
             if (a instanceof Location) {
-                batch.draw(texLoader.towns.get(0), cam.position.x + a.x - 10, cam.position.y + a.y - 10, 20, 20);
+                batch.draw(texLoader.towns.get(a.texID), cam.position.x + a.x - 20, cam.position.y + a.y - 20);
             }
         }
+        batch.draw(texLoader.heroes.get(Main.player.texID), cam.position.x + Main.player.x - 10, cam.position.y + Main.player.y - 10);
         GameMenu tempMenu = Main.gui.currmenu;
         Agent hovered = Main.inputs.entityHovered();
         if (tempMenu != null) {
@@ -72,7 +71,8 @@ public class Display {
 
     public void drawName(Agent a) {
         GlyphLayout layout = new GlyphLayout(font, a.getName());
-        font.draw(batch, layout, cam.position.x + a.x - layout.width / 2, cam.position.y + a.y + 30);
+        int tempHeight = a instanceof Location ? 40 : 30;
+        font.draw(batch, layout, cam.position.x + a.x - layout.width / 2, cam.position.y + a.y + tempHeight);
     }
 
     private void drawChunk(int chunkx, int chunky) {

@@ -44,11 +44,14 @@ public class Main extends ApplicationAdapter {
 		gui = new GUIManager();
 		crabwizard.x=0;
 		crabwizard.y=0;
+		crabwizard.texID=0;
 		boneland = new Location("boneland",200,200);
 		entities.add(boneland);
+		boneland.texID=0;
 		skeletrex = boneland.getFigurehead();
 		entities.add(skeletrex);
 		skeletrex.setDestination(new Vector3(-300, 100,0));
+		skeletrex.texID=1;
 		cam = new OrthographicCamera();
 		cam.setToOrtho(false,1024,576);
 		cam.position.x=320;

@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.volbot.lourts.Agents.Agent;
+import com.volbot.lourts.Data.Location;
 import com.volbot.lourts.GUI.GameMenu;
 import com.volbot.lourts.GUI.GameWindow;
 import com.volbot.lourts.GUI.InteractMenu;
@@ -38,9 +39,11 @@ public class InputManager implements InputProcessor {
 
     public Agent entityHovered(Vector3 clickLoc) {
         int thresh = 17;
+        int width;
         for (Agent e : Main.entities) {
-            if (clickLoc.x < e.x + thresh && clickLoc.x > e.x - thresh) {
-                if (clickLoc.y < e.y + thresh && clickLoc.y > e.y - thresh) {
+            width = e instanceof Location ? 20 : 10;
+            if (clickLoc.x < e.x + width + thresh && clickLoc.x > e.x - width - thresh) {
+                if (clickLoc.y < e.y + width + thresh && clickLoc.y > e.y - width - thresh) {
                     if(Main.player!=e) return e;
                 }
             }
@@ -52,10 +55,12 @@ public class InputManager implements InputProcessor {
         Vector3 touchPos = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
         cam.unproject(touchPos);
         Vector3 touchLoc = positionClick(touchPos);
-        int thresh = 17;
+        int thresh = 4;
+        int width;
         for (Agent e : Main.entities) {
-            if (touchLoc.x < e.x + thresh && touchLoc.x > e.x - thresh) {
-                if (touchLoc.y < e.y + thresh && touchLoc.y > e.y - thresh) {
+            width = e instanceof Location ? 20 : 10;
+            if (touchLoc.x < e.x + width + thresh && touchLoc.x > e.x - width - thresh) {
+                if (touchLoc.y < e.y + width + thresh && touchLoc.y > e.y - width - thresh) {
                     return e;
                 }
             }
