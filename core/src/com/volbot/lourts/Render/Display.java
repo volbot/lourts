@@ -48,7 +48,6 @@ public class Display {
                 batch.draw(texLoader.towns.get(a.texID), cam.position.x + a.x - 20, cam.position.y + a.y - 20);
             }
         }
-        System.out.println(cam.position);
         batch.draw(texLoader.heroes.get(Main.player.texID), Main.player.x - 10 + cam.position.x, Main.player.y - 10 + cam.position.y);
         GameMenu tempMenu = Main.gui.currmenu;
         Agent hovered = Main.inputs.entityHovered(Main.inputs.getTouchPos());
@@ -73,7 +72,7 @@ public class Display {
                 drawName(hovered);
             }
         }
-        cam.update(false);
+        cam.update();
         batch.end();
     }
 

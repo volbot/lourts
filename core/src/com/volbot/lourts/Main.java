@@ -50,8 +50,8 @@ public class Main extends ApplicationAdapter {
 		//boneland.getFigurehead().setDestination(new Vector3(-300, 100,0));
 		cam = new OrthographicCamera();
 		cam.setToOrtho(false,1024,576);
-		cam.position.x=320;
-		cam.position.y=240;
+		cam.position.x=0;
+		cam.position.y=0;
 		display = new Display(cam);
 		inputs = new InputManager(cam);
 		Gdx.input.setInputProcessor(inputs);
@@ -66,7 +66,6 @@ public class Main extends ApplicationAdapter {
 		}
 		inputs.parseCameraMovement();
 		display.loop();
-		cam.update();
 	}
 
 	public void massThink () {

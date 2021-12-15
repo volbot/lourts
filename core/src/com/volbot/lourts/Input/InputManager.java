@@ -31,9 +31,8 @@ public class InputManager implements InputProcessor {
     private Vector3 positionClick(Vector3 clickLoc) {
         Vector3 touchPos = clickLoc.cpy();
         cam.unproject(touchPos);
-        Vector3 camPos = cam.position.cpy();
-        Vector3 camViewport = new Vector3(480,480,0);
-        touchPos.sub(camPos);
+        touchPos.x-=((cam.position.x)-cam.viewportWidth/2)+cam.position.x;
+        touchPos.y-=((cam.position.y)-cam.viewportHeight/2)+cam.position.y;
         return touchPos;
     }
 
@@ -132,10 +131,9 @@ public class InputManager implements InputProcessor {
                 if (Main.gui.currmenu != null) {
                     GameMenu tempMenu = Main.gui.currmenu;
                     if(tempMenu.buttons!=null){
-                        cam.unproject(clickPos);
                         for(Button b : tempMenu.buttons){
-                            if(clickPos.x>b.getX()&&clickPos.x<b.getX()+b.getWidth()){
-                                if(clickPos.y>b.getY()&&clickPos.y<b.getY()+b.getHeight()){
+                            if(touchLoc.x>b.getX()&&touchLoc.x<b.getX()+b.getWidth()){
+                                if(touchLoc.y>b.getY()&&touchLoc.y<b.getY()+b.getHeight()){
                                     b.setChecked(true);
                                     for(Button b2 : tempMenu.buttons) if(b!=b2) b2.setChecked(false);
                                     returnval=true;
@@ -181,7 +179,7 @@ public class InputManager implements InputProcessor {
         if(camHold!=null) {
             Vector3 temp = touchLoc.cpy().sub(camHold);
             cam.position.add(temp);
-            camHold=touchLoc;
+            cam.update();
         } else {
             if(Main.player.getDestination()==null) {
                 Main.player.setDestination(touchLoc);
