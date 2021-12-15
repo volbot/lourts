@@ -1,9 +1,12 @@
 package com.volbot.lourts.Render;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Camera;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.volbot.lourts.Agents.Agent;
 import com.volbot.lourts.Agents.Individual;
@@ -11,6 +14,7 @@ import com.volbot.lourts.Data.Location;
 import com.volbot.lourts.GUI.GameMenu;
 import com.volbot.lourts.GUI.InteractMenu;
 import com.volbot.lourts.GUI.TalkWindow;
+import com.volbot.lourts.Input.InputManager;
 import com.volbot.lourts.Main;
 
 import java.util.ArrayList;
@@ -19,25 +23,24 @@ public class Display {
 
     private final TexLoader texLoader;
     private final SpriteBatch batch;
-    private final Camera cam;
-    private final ArrayList<Agent> entities;
+    private final OrthographicCamera cam;
 
     private final BitmapFont font;
 
-    public Display(Camera camera) {
+    public Display(OrthographicCamera camera) {
         cam = camera;
         texLoader = new TexLoader();
         batch = new SpriteBatch();
-        batch.setProjectionMatrix(cam.combined);
-        entities = new ArrayList<>();
         font = new BitmapFont();
+        batch.setProjectionMatrix(cam.combined);
+
     }
 
     public void loop() {
         ScreenUtils.clear(1, 0, 0, 1);
         batch.begin();
         drawMap();
-        for (Agent a : entities) {
+        for (Agent a : Main.entities) {
             if (a instanceof Individual) {
                 if(a != Main.player) batch.draw(texLoader.heroes.get(a.texID), cam.position.x + a.x - 10, cam.position.y + a.y - 10);
             }
@@ -45,9 +48,10 @@ public class Display {
                 batch.draw(texLoader.towns.get(a.texID), cam.position.x + a.x - 20, cam.position.y + a.y - 20);
             }
         }
-        batch.draw(texLoader.heroes.get(Main.player.texID), cam.position.x + Main.player.x - 10, cam.position.y + Main.player.y - 10);
+        System.out.println(cam.position);
+        batch.draw(texLoader.heroes.get(Main.player.texID), Main.player.x - 10 + cam.position.x, Main.player.y - 10 + cam.position.y);
         GameMenu tempMenu = Main.gui.currmenu;
-        Agent hovered = Main.inputs.entityHovered();
+        Agent hovered = Main.inputs.entityHovered(Main.inputs.getTouchPos());
         if (tempMenu != null) {
             if (tempMenu instanceof InteractMenu) {
                 InteractMenu menu = (InteractMenu) tempMenu;
@@ -69,6 +73,7 @@ public class Display {
                 drawName(hovered);
             }
         }
+        cam.update(false);
         batch.end();
     }
 
@@ -129,14 +134,6 @@ public class Display {
                 drawChunk(chunkx, chunky);
             }
         }
-    }
-
-    public void displayEntity(Agent a) {
-        entities.add(a);
-    }
-
-    public void hideEntity(Agent a) {
-        entities.remove(a);
     }
 
     public void dispose() {

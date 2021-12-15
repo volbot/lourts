@@ -3,9 +3,6 @@ package com.volbot.lourts.Agents;
 import com.volbot.lourts.Data.Reputation;
 import com.volbot.lourts.Data.TalkOption;
 import com.volbot.lourts.Data.TalkResponse;
-import com.volbot.lourts.Main;
-
-import java.util.ArrayList;
 
 public class Agent {
 

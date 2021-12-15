@@ -1,11 +1,12 @@
 package com.volbot.lourts.Data;
 
 import com.volbot.lourts.Agents.Agent;
+import com.volbot.lourts.Agents.Individual;
 
 import java.util.HashMap;
 
 public class Reputation {
-    private final HashMap<String, Integer> repmap = new HashMap<>();
+    private final HashMap<String, Float> repmap = new HashMap<>();
 
     public Reputation() {
     }
@@ -15,18 +16,23 @@ public class Reputation {
     }
 
     public int get(Agent key) {
-        return repmap.get(key.getName());
+        return Math.round(repmap.get(key.getName()));
     }
 
     public void meet(Agent a) {
-        repmap.put(a.getName(), 0);
+        repmap.put(a.getName(), 0f);
     }
 
-    public void impress(Agent a, int mag) {
+    public void impress(Agent a, double mag) {
         String name = a.getName();
-        int newrep = repmap.get(name)+mag;
+        float newrep = repmap.get(name)+(float)mag;
         if(Math.abs(newrep)<=100){
             repmap.put(name, newrep);
+        }
+        if(a instanceof Individual){
+            if(((Individual) a).location!=null){
+                ((Individual) a).location.rep.impress(a,mag*0.2);
+            }
         }
     }
 }

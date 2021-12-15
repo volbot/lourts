@@ -10,6 +10,7 @@ import com.volbot.lourts.Agents.Hero;
 import com.volbot.lourts.Agents.Individual;
 import com.volbot.lourts.Data.Location;
 import com.volbot.lourts.GUI.GUIManager;
+import com.volbot.lourts.GUI.InteractMenu;
 import com.volbot.lourts.Input.InputManager;
 import com.volbot.lourts.Map.GameMap;
 import com.volbot.lourts.Render.Display;
@@ -23,7 +24,6 @@ public class Main extends ApplicationAdapter {
 
 	public static TexLoader texLoader;
 	Individual crabwizard;
-	Hero skeletrex;
 	Location boneland;
 
 	public static Individual player;
@@ -47,17 +47,12 @@ public class Main extends ApplicationAdapter {
 		boneland = new Location("boneland",200,200);
 		entities.add(boneland);
 		boneland.texID=0;
-		skeletrex = boneland.getFigurehead();
-		entities.add(skeletrex);
-		skeletrex.setDestination(new Vector3(-300, 100,0));
+		//boneland.getFigurehead().setDestination(new Vector3(-300, 100,0));
 		cam = new OrthographicCamera();
 		cam.setToOrtho(false,1024,576);
 		cam.position.x=320;
 		cam.position.y=240;
 		display = new Display(cam);
-		display.displayEntity(crabwizard);
-		display.displayEntity(skeletrex);
-		display.displayEntity(boneland);
 		inputs = new InputManager(cam);
 		Gdx.input.setInputProcessor(inputs);
 	}
@@ -65,13 +60,41 @@ public class Main extends ApplicationAdapter {
 	@Override
 	public void render () {
 		ScreenUtils.clear(1, 0, 0, 1);
-		crabwizard.think();
-		skeletrex.think();
+		massThink();
 		if(gui.currmenu!=null){
 			gui.loop();
 		}
 		inputs.parseCameraMovement();
 		display.loop();
+		cam.update();
+	}
+
+	public void massThink () {
+		int len1 = entities.size();
+		Agent entity;
+		for(int j = 0; j<len1; j++){
+			entity = entities.get(j);
+			if(entity instanceof Individual){
+				entity.think();
+			} else if(entity instanceof Location){
+				ArrayList<Individual> heroes = ((Location) entity).heroes;
+				int len2 = heroes.size();
+				for(int i = 0; i<len2; i++){
+					heroes.get(i).think();
+					if(heroes.size()<len2){
+						len2--;
+						i--;
+					}
+				}
+			}
+			if(entities.size()<len1){
+				len1--;
+				j--;
+			}
+			if(entities.size()>len1){
+				len1++;
+			}
+		}
 	}
 	
 	@Override

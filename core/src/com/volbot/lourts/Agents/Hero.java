@@ -16,10 +16,16 @@ public class Hero extends Individual {
 
     public Hero(String name, Location origin) {
         super(name);
-        personality = new Personality(0, 0, 0, 0);
+        personality = origin.getPersonality();
         background = new Background(origin, 0);
-        x=origin.x;
-        y=origin.y;
+        this.location=origin;
+        origin.heroes.add(this);
+    }
+
+    @Override
+    public void think() {
+        super.think();
+
     }
 
     public Personality getPersonality() {

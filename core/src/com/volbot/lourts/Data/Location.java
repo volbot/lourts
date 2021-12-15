@@ -13,13 +13,14 @@ public class Location extends Agent {
     private int wealth;
     private Personality personality;
 
-    ArrayList<Individual> heroes = new ArrayList<>();
+    public ArrayList<Individual> heroes = new ArrayList<>();
 
     public Location(String name){
         super(name);
         population=1;
         wealth=0;
         figurehead=new Hero("Skeletrex",this);
+        figurehead.location = this;
         heroes.add(figurehead);
         personality=figurehead.getPersonality();
     }
@@ -32,7 +33,6 @@ public class Location extends Agent {
         y=ypos;
         figurehead=new Hero("Skeletrex",this);
         figurehead.texID=1;
-        heroes.add(figurehead);
         personality=figurehead.getPersonality();
     }
 

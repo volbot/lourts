@@ -1,6 +1,8 @@
 package com.volbot.lourts.GUI;
 
 import com.volbot.lourts.Agents.Agent;
+import com.volbot.lourts.Agents.Hero;
+import com.volbot.lourts.Data.Location;
 import com.volbot.lourts.Main;
 
 public class GUIManager {
@@ -43,7 +45,16 @@ public class GUIManager {
     }
 
     public void drawTalkMenu(Agent a) {
-        currmenu = new TalkWindow(a);
+        if(a instanceof Location){
+            Location loc = (Location) a;
+            if(loc.heroes.contains(loc.getFigurehead())){
+                currmenu = new TalkWindow(loc.getFigurehead());
+            } else {
+                currmenu = new TalkWindow(new Hero(loc.getName()+" Diplomat"));
+            }
+        } else {
+            currmenu = new TalkWindow(a);
+        }
     }
 
     public void clearMenu() {

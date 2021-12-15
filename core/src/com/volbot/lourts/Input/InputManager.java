@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.Camera;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.volbot.lourts.Agents.Agent;
@@ -14,7 +15,7 @@ import com.volbot.lourts.Main;
 
 public class InputManager implements InputProcessor {
 
-    Camera cam;
+    OrthographicCamera cam;
 
     private final int camSpeed;
 
@@ -22,37 +23,27 @@ public class InputManager implements InputProcessor {
 
     public boolean camLockedToMap = false;
 
-    public InputManager(Camera camera) {
+    public InputManager(OrthographicCamera camera) {
         cam = camera;
         camSpeed = 300;
     }
 
-    private Vector3 positionClick(Vector3 touchPos) {
-        return new Vector3(
-                -cam.position.x + touchPos.x,
-                -cam.position.y + touchPos.y,
-                0
-        );
-    }
-
-    public Agent entityHovered(Vector3 clickLoc) {
-        int thresh = 17;
-        int width;
-        for (Agent e : Main.entities) {
-            width = e instanceof Location ? 20 : 10;
-            if (clickLoc.x < e.x + width + thresh && clickLoc.x > e.x - width - thresh) {
-                if (clickLoc.y < e.y + width + thresh && clickLoc.y > e.y - width - thresh) {
-                    if(Main.player!=e) return e;
-                }
-            }
-        }
-        return null;
-    }
-
-    public Agent entityHovered() {
-        Vector3 touchPos = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
+    private Vector3 positionClick(Vector3 clickLoc) {
+        Vector3 touchPos = clickLoc.cpy();
         cam.unproject(touchPos);
-        Vector3 touchLoc = positionClick(touchPos);
+        Vector3 camPos = cam.position.cpy();
+        Vector3 camViewport = new Vector3(480,480,0);
+        touchPos.sub(camPos);
+        return touchPos;
+    }
+
+    public Vector3 getTouchPos(){
+        Vector3 vec = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
+        vec = positionClick(vec);
+        return vec;
+    }
+
+    public Agent entityHovered(Vector3 touchLoc) {
         int thresh = 4;
         int width;
         for (Agent e : Main.entities) {
@@ -134,7 +125,6 @@ public class InputManager implements InputProcessor {
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
         boolean returnval = false;
         Vector3 clickPos = new Vector3(screenX, screenY, 0);
-        cam.unproject(clickPos);
         Vector3 touchLoc = positionClick(clickPos);
         Agent hoverAgent = entityHovered(touchLoc);
         switch (button) {
@@ -142,6 +132,7 @@ public class InputManager implements InputProcessor {
                 if (Main.gui.currmenu != null) {
                     GameMenu tempMenu = Main.gui.currmenu;
                     if(tempMenu.buttons!=null){
+                        cam.unproject(clickPos);
                         for(Button b : tempMenu.buttons){
                             if(clickPos.x>b.getX()&&clickPos.x<b.getX()+b.getWidth()){
                                 if(clickPos.y>b.getY()&&clickPos.y<b.getY()+b.getHeight()){
@@ -149,14 +140,6 @@ public class InputManager implements InputProcessor {
                                     for(Button b2 : tempMenu.buttons) if(b!=b2) b2.setChecked(false);
                                     returnval=true;
                                 }
-                            }
-                        }
-                    }
-                    if(tempMenu instanceof GameWindow){
-                        GameWindow menu = (GameWindow)tempMenu;
-                        if(clickPos.x>(cam.viewportWidth-menu.windowbg.getWidth())/2&&clickPos.x<(cam.viewportWidth-menu.windowbg.getWidth())/2 + menu.windowbg.getWidth()){
-                            if(clickPos.y>(cam.viewportHeight-menu.windowbg.getHeight())/2&&clickPos.y<(cam.viewportHeight-menu.windowbg.getHeight())/2 + menu.windowbg.getHeight()){
-                                returnval=true;
                             }
                         }
                     }
@@ -173,7 +156,7 @@ public class InputManager implements InputProcessor {
                 }
                 return returnval;
             case 1:
-                if (hoverAgent != null) {
+                if (camHold == null && hoverAgent != null) {
                     Main.player.setDestination(touchLoc);
                 }
                 if(Main.gui.currmenu instanceof GameWindow){
@@ -193,14 +176,15 @@ public class InputManager implements InputProcessor {
 
     @Override
     public boolean touchDragged(int screenX, int screenY, int pointer) {
-        Vector3 touchLoc = new Vector3(screenX, screenY, 0);
-        touchLoc = cam.unproject(touchLoc);
+        Vector3 clickPos = new Vector3(screenX, screenY, 0);
+        Vector3 touchLoc = positionClick(clickPos);
         if(camHold!=null) {
-            touchLoc.sub(camHold);
-            cam.position.set(touchLoc);
+            Vector3 temp = touchLoc.cpy().sub(camHold);
+            cam.position.add(temp);
+            camHold=touchLoc;
         } else {
             if(Main.player.getDestination()==null) {
-                Main.player.setDestination(positionClick(touchLoc));
+                Main.player.setDestination(touchLoc);
             }
         }
         return false;
@@ -213,6 +197,7 @@ public class InputManager implements InputProcessor {
 
     @Override
     public boolean scrolled(float amountX, float amountY) {
-        return false;
+        //cam.zoom -= amountY;
+        return true;
     }
 }
