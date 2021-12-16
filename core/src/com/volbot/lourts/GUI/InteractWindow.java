@@ -2,6 +2,7 @@ package com.volbot.lourts.GUI;
 
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -18,7 +19,7 @@ public abstract class InteractWindow extends GameWindow {
     protected Integer repInt;
 
     @Override
-    public void drawMenu(SpriteBatch batch, Camera cam) {
+    public void drawMenu(SpriteBatch batch, OrthographicCamera cam) {
         super.drawMenu(batch, cam);
         drawAgentInfo(batch,cam);
     }

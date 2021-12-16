@@ -30,9 +30,11 @@ public class InputManager implements InputProcessor {
 
     private Vector3 positionClick(Vector3 clickLoc) {
         Vector3 touchPos = clickLoc.cpy();
-        cam.unproject(touchPos);
-        touchPos.x-=((cam.position.x)-cam.viewportWidth/2)+cam.position.x;
-        touchPos.y-=((cam.position.y)-cam.viewportHeight/2)+cam.position.y;
+        touchPos=cam.unproject(touchPos);
+        touchPos.x+=((cam.viewportWidth)/2);
+        touchPos.y+=((cam.viewportHeight)/2);
+        touchPos.x-=((cam.position.x*2));
+        touchPos.y-=((cam.position.y*2));
         return touchPos;
     }
 
@@ -43,10 +45,10 @@ public class InputManager implements InputProcessor {
     }
 
     public Agent entityHovered(Vector3 touchLoc) {
-        int thresh = 4;
-        int width;
+        float thresh = 0;
+        float width;
         for (Agent e : Main.entities) {
-            width = e instanceof Location ? 20 : 10;
+            width = e instanceof Location ? 20*cam.zoom : 10*cam.zoom;
             if (touchLoc.x < e.x + width + thresh && touchLoc.x > e.x - width - thresh) {
                 if (touchLoc.y < e.y + width + thresh && touchLoc.y > e.y - width - thresh) {
                     return e;
@@ -132,8 +134,10 @@ public class InputManager implements InputProcessor {
                     GameMenu tempMenu = Main.gui.currmenu;
                     if(tempMenu.buttons!=null){
                         for(Button b : tempMenu.buttons){
-                            if(touchLoc.x>b.getX()&&touchLoc.x<b.getX()+b.getWidth()){
-                                if(touchLoc.y>b.getY()&&touchLoc.y<b.getY()+b.getHeight()){
+                            Vector3 bpos = new Vector3(b.getX(),b.getY(),0);
+                            bpos.scl(1/cam.zoom);
+                            if(touchLoc.x>bpos.x&&touchLoc.x<bpos.y+b.getWidth()/2){
+                                if(touchLoc.y>bpos.y&&touchLoc.y<bpos.y+b.getHeight()/2){
                                     b.setChecked(true);
                                     for(Button b2 : tempMenu.buttons) if(b!=b2) b2.setChecked(false);
                                     returnval=true;
@@ -195,7 +199,12 @@ public class InputManager implements InputProcessor {
 
     @Override
     public boolean scrolled(float amountX, float amountY) {
-        //cam.zoom -= amountY;
+        if(amountY<0) {
+            cam.zoom += 0.02f;
+        } else {
+            cam.zoom -= 0.02f;
+        }
+        System.out.println(cam.zoom);
         return true;
     }
 }

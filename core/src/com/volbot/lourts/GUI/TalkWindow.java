@@ -1,6 +1,7 @@
 package com.volbot.lourts.GUI;
 
 import com.badlogic.gdx.graphics.Camera;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -32,7 +33,7 @@ public class TalkWindow extends InteractWindow {
     }
 
     @Override
-    public void drawMenu(SpriteBatch batch, Camera cam) {
+    public void drawMenu(SpriteBatch batch, OrthographicCamera cam) {
         float widthinc = windowbg.getWidth() * 0.05f;
         float heightinc = windowbg.getHeight() * 0.05f;
 

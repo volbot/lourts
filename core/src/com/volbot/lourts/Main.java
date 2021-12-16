@@ -47,7 +47,6 @@ public class Main extends ApplicationAdapter {
 		boneland = new Location("boneland",200,200);
 		entities.add(boneland);
 		boneland.texID=0;
-		//boneland.getFigurehead().setDestination(new Vector3(-300, 100,0));
 		cam = new OrthographicCamera();
 		cam.setToOrtho(false,1024,576);
 		cam.position.x=0;
