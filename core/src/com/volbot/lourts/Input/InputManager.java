@@ -31,10 +31,12 @@ public class InputManager implements InputProcessor {
     private Vector3 positionClick(Vector3 clickLoc) {
         Vector3 touchPos = clickLoc.cpy();
         touchPos=cam.unproject(touchPos);
-        touchPos.x+=((cam.viewportWidth)/2);
-        touchPos.y+=((cam.viewportHeight)/2);
-        touchPos.x-=((cam.position.x*2));
-        touchPos.y-=((cam.position.y*2));
+        Vector3 camSize = new Vector3(cam.viewportWidth,cam.viewportHeight,0);
+        Vector3 camPos = cam.position.cpy();
+        camSize.scl(1/(cam.zoom));
+        touchPos.mulAdd(camSize,0.5f);
+        touchPos.mulAdd(camPos,-2f);
+        touchPos.mulAdd(camPos,(cam.zoom-1)/cam.zoom);
         return touchPos;
     }
 
@@ -126,6 +128,7 @@ public class InputManager implements InputProcessor {
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
         boolean returnval = false;
         Vector3 clickPos = new Vector3(screenX, screenY, 0);
+        System.out.println("CLICKPOS: "+clickPos);
         Vector3 touchLoc = positionClick(clickPos);
         Agent hoverAgent = entityHovered(touchLoc);
         switch (button) {
@@ -135,7 +138,7 @@ public class InputManager implements InputProcessor {
                     if(tempMenu.buttons!=null){
                         for(Button b : tempMenu.buttons){
                             Vector3 bpos = new Vector3(b.getX(),b.getY(),0);
-                            bpos.scl(1/cam.zoom);
+                            //System.out.println("BPOS: "+bpos);
                             if(touchLoc.x>bpos.x&&touchLoc.x<bpos.y+b.getWidth()/2){
                                 if(touchLoc.y>bpos.y&&touchLoc.y<bpos.y+b.getHeight()/2){
                                     b.setChecked(true);
@@ -205,6 +208,7 @@ public class InputManager implements InputProcessor {
             cam.zoom -= 0.02f;
         }
         System.out.println(cam.zoom);
+        System.out.println(cam.position);
         return true;
     }
 }

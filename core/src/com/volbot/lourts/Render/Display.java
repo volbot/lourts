@@ -89,10 +89,10 @@ public class Display {
     private void drawChunk(int chunkx, int chunky) {
         float size = (20)*(cam.zoom);
         //System.out.println(size);
-        float posx = (chunkx * (size*24)) - (int) cam.position.x;
+        float posx = (chunkx * (size*24)) + (int) cam.position.x;
         float posy;
         for (int drawx = 0; drawx < 24; drawx++) {
-            posy = (chunky * (size*24)) - (int) cam.position.y;
+            posy = (chunky * (size*24)) + (int) cam.position.y;
             for (int drawy = 0; drawy < 24; drawy++) {
                 batch.draw(
                         texLoader.tiles.get(
@@ -100,7 +100,7 @@ public class Display {
                                         .get(chunkx)
                                         .get(chunky)
                                         [drawx][drawy]),
-                        drawx * size - posx, drawy * size - posy,size,size
+                        drawx * size + posx, drawy * size + posy,size,size
                 );
             }
         }

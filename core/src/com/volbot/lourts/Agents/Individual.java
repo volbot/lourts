@@ -50,6 +50,7 @@ public class Individual extends Agent{
         }
         if (goalPos != null) {
             if(!move(goalPos)){
+                System.out.println(this.x+"   "+this.y);
                 goalPos=null;
             }
         }
