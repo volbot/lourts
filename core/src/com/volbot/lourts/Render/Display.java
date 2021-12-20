@@ -88,7 +88,6 @@ public class Display {
 
     private void drawChunk(int chunkx, int chunky) {
         float size = (20)*(cam.zoom);
-        //System.out.println(size);
         float posx = (chunkx * (size*24)) + (int) cam.position.x;
         float posy;
         for (int drawx = 0; drawx < 24; drawx++) {
@@ -107,16 +106,16 @@ public class Display {
     }
 
     private void drawMap() {
-        float size = (20)*(cam.viewportWidth/1024);
-        int camxstart = (int) Math.floor(cam.position.x - cam.viewportWidth);
-        int camystart = (int) Math.floor(cam.position.y - cam.viewportHeight);
-        int camxend = (int) Math.ceil(cam.position.x + cam.viewportWidth);
-        int camyend = (int) Math.ceil(cam.position.y + cam.viewportHeight);
+        float size = (20)*(cam.zoom);
+        Vector3 camPosAbs = new Vector3(Math.abs(cam.position.x),Math.abs(cam.position.y),0);
+        int camxstart = (int) Math.floor(camPosAbs.x);
+        int camystart = (int) Math.floor(camPosAbs.y);
+        int camxend = (int) Math.ceil(camPosAbs.x + cam.viewportWidth);
+        int camyend = (int) Math.ceil(camPosAbs.y + cam.viewportHeight);
         ArrayList<Integer> chunksx = new ArrayList<>();
         ArrayList<Integer> chunksy = new ArrayList<>();
         chunksx.add((int) Math.floor(camxstart / (24*size))-1);
-        chunksx.add((int) Math.ceil(camxend / (24*size))+1);
-        int i = chunksx.get(0);
+        chunksx.add((int) Math.ceil(camxend / (24*size))+1);int i = chunksx.get(0);
         while (i < chunksx.get(1)) {
             chunksx.add(i);
             i++;

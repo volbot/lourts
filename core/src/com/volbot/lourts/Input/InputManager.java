@@ -31,12 +31,19 @@ public class InputManager implements InputProcessor {
     private Vector3 positionClick(Vector3 clickLoc) {
         Vector3 touchPos = clickLoc.cpy();
         touchPos=cam.unproject(touchPos);
-        Vector3 camSize = new Vector3(cam.viewportWidth,cam.viewportHeight,0);
         Vector3 camPos = cam.position.cpy();
-        camSize.scl(1/(cam.zoom));
+        touchPos.sub(camPos);
+        camPos.scl(cam.zoom);
+        touchPos.sub(camPos);
+        touchPos.scl(1/cam.zoom);
+        Vector3 camSize = new Vector3(cam.viewportWidth,cam.viewportHeight,0);
         touchPos.mulAdd(camSize,0.5f);
-        touchPos.mulAdd(camPos,-2f);
-        touchPos.mulAdd(camPos,(cam.zoom-1)/cam.zoom);
+        camSize.scl(1/cam.zoom);
+        //System.out.println(camSize);
+        touchPos.x*=camSize.x/cam.viewportWidth;
+        touchPos.y*=camSize.y/cam.viewportHeight;
+        //System.out.println(camPos);
+        //touchPos.mulAdd(camPos,-2/cam.zoom);
         return touchPos;
     }
 
