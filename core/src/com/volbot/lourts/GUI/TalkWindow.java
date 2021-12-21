@@ -18,7 +18,6 @@ public class TalkWindow extends InteractWindow {
 
     public TalkWindow(Agent a) {
         entity = a;
-        System.out.println(entity instanceof Location);
         entityname = a instanceof Location ?
                 (((Location) a).heroes.contains(((Location) a).getFigurehead()) ?
                         ((Location) a).getFigurehead().getName() : a.getName()+" Representative")

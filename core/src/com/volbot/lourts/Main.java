@@ -34,14 +34,14 @@ public class Main extends ApplicationAdapter {
 	public void create () {
 		map = new GameMap();
 		texLoader = new TexLoader();
-		crabwizard = new Individual("crabwizard");
+		crabwizard = new Individual("Crabwizard");
 		player = crabwizard;
 		entities.add(crabwizard);
 		gui = new GUIManager();
 		crabwizard.x=0;
 		crabwizard.y=0;
 		crabwizard.texID=1;
-		boneland = new Location("boneland",200,200, 100);
+		boneland = new Location("Boneland",200,200, 100);
 		entities.add(boneland);
 		boneland.texID=0;
 		cam = new OrthographicCamera();

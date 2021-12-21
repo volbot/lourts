@@ -222,8 +222,6 @@ public class InputManager implements InputProcessor {
         } else {
             cam.zoom -= 0.02f;
         }
-        System.out.println(cam.zoom);
-        System.out.println(cam.position);
         return true;
     }
 }

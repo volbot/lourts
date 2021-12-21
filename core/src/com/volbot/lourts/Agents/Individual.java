@@ -7,12 +7,15 @@ import com.volbot.lourts.GUI.GameMenu;
 import com.volbot.lourts.GUI.InteractMenu;
 import com.volbot.lourts.Main;
 
+import java.util.ArrayList;
+
 public class Individual extends Agent{
     private final Stats stats; //INT, WIS, STR, DEX, CHA, PSI
     private int moveSpeed;
     public Vector3 goalPos;
     public Agent dest;
     public Location location;
+    private Population population;
 
     public Individual(String name){
         super(name);
@@ -22,6 +25,7 @@ public class Individual extends Agent{
         goalPos=null;
         dest=null;
         location=null;
+        population = new Population();
     }
 
     @Override
@@ -75,7 +79,13 @@ public class Individual extends Agent{
 
     @Override
     public int getPopulation() {
-        return 1;
+        int popu = 0;
+        for(Demographic demo : population.pop) popu+=demo.getPopulation();
+        return popu;
+    }
+
+    public Population getParty() {
+        return population;
     }
 
     public void setDestination(Vector3 goalPos) {
