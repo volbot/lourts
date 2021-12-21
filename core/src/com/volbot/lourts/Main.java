@@ -3,6 +3,7 @@ package com.volbot.lourts;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.volbot.lourts.Agents.Agent;
 import com.volbot.lourts.Agents.Individual;
@@ -44,6 +45,7 @@ public class Main extends ApplicationAdapter {
 		boneland = new Location("Boneland",200,200, 100);
 		entities.add(boneland);
 		boneland.texID=0;
+		boneland.getFigurehead().setDestination(new Vector3(400,400,0));
 		cam = new OrthographicCamera();
 		cam.setToOrtho(false,1024,576);
 		cam.position.x=0;

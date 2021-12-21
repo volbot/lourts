@@ -58,6 +58,7 @@ public class Display {
                 menu.drawMenu(batch, cam);
                 if (hovered != null && hovered != menu.getAgent()) {
                     drawName(hovered);
+                    drawPopulation(hovered);
                 }
             } else if(tempMenu instanceof TalkWindow) {
                 TalkWindow menu = (TalkWindow) tempMenu;
@@ -70,6 +71,7 @@ public class Display {
         } else {
             if (hovered != null) {
                 drawName(hovered);
+                drawPopulation(hovered);
             }
         }
         cam.update();
@@ -78,9 +80,17 @@ public class Display {
 
 
     public void drawName(Agent a) {
+        font.getData().setScale(cam.zoom);
         GlyphLayout layout = new GlyphLayout(font, a.getName());
         int tempHeight = a instanceof Location ? 40 : 30;
         font.draw(batch, layout, cam.position.x + a.x*cam.zoom - layout.width / 2, cam.position.y + a.y*cam.zoom + tempHeight*cam.zoom);
+    }
+
+    public void drawPopulation(Agent a) {
+        font.getData().setScale(cam.zoom);
+        GlyphLayout layout = new GlyphLayout(font, ""+a.getPopulation());
+        int tempHeight = a instanceof Location ? 25 : 15;
+        font.draw(batch, layout, cam.position.x + a.x*cam.zoom - layout.width / 2, cam.position.y + a.y*cam.zoom - tempHeight*cam.zoom);
     }
 
     private void drawChunk(int chunkx, int chunky) {

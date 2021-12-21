@@ -144,8 +144,8 @@ public class InputManager implements InputProcessor {
                     if(tempMenu.buttons!=null){
                         for(Button b : tempMenu.buttons){
                             Vector3 bpos = new Vector3(
-                                    b.getX(),
-                                    b.getY(),0);
+                                    b.getX()-cam.position.x,
+                                    b.getY()-cam.position.y,0);
                             Vector3 bsize = new Vector3(
                                     b.getWidth(),
                                     b.getHeight(),0);
