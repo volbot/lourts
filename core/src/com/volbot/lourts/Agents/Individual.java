@@ -17,6 +17,7 @@ public class Individual extends Agent{
 
     public Individual(String name){
         super(name);
+        theme="base";
         stats = new Stats();
         moveSpeed = 100;
         goalPos=null;

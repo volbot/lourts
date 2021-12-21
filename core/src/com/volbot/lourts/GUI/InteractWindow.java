@@ -30,7 +30,7 @@ public abstract class InteractWindow extends GameWindow {
         int ybot = (int)(cam.viewportHeight-windowbg.getHeight())/2;
         int scalefac = 10;
         int texID = entity instanceof Location ? ((Location) entity).getFigurehead().texID : entity.texID;
-        batch.draw(Main.texLoader.heroes.get(texID), xleft+windowbg.getWidth()*0.05f, ybot+windowbg.getHeight()*0.5f, 20*scalefac, 20*scalefac);
+        batch.draw(Main.texLoader.texUnits.get(entity.theme).heroes.get(texID), xleft+windowbg.getWidth()*0.05f, ybot+windowbg.getHeight()*0.5f, 20*scalefac, 20*scalefac);
         font.getData().setScale(2f);
         if(repInt==null){
             repInt = entity.rep.get(Main.player);

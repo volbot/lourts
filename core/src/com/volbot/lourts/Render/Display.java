@@ -44,14 +44,14 @@ public class Display {
         drawMap();
         for (Agent a : Main.entities) {
             if (a instanceof Individual) {
-                if(a != Main.player) batch.draw(texLoader.heroes.get(a.texID), cam.position.x + a.x*cam.zoom - size/2, cam.position.y + a.y*cam.zoom - size/2, size, size);
+                if(a != Main.player) batch.draw(texLoader.texUnits.get(a.theme).heroes.get(a.texID), cam.position.x + a.x*cam.zoom - size/2, cam.position.y + a.y*cam.zoom - size/2, size, size);
             }
             if (a instanceof Location) {
                 //System.out.println(a.x+"     "+a.y);
-                batch.draw(texLoader.towns.get(a.texID), a.x*cam.zoom - size + cam.position.x, a.y*cam.zoom - size + cam.position.y , size*2, size*2);
+                batch.draw(texLoader.texUnits.get(a.theme).towns.get(a.texID), a.x*cam.zoom - size + cam.position.x, a.y*cam.zoom - size + cam.position.y , size*2, size*2);
             }
         }
-        batch.draw(texLoader.heroes.get(Main.player.texID), Main.player.x*cam.zoom - size/2 + cam.position.x, Main.player.y*cam.zoom - size/2 + cam.position.y, size, size);
+        batch.draw(texLoader.texUnits.get(Main.player.theme).heroes.get(Main.player.texID), Main.player.x*cam.zoom - size/2 + cam.position.x, Main.player.y*cam.zoom - size/2 + cam.position.y, size, size);
         GameMenu tempMenu = Main.gui.currmenu;
         Agent hovered = Main.inputs.entityHovered(Main.inputs.getTouchPos());
         if (tempMenu != null) {
