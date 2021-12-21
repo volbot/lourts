@@ -101,7 +101,14 @@ public class Location extends Agent {
     }
 
     public int getPopulation() {
-        return population;
+        int returnPop = population;
+        for(Individual a : heroes){
+            returnPop+=1;
+            for(Demographic d : a.getParty().pop){
+                returnPop+=d.population;
+            }
+        }
+        return returnPop;
     }
 
     public Hero getFigurehead() {

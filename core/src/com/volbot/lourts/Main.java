@@ -31,8 +31,11 @@ public class Main extends ApplicationAdapter {
 	public static GameMap map;
 	public static InputManager inputs;
 
+	public static int GAMETIME;
+
 	@Override
 	public void create () {
+		GAMETIME=0;
 		map = new GameMap();
 		texLoader = new TexLoader();
 		crabwizard = new Individual("Crabwizard");
@@ -45,7 +48,6 @@ public class Main extends ApplicationAdapter {
 		boneland = new Location("Boneland",200,200, 100);
 		entities.add(boneland);
 		boneland.texID=0;
-		boneland.getFigurehead().setDestination(new Vector3(400,400,0));
 		cam = new OrthographicCamera();
 		cam.setToOrtho(false,1024,576);
 		cam.position.x=0;
@@ -57,6 +59,10 @@ public class Main extends ApplicationAdapter {
 
 	@Override
 	public void render () {
+		GAMETIME++;
+		if(GAMETIME==300){
+			boneland.getFigurehead().setDestination(new Vector3(400,400,0));
+		}
 		ScreenUtils.clear(1, 0, 0, 1);
 		massThink();
 		if(gui.currmenu!=null){

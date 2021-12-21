@@ -79,7 +79,7 @@ public class Individual extends Agent{
 
     @Override
     public int getPopulation() {
-        int popu = 0;
+        int popu = 1;
         for(Demographic demo : population.pop) popu+=demo.getPopulation();
         return popu;
     }
