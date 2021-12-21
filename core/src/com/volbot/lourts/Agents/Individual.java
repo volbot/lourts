@@ -50,7 +50,6 @@ public class Individual extends Agent{
         }
         if (goalPos != null) {
             if(!move(goalPos)){
-                System.out.println(this.x+"   "+this.y);
                 goalPos=null;
             }
         }
@@ -75,7 +74,6 @@ public class Individual extends Agent{
     }
 
     public void setDestination(Vector3 goalPos) {
-        System.out.println(goalPos);
         this.dest = null;
         this.goalPos = goalPos;
     }

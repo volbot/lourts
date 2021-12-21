@@ -136,7 +136,6 @@ public class InputManager implements InputProcessor {
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
         boolean returnval = false;
         Vector3 clickPos = new Vector3(screenX, screenY, 0);
-        System.out.println("CLICKPOS: "+clickPos);
         Vector3 touchLoc = positionClick(clickPos);
         Agent hoverAgent = entityHovered(touchLoc);
         switch (button) {
@@ -145,10 +144,19 @@ public class InputManager implements InputProcessor {
                     GameMenu tempMenu = Main.gui.currmenu;
                     if(tempMenu.buttons!=null){
                         for(Button b : tempMenu.buttons){
-                            Vector3 bpos = new Vector3(b.getX()/cam.zoom,b.getY()/cam.zoom,0);
-                            System.out.println("BPOS: "+bpos);
-                            if(touchLoc.x>bpos.x&&touchLoc.x<bpos.x+b.getWidth()){
-                                if(touchLoc.y>bpos.y&&touchLoc.y<bpos.y+b.getHeight()){
+                            Vector3 bpos = new Vector3(
+                                    b.getX(),
+                                    b.getY(),0);
+                            Vector3 bsize = new Vector3(
+                                    b.getWidth(),
+                                    b.getHeight(),0);
+                            bpos.scl(1/cam.zoom);
+                            if(tempMenu instanceof GameWindow){
+                                returnval=true;
+                                bsize.scl(1/cam.zoom);
+                            }
+                            if(touchLoc.x>bpos.x&&touchLoc.x<bpos.x+bsize.x){
+                                if(touchLoc.y>bpos.y&&touchLoc.y<bpos.y+bsize.y){
                                     b.setChecked(true);
                                     for(Button b2 : tempMenu.buttons) if(b!=b2) b2.setChecked(false);
                                     returnval=true;
