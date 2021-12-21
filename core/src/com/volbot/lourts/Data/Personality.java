@@ -1,9 +1,11 @@
 package com.volbot.lourts.Data;
 
 public class Personality {
-    private float[] personality;
+    private float[] statProclivity;
+    private float[] sympatheticProclivity;
 
-    public Personality(float indiv, float trad, float fight, float optim) {
-        personality = new float[]{indiv, trad, fight, optim};
+    public Personality(float[] biology, float[] amygdala) {
+        statProclivity = biology;
+        sympatheticProclivity = amygdala;
     }
 }

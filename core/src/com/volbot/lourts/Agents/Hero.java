@@ -10,7 +10,7 @@ public class Hero extends Individual {
 
     public Hero(String name) {
         super(name);
-        personality = new Personality(0, 0, 0, 0);
+        personality = new Personality(new float[]{0, 0, 0, 0, 0, 0}, new float[]{0, 0, 0, 0});
         background = new Background(new Location("Nowhere"), 0);
     }
 
