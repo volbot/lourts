@@ -44,6 +44,10 @@ public class Agent {
         }
     }
 
+    public int getPopulation() {
+        return 1;
+    }
+
     public String getName() {
         return name;
     }

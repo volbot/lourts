@@ -1,5 +1,7 @@
 package com.volbot.lourts.Data;
 
+import com.volbot.lourts.Agents.Location;
+
 public class Background {
     final Location origin;
     final int wealth;

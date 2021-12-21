@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.volbot.lourts.Agents.Agent;
+import com.volbot.lourts.Agents.Location;
 import com.volbot.lourts.Main;
 
 public class TalkWindow extends InteractWindow {
@@ -17,6 +18,11 @@ public class TalkWindow extends InteractWindow {
 
     public TalkWindow(Agent a) {
         entity = a;
+        System.out.println(entity instanceof Location);
+        entityname = a instanceof Location ?
+                (((Location) a).heroes.contains(((Location) a).getFigurehead()) ?
+                        ((Location) a).getFigurehead().getName() : a.getName()+" Representative")
+                : a.getName();
 
         conversation = a.startConversation(Main.player);
 
@@ -37,7 +43,7 @@ public class TalkWindow extends InteractWindow {
         float widthinc = windowbg.getWidth() * 0.05f;
         float heightinc = windowbg.getHeight() * 0.05f;
 
-        float temp = (cam.viewportWidth - windowbg.getWidth()) / 2 + widthinc;
+        float temp = (cam.viewportWidth - windowbg.getWidth()) / 2 + widthinc/2;
         buttons[0].setX(temp);
         buttons[2].setX(temp);
 
@@ -58,15 +64,17 @@ public class TalkWindow extends InteractWindow {
     }
 
     public void genButtonText() {
+        float buttonwidth = windowbg.getWidth() * 0.45f;
         for (int i = 0; i < 4; i++) {
             TextButton temp;
             if(conversation==null) return;
             if(i<conversation.options.length) {
                 temp = new TextButton(conversation.options[i].option.substring(2), buttonStyle);
-                temp.getLabel().setWrap(true);
             } else {
                 temp = new TextButton("",buttonStyle);
             }
+            temp.setWidth(buttonwidth);
+            temp.getLabel().setWrap(true);
             buttons[i] = temp;
         }
     }

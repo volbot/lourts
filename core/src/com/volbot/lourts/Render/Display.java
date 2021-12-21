@@ -1,7 +1,5 @@
 package com.volbot.lourts.Render;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
@@ -10,11 +8,10 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.volbot.lourts.Agents.Agent;
 import com.volbot.lourts.Agents.Individual;
-import com.volbot.lourts.Data.Location;
+import com.volbot.lourts.Agents.Location;
 import com.volbot.lourts.GUI.GameMenu;
 import com.volbot.lourts.GUI.InteractMenu;
 import com.volbot.lourts.GUI.TalkWindow;
-import com.volbot.lourts.Input.InputManager;
 import com.volbot.lourts.Main;
 
 import java.util.ArrayList;

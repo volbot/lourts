@@ -1,7 +1,6 @@
 package com.volbot.lourts.Agents;
 
 import com.volbot.lourts.Data.Background;
-import com.volbot.lourts.Data.Location;
 import com.volbot.lourts.Data.Personality;
 
 public class Hero extends Individual {

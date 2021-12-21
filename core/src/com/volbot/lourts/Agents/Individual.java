@@ -2,7 +2,6 @@ package com.volbot.lourts.Agents;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector3;
-import com.volbot.lourts.Data.Location;
 import com.volbot.lourts.Data.Stats;
 import com.volbot.lourts.GUI.GameMenu;
 import com.volbot.lourts.GUI.InteractMenu;
@@ -72,6 +71,11 @@ public class Individual extends Agent{
     public void setDestination(Agent destination) {
         this.goalPos=null;
         this.dest = destination;
+    }
+
+    @Override
+    public int getPopulation() {
+        return 1;
     }
 
     public void setDestination(Vector3 goalPos) {
