@@ -41,14 +41,16 @@ public class Display {
         drawMap();
         for (Agent a : Main.entities) {
             if (a instanceof Individual) {
-                if(a != Main.player) batch.draw(texLoader.texUnits.get(a.theme).heroes.get(a.texID), cam.position.x + a.x*cam.zoom - size/2, cam.position.y + a.y*cam.zoom - size/2, size, size);
+                if(a != Main.player) batch.draw(texLoader.texUnits.get(a.theme).heroes.get(a.texID), cam.position.x + a.position.x*cam.zoom - size/2, cam.position.y + a.position.y*cam.zoom - size/2, size, size);
             }
             if (a instanceof Location) {
                 //System.out.println(a.x+"     "+a.y);
-                batch.draw(texLoader.texUnits.get(a.theme).towns.get(a.texID), a.x*cam.zoom - size + cam.position.x, a.y*cam.zoom - size + cam.position.y , size*2, size*2);
+                batch.draw(texLoader.texUnits.get(a.theme).towns.get(a.texID), a.position.x*cam.zoom - size + cam.position.x, a.position.y*cam.zoom - size + cam.position.y , size*2, size*2);
             }
         }
-        batch.draw(texLoader.texUnits.get(Main.player.theme).heroes.get(Main.player.texID), Main.player.x*cam.zoom - size/2 + cam.position.x, Main.player.y*cam.zoom - size/2 + cam.position.y, size, size);
+        if(Main.player.location==null) {
+            batch.draw(texLoader.texUnits.get(Main.player.theme).heroes.get(Main.player.texID), Main.player.position.x * cam.zoom - size / 2 + cam.position.x, Main.player.position.y * cam.zoom - size / 2 + cam.position.y, size, size);
+        }
         GameMenu tempMenu = Main.gui.currmenu;
         Agent hovered = Main.inputs.entityHovered(Main.inputs.getTouchPos());
         if (tempMenu != null) {
@@ -83,14 +85,14 @@ public class Display {
         font.getData().setScale(cam.zoom);
         GlyphLayout layout = new GlyphLayout(font, a.getName());
         int tempHeight = a instanceof Location ? 40 : 30;
-        font.draw(batch, layout, cam.position.x + a.x*cam.zoom - layout.width / 2, cam.position.y + a.y*cam.zoom + tempHeight*cam.zoom);
+        font.draw(batch, layout, cam.position.x + a.position.x*cam.zoom - layout.width / 2, cam.position.y + a.position.y*cam.zoom + tempHeight*cam.zoom);
     }
 
     public void drawPopulation(Agent a) {
         font.getData().setScale(cam.zoom);
         GlyphLayout layout = new GlyphLayout(font, ""+a.getPopulation());
         int tempHeight = a instanceof Location ? 25 : 15;
-        font.draw(batch, layout, cam.position.x + a.x*cam.zoom - layout.width / 2, cam.position.y + a.y*cam.zoom - tempHeight*cam.zoom);
+        font.draw(batch, layout, cam.position.x + a.position.x*cam.zoom - layout.width / 2, cam.position.y + a.position.y*cam.zoom - tempHeight*cam.zoom);
     }
 
     private void drawChunk(int chunkx, int chunky) {

@@ -6,6 +6,7 @@ import com.volbot.lourts.Agents.Individual;
 import com.volbot.lourts.Data.Personality;
 import com.volbot.lourts.Data.TalkOption;
 import com.volbot.lourts.Data.TalkResponse;
+import com.volbot.lourts.Main;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -22,8 +23,8 @@ public class Location extends Agent {
         super(name);
         population=1;
         wealth=0;
-        x=xpos;
-        y=ypos;
+        position.x=xpos;
+        position.y=ypos;
         figurehead=new Hero("Skeletrex",this);
         figurehead.texID=0;
         personality=figurehead.getPersonality();
@@ -33,8 +34,8 @@ public class Location extends Agent {
         super(name);
         this.population=population;
         wealth=0;
-        x=xpos;
-        y=ypos;
+        position.x=xpos;
+        position.y=ypos;
         figurehead=new Hero("Skeletrex",this);
         figurehead.texID=0;
         figurehead.getParty().add(new Demographic(this,population/8));
@@ -102,13 +103,20 @@ public class Location extends Agent {
 
     public int getPopulation() {
         int returnPop = population;
+        System.out.println(returnPop);
         for(Individual a : heroes){
-            returnPop+=1;
-            for(Demographic d : a.getParty().pop){
-                returnPop+=d.population;
+            if(!a.equals(Main.player)) {
+                returnPop += 1;
+                for (Demographic d : a.getParty().pop) {
+                    returnPop += d.population;
+                }
             }
         }
         return returnPop;
+    }
+
+    public int getPopulationInternal() {
+        return population;
     }
 
     public Hero getFigurehead() {

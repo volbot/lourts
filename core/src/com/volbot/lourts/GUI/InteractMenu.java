@@ -28,10 +28,10 @@ public class InteractMenu extends GameMenu {
     @Override
     public void drawMenu(SpriteBatch batch, OrthographicCamera cam){
         int texSize = entity instanceof Location ? 32 : 20;
-        buttons[0].setX(cam.position.x+entity.x*cam.zoom-(texSize*1.2f*cam.zoom)-10*cam.zoom);
-        buttons[0].setY(cam.position.y+entity.y*cam.zoom-10*cam.zoom);
-        buttons[1].setX(cam.position.x+entity.x*cam.zoom+(texSize*1.2f*cam.zoom)-10*cam.zoom);
-        buttons[1].setY(cam.position.y+entity.y*cam.zoom-10*cam.zoom);
+        buttons[0].setX(cam.position.x+entity.position.x*cam.zoom-(texSize*1.2f*cam.zoom)-10*cam.zoom);
+        buttons[0].setY(cam.position.y+entity.position.y*cam.zoom-10*cam.zoom);
+        buttons[1].setX(cam.position.x+entity.position.x*cam.zoom+(texSize*1.2f*cam.zoom)-10*cam.zoom);
+        buttons[1].setY(cam.position.y+entity.position.y*cam.zoom-10*cam.zoom);
         for(Button b : buttons){
             b.setWidth(20*cam.zoom);
             b.setHeight(20*cam.zoom);

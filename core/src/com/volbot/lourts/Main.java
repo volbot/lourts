@@ -42,8 +42,8 @@ public class Main extends ApplicationAdapter {
 		player = crabwizard;
 		entities.add(crabwizard);
 		gui = new GUIManager();
-		crabwizard.x=0;
-		crabwizard.y=0;
+		crabwizard.position.x=0;
+		crabwizard.position.y=0;
 		crabwizard.texID=1;
 		boneland = new Location("Boneland",200,200, 100);
 		entities.add(boneland);
@@ -61,7 +61,7 @@ public class Main extends ApplicationAdapter {
 	public void render () {
 		GAMETIME++;
 		if(GAMETIME==300){
-			boneland.getFigurehead().setDestination(new Vector3(400,400,0));
+			//boneland.getFigurehead().setDestination(new Vector3(400,400,0));
 		}
 		ScreenUtils.clear(1, 0, 0, 1);
 		massThink();

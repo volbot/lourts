@@ -15,13 +15,13 @@ public class Individual extends Agent{
     public Vector3 goalPos;
     public Agent dest;
     public Location location;
-    private Population population;
+    private final Population population;
 
     public Individual(String name){
         super(name);
         theme="base";
         stats = new Stats();
-        moveSpeed = 100;
+        moveSpeed = 70;
         goalPos=null;
         dest=null;
         location=null;
@@ -31,22 +31,25 @@ public class Individual extends Agent{
     @Override
     public void think() {
         if(dest!=null){
-            Vector3 destLoc = new Vector3(dest.x,dest.y,0);
-            if(!move(destLoc)){
-                if(Main.gui.currmenu!=null) {
-                    GameMenu tempmenu = Main.gui.currmenu;
-                    if (tempmenu instanceof InteractMenu) {
-                        InteractMenu menu = (InteractMenu) tempmenu;
-                        if (menu.buttons[0].isChecked()) {
-                            menu.buttons[0].setChecked(false);
-                            if(menu.getAgent() instanceof Location){
-                                Main.entities.remove(this);
-                                ((Location) menu.getAgent()).heroes.add(this);
-                                this.location=(Location)menu.getAgent();
+            Vector3 destLoc = new Vector3(dest.position.x,dest.position.y,0);
+            move(destLoc);
+            if(position.dst(dest.position)<20){
+                if(dest instanceof Location){
+                    Main.entities.remove(this);
+                    ((Location) dest).heroes.add(this);
+                    this.location=(Location)dest;
+                }
+                if(this.equals(Main.player)) {
+                    if (Main.gui.currmenu != null) {
+                        GameMenu tempmenu = Main.gui.currmenu;
+                        if (tempmenu instanceof InteractMenu) {
+                            InteractMenu menu = (InteractMenu) tempmenu;
+                            if (menu.buttons[0].isChecked()) {
+                                menu.buttons[0].setChecked(false);
+                                Main.gui.drawTalkMenu(menu.getAgent());
+                            } else if (menu.buttons[1].isChecked()) {
+                                menu.buttons[1].setChecked(false);
                             }
-                            Main.gui.drawTalkMenu(menu.getAgent());
-                        } else if (menu.buttons[1].isChecked()) {
-                            menu.buttons[1].setChecked(false);
                         }
                     }
                 }
@@ -100,18 +103,18 @@ public class Individual extends Agent{
         if(location!=null){
             location.heroes.remove(this);
             Main.entities.add(this);
-            this.x=location.x;
-            this.y=location.y;
+            this.position.x=location.position.x;
+            this.position.y=location.position.y;
             location=null;
+            return true;
         }
-        if(location==null) {
-            double xdist = goal.x - x;
-            double ydist = goal.y - y;
+        double xdist = goal.x - position.x;
+            double ydist = goal.y - position.y;
             double xtravel = 0;
             double ytravel = 0;
             double workingSpeed = Gdx.graphics.getDeltaTime() * moveSpeed;
 
-            if (Math.abs(xdist) > 2 * workingSpeed || Math.abs(ydist) > 2 * workingSpeed) {
+            if (Math.abs(xdist) > 2*workingSpeed || Math.abs(ydist) > 2*workingSpeed) {
                 //if far from goal, go to it
                 xtravel = workingSpeed * (Math.abs(xdist) / (Math.abs(xdist) + Math.abs(ydist)));
                 ytravel = workingSpeed - xtravel;
@@ -129,15 +132,13 @@ public class Individual extends Agent{
 
             boolean returnval = false;
             if (Math.abs(xdist) > 10) {
-                x += xtravel;
+                position.x += xtravel;
                 returnval = true;
             }
             if (Math.abs(ydist) > 10) {
-                y += ytravel;
+                position.y += ytravel;
                 returnval = true;
             }
             return returnval;
-        }
-        return false;
     }
 }

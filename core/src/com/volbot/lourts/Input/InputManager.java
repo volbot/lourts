@@ -58,8 +58,8 @@ public class InputManager implements InputProcessor {
         float width;
         for (Agent e : Main.entities) {
             width = e instanceof Location ? 20*cam.zoom : 10*cam.zoom;
-            if (touchLoc.x < e.x + width + thresh && touchLoc.x > e.x - width - thresh) {
-                if (touchLoc.y < e.y + width + thresh && touchLoc.y > e.y - width - thresh) {
+            if (touchLoc.x < e.position.x + width + thresh && touchLoc.x > e.position.x - width - thresh) {
+                if (touchLoc.y < e.position.y + width + thresh && touchLoc.y > e.position.y - width - thresh) {
                     return e;
                 }
             }

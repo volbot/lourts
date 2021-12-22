@@ -22,7 +22,7 @@ public class GUIManager {
             }
             for (int i = 0; i < 4; i++) {
                 if (menu.buttons[i].isChecked()) {
-                    if (i >= menu.conversation.options.length) break;
+                    if (i >= menu.conversation.options.length) continue;
                     switch (menu.conversation.options[i].option.charAt(0)) {
                         case '+':
                             menu.entity.rep.impress(Main.player, 1);
@@ -45,11 +45,12 @@ public class GUIManager {
                                 numDex++;
                             }
                             Location loc = (Location)menu.entity;
-                            loc.setPopulation(loc.getPopulation()-num);
+                            loc.setPopulation(loc.getPopulationInternal()-num);
                             Main.player.getParty().add(new Demographic(loc,num));
                     }
-                    menu.advanceConversation(i);
+
                     menu.buttons[i].setChecked(false);
+                    menu.advanceConversation(i);
                 }
             }
         }
