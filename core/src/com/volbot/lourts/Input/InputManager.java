@@ -20,7 +20,8 @@ public class InputManager implements InputProcessor {
 
     private Vector3 camHold = null;
 
-    public boolean camLockedToMap = false;
+    public boolean camLockedToMap = true;
+    private int camBound = 300;
 
     public InputManager(OrthographicCamera camera) {
         cam = camera;
@@ -124,6 +125,20 @@ public class InputManager implements InputProcessor {
         }
         if (inputs[3]) {
             cam.position.x -= moveSpeed;
+        }
+
+        System.out.println(cam.position);
+        if(camLockedToMap){
+            if(cam.position.x>camBound){
+                cam.position.x=camBound;
+            } else if(cam.position.x-cam.viewportWidth<-camBound-(Main.map.chunks.size()*480)){
+                cam.position.x=-camBound+cam.viewportWidth-(Main.map.chunks.size()*480);
+            }
+            if(cam.position.y>camBound){
+                cam.position.y=camBound;
+            } else if(cam.position.y-cam.viewportHeight<-camBound-(Main.map.chunks.get(0).size()*480)){
+                cam.position.y=-camBound+cam.viewportHeight-(Main.map.chunks.get(0).size()*480);
+            }
         }
     }
 
