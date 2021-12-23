@@ -1,6 +1,7 @@
 package com.volbot.lourts.Render;
 
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -97,34 +98,40 @@ public class Display {
 
     private void drawChunk(int chunkx, int chunky) {
         float size = (20)*(cam.zoom);
-        float posx = (chunkx * (size*24)) + (int) cam.position.x;
+        float posx = (chunkx * (size*24)) + cam.position.x;
         float posy;
         for (int drawx = 0; drawx < 24; drawx++) {
-            posy = (chunky * (size*24)) + (int) cam.position.y;
+            posy = (chunky * (size*24)) + cam.position.y;
             for (int drawy = 0; drawy < 24; drawy++) {
-                batch.draw(
-                        texLoader.tiles.get(
-                                Main.map.chunks
-                                        .get(chunkx)
-                                        .get(chunky)
-                                        [drawx][drawy]),
-                        drawx * size + posx, drawy * size + posy,size,size
-                );
+                if ((chunkx >= Main.map.chunks.size() || chunkx < 0) || (chunky >= Main.map.chunks.get(chunkx).size() || chunky < 0)) {
+                    batch.draw(texLoader.tiles.get(1),drawx * size + posx, drawy * size + posy,size,size);
+                } else {
+                    batch.draw(
+                            texLoader.tiles.get(
+                                    Main.map.chunks
+                                            .get(chunkx)
+                                            .get(chunky)
+                                            [drawx][drawy]),
+                            drawx * size + posx, drawy * size + posy, size, size
+                    );
+                }
             }
         }
     }
 
     private void drawMap() {
         float size = (20)*(cam.zoom);
-        Vector3 camPosAbs = new Vector3(Math.abs(cam.position.x),Math.abs(cam.position.y),0);
-        int camxstart = (int) Math.floor(camPosAbs.x);
-        int camystart = (int) Math.floor(camPosAbs.y);
-        int camxend = (int) Math.ceil(camPosAbs.x + cam.viewportWidth);
-        int camyend = (int) Math.ceil(camPosAbs.y + cam.viewportHeight);
+        Vector3 camPosAbs = cam.position.cpy();
+        camPosAbs.scl(-1f);
+        float camxstart = camPosAbs.x;
+        float camystart =camPosAbs.y;
+        float camxend = camPosAbs.x + cam.viewportWidth;
+        float camyend = camPosAbs.y + cam.viewportHeight;
         ArrayList<Integer> chunksx = new ArrayList<>();
         ArrayList<Integer> chunksy = new ArrayList<>();
         chunksx.add((int) Math.floor(camxstart / (24*size))-1);
-        chunksx.add((int) Math.ceil(camxend / (24*size))+1);int i = chunksx.get(0);
+        chunksx.add((int) Math.ceil(camxend / (24*size))+1);
+        int i = chunksx.get(0);
         while (i < chunksx.get(1)) {
             chunksx.add(i);
             i++;
@@ -137,13 +144,7 @@ public class Display {
             i++;
         }
         for (int chunkx : chunksx) {
-            if (chunkx >= Main.map.chunks.size() || chunkx < 0) {
-                continue;
-            }
             for (int chunky : chunksy) {
-                if (chunky >= Main.map.chunks.get(chunkx).size() || chunky < 0) {
-                    continue;
-                }
                 drawChunk(chunkx, chunky);
             }
         }

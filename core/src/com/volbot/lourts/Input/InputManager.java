@@ -27,6 +27,15 @@ public class InputManager implements InputProcessor {
         camSpeed = 300;
     }
 
+    private Vector3 boundClick(Vector3 touchPos){
+        Vector3 touchLoc = touchPos.cpy();
+        touchLoc.x=Math.max(0,touchLoc.x);
+        touchLoc.y=Math.max(0,touchLoc.y);
+        touchLoc.x=Math.min(Main.map.chunks.size()*480,touchLoc.x);
+        touchLoc.y=Math.min(Main.map.chunks.get(0).size()*480,touchLoc.y);
+        return touchLoc;
+    }
+
     private Vector3 positionClick(Vector3 clickLoc) {
         Vector3 touchPos = clickLoc.cpy();
         touchPos=cam.unproject(touchPos);
@@ -43,6 +52,8 @@ public class InputManager implements InputProcessor {
         camSize.scl(1/cam.zoom);
         touchPos.x*=camSize.x/cam.viewportWidth;
         touchPos.y*=camSize.y/cam.viewportHeight;
+
+
 
         return touchPos;
     }
@@ -171,13 +182,13 @@ public class InputManager implements InputProcessor {
                         Main.player.setDestination(hoverAgent);
                         returnval = true;
                     } else {
-                        Main.player.setDestination(touchLoc);
+                        Main.player.setDestination(boundClick(touchLoc));
                     }
                 }
                 return returnval;
             case 1:
                 if (camHold == null && hoverAgent != null) {
-                    Main.player.setDestination(touchLoc);
+                    Main.player.setDestination(boundClick(touchLoc));
                 }
                 if(Main.gui.currmenu instanceof GameWindow){
                     Main.gui.clearMenu();
@@ -203,8 +214,8 @@ public class InputManager implements InputProcessor {
             cam.position.add(temp);
             cam.update();
         } else {
-            if(Main.player.getDestination()==null) {
-                Main.player.setDestination(touchLoc);
+            if(Main.player.getDestination()==null && !(Main.gui.currmenu instanceof GameWindow)) {
+                Main.player.setDestination(boundClick(touchLoc));
             }
         }
         return false;
