@@ -21,7 +21,7 @@ public class InputManager implements InputProcessor {
     private Vector3 camHold = null;
 
     public boolean camLockedToMap = true;
-    private int camBound = 300;
+    private static final int camBound = 300;
 
     public InputManager(OrthographicCamera camera) {
         cam = camera;
