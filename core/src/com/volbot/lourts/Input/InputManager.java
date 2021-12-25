@@ -113,7 +113,7 @@ public class InputManager implements InputProcessor {
             temp = Math.sqrt(temp);
             moveSpeed = (int) Math.ceil(temp);
         }
-        moveSpeed *= Gdx.graphics.getDeltaTime();
+        moveSpeed *= Gdx.graphics.getDeltaTime() * cam.zoom;
         if (inputs[0]) {
             cam.position.y -= moveSpeed;
         }
@@ -127,7 +127,6 @@ public class InputManager implements InputProcessor {
             cam.position.x -= moveSpeed;
         }
 
-        System.out.println(cam.position);
         if(camLockedToMap){
             if(cam.position.x>camBound){
                 cam.position.x=camBound;
@@ -243,11 +242,25 @@ public class InputManager implements InputProcessor {
 
     @Override
     public boolean scrolled(float amountX, float amountY) {
+        Vector3 camSize = new Vector3(cam.viewportWidth,cam.viewportHeight,0);
+        camSize.scl(0.5f);
+        Vector3 camPos = cam.position.cpy();
+        camPos.sub(camSize);
         if(amountY<0) {
             cam.zoom += 0.02f;
+            if(cam.zoom>2.3f){
+                cam.zoom=2.3f;
+            } else {
+                cam.position.mulAdd(camPos, 0.02f/cam.zoom);
+            }
         } else {
             cam.zoom -= 0.02f;
+            if(cam.zoom<0.2f){
+                cam.zoom=0.2f;
+            } else {
+                cam.position.mulAdd(camPos, -0.02f/cam.zoom);
+            }
         }
-        return true;
+    return true;
     }
 }
