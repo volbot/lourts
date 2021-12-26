@@ -18,12 +18,6 @@ public class Hero extends Individual {
     int viewDistance = 150;
     int intent = 0;
 
-    public Hero(String name) {
-        super(name);
-        personality = new Personality(new float[]{0, 0, 0, 0, 0, 0}, new float[]{0, 0, 0, 0});
-        background = new Background(new Location("Nowhere"), 0);
-    }
-
     public Hero(String name, Location origin) {
         super(name);
         personality = origin.getPersonality();
@@ -34,19 +28,26 @@ public class Hero extends Individual {
     }
 
     @Override
+    public void interact(Agent a) {
+        super.interact(a);
+        if(dest.equals(Main.player)) {
+            if (!(Main.gui.currmenu instanceof GameWindow)) {
+                Main.gui.drawTalkMenu(this);
+            }
+        }
+    }
+
+    @Override
     public void think() {
         super.think();
         if(dest!=null) {
             if (position.dst(dest.position) < 20) {
-                dest=null;
                 if (intent == 1) {
-                    Main.player.dest=null;
-                    Main.player.goalPos=null;
-                    if(!(Main.gui.currmenu instanceof GameWindow)) {
-                        Main.gui.drawTalkMenu(this);
-                    }
+                    this.interact(dest);
+
                     intent = 2;
                 }
+                dest=null;
             }
         } else if(goalPos!=null) {
             if(position.dst(goalPos)<10){

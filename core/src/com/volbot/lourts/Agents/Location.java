@@ -19,24 +19,13 @@ public class Location extends Agent {
 
     public ArrayList<Individual> heroes = new ArrayList<>();
 
-    public Location(String name, int xpos, int ypos){
-        super(name);
-        population=1;
-        wealth=0;
-        position.x=xpos;
-        position.y=ypos;
-        figurehead=new Hero("Skeletrex",this);
-        figurehead.texID=0;
-        personality=figurehead.getPersonality();
-    }
-
-    public Location(String name, int xpos, int ypos, int population){
+    public Location(String name, String figureheadname, int xpos, int ypos, int population){
         super(name);
         this.population=population;
         wealth=0;
         position.x=xpos;
         position.y=ypos;
-        figurehead=new Hero("Skeletrex",this);
+        figurehead=new Hero(figureheadname,this);
         figurehead.texID=0;
         figurehead.getParty().add(new Demographic(this,population/8));
         personality=figurehead.getPersonality();
@@ -103,7 +92,6 @@ public class Location extends Agent {
 
     public int getPopulation() {
         int returnPop = population;
-        System.out.println(returnPop);
         for(Individual a : heroes){
             if(!a.equals(Main.player)) {
                 returnPop += 1;

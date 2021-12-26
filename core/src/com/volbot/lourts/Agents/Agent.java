@@ -22,6 +22,9 @@ public class Agent {
         this.theme = "base";
     }
 
+    public void interact(Agent a) {
+    }
+
     public void think() { }
 
     public TalkResponse startConversation(Individual a) {

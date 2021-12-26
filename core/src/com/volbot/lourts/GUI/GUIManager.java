@@ -13,6 +13,18 @@ public class GUIManager {
 
     }
 
+    public void sendGUIMessage() {
+        if (currmenu instanceof InteractMenu) {
+            InteractMenu menu = (InteractMenu) currmenu;
+            if (menu.buttons[0].isChecked()) {
+                menu.buttons[0].setChecked(false);
+                Main.gui.drawTalkMenu(menu.getAgent());
+            } else if (menu.buttons[1].isChecked()) {
+                menu.buttons[1].setChecked(false);
+            }
+        }
+    }
+
     public void loop() {
         if (currmenu instanceof TalkWindow) {
             TalkWindow menu = (TalkWindow) currmenu;
@@ -61,10 +73,12 @@ public class GUIManager {
     }
 
     public void drawTalkMenu(Agent a) {
+        Main.setPaused(true);
         currmenu=new TalkWindow(a);
     }
 
     public void clearMenu() {
+        Main.setPaused(false);
         currmenu = null;
     }
 }

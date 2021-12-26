@@ -3,6 +3,7 @@ package com.volbot.lourts.Agents;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector3;
 import com.volbot.lourts.Data.Stats;
+import com.volbot.lourts.GUI.GUIManager;
 import com.volbot.lourts.GUI.GameMenu;
 import com.volbot.lourts.GUI.InteractMenu;
 import com.volbot.lourts.Main;
@@ -34,24 +35,11 @@ public class Individual extends Agent{
             Vector3 destLoc = new Vector3(dest.position.x,dest.position.y,0);
             move(destLoc);
             if(position.dst(dest.position)<20){
-                if(dest instanceof Location){
+                Main.gui.sendGUIMessage();
+                if(location==null && dest instanceof Location){
                     Main.entities.remove(this);
                     ((Location) dest).heroes.add(this);
                     this.location=(Location)dest;
-                }
-                if(this.equals(Main.player)) {
-                    if (Main.gui.currmenu != null) {
-                        GameMenu tempmenu = Main.gui.currmenu;
-                        if (tempmenu instanceof InteractMenu) {
-                            InteractMenu menu = (InteractMenu) tempmenu;
-                            if (menu.buttons[0].isChecked()) {
-                                menu.buttons[0].setChecked(false);
-                                Main.gui.drawTalkMenu(menu.getAgent());
-                            } else if (menu.buttons[1].isChecked()) {
-                                menu.buttons[1].setChecked(false);
-                            }
-                        }
-                    }
                 }
             }
         }
@@ -90,6 +78,10 @@ public class Individual extends Agent{
     public Population getParty() {
         return population;
     }
+    @Override
+    public void interact(Agent a) {
+
+    }
 
     public void setDestination(Vector3 goalPos) {
         this.dest = null;
@@ -100,6 +92,9 @@ public class Individual extends Agent{
     }
 
     public boolean move(Vector3 goal) {
+        if(Main.PAUSED){
+            return true;
+        }
         if(location!=null){
             location.heroes.remove(this);
             Main.entities.add(this);

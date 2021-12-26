@@ -20,34 +20,35 @@ public class Main extends ApplicationAdapter {
 
 	private OrthographicCamera cam;
 
-	public static TexLoader texLoader;
-	Individual crabwizard;
-	Location boneland;
-
-	public static Individual player;
 	public static GUIManager gui;
 	public static Display display;
 	public static ArrayList<Agent> entities = new ArrayList<>();
 	public static GameMap map;
+	public static TexLoader texLoader;
 	public static InputManager inputs;
 
+	public static Individual player;
 	public static int GAMETIME;
+	public static boolean PAUSED = false;
 
 	@Override
 	public void create () {
 		GAMETIME=0;
 		map = new GameMap();
 		texLoader = new TexLoader();
-		crabwizard = new Individual("Crabwizard");
+		Individual crabwizard = new Individual("Crabwizard");
 		player = crabwizard;
 		entities.add(crabwizard);
 		gui = new GUIManager();
 		crabwizard.position.x=400;
 		crabwizard.position.y=400;
 		crabwizard.texID=1;
-		boneland = new Location("Boneland",200,200, 100);
+		Location boneland = new Location("Boneland","Skeletrex",200,200, 100);
 		entities.add(boneland);
 		boneland.texID=0;
+		Location bonetown = new Location("Bonetown", "Anthony Hopkins",800,440,233);
+		entities.add(bonetown);
+		bonetown.texID=0;
 		cam = new OrthographicCamera();
 		cam.setToOrtho(false,1024,576);
 		cam.position.x=0;
@@ -60,9 +61,6 @@ public class Main extends ApplicationAdapter {
 	@Override
 	public void render () {
 		GAMETIME++;
-		if(GAMETIME==300){
-			//boneland.getFigurehead().setDestination(new Vector3(400,400,0));
-		}
 		ScreenUtils.clear(1, 0, 0, 1);
 		massThink();
 		if(gui.currmenu!=null){
@@ -81,12 +79,14 @@ public class Main extends ApplicationAdapter {
 				entity.think();
 			} else if(entity instanceof Location){
 				ArrayList<Individual> heroes = ((Location) entity).heroes;
-				int len2 = heroes.size();
-				for(int i = 0; i<len2; i++){
-					heroes.get(i).think();
-					if(heroes.size()<len2){
-						len2--;
-						i--;
+				if(!heroes.isEmpty()) {
+					int len2 = heroes.size();
+					for (int i = 0; i < len2; i++) {
+						heroes.get(i).think();
+						if (heroes.size() < len2) {
+							len2--;
+							i--;
+						}
 					}
 				}
 			}
@@ -104,5 +104,9 @@ public class Main extends ApplicationAdapter {
 	public void dispose () {
 		display.dispose();
 		texLoader.dispose();
+	}
+
+	public static void setPaused(boolean val){
+		PAUSED=val;
 	}
 }
