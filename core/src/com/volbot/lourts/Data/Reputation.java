@@ -3,6 +3,7 @@ package com.volbot.lourts.Data;
 import com.volbot.lourts.Agents.Agent;
 import com.volbot.lourts.Agents.Individual;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class Reputation {
@@ -13,6 +14,16 @@ public class Reputation {
 
     public boolean knows(Agent key){
         return repmap.containsKey(key);
+    }
+
+    public ArrayList<Individual> known() {
+        ArrayList<Individual> searchList = new ArrayList<>();
+        for(Agent a : repmap.keySet()){
+            if(a instanceof Individual){
+                searchList.add((Individual)a);
+            }
+        }
+        return searchList;
     }
 
     public int get(Agent key) {

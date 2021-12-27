@@ -10,6 +10,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.volbot.lourts.Agents.Agent;
 import com.volbot.lourts.Agents.Location;
+import com.volbot.lourts.Data.TalkOption;
+import com.volbot.lourts.Data.TalkResponse;
 import com.volbot.lourts.Main;
 
 public class TalkWindow extends InteractWindow {
@@ -68,7 +70,11 @@ public class TalkWindow extends InteractWindow {
             TextButton temp;
             if(conversation==null) return;
             if(i<conversation.options.length) {
-                temp = new TextButton(conversation.options[i].option.substring(2), buttonStyle);
+                if(conversation.options[i]==null) {
+                    temp = new TextButton("",buttonStyle);
+                } else {
+                    temp = new TextButton(conversation.options[i].option.substring(2), buttonStyle);
+                }
             } else {
                 temp = new TextButton("",buttonStyle);
             }
@@ -76,6 +82,13 @@ public class TalkWindow extends InteractWindow {
             temp.getLabel().setWrap(true);
             buttons[i] = temp;
         }
+    }
+
+    public void resetConvo() {
+        TalkResponse newConvo = entity.startConversation(Main.player);
+        newConvo.response="Is there anything else I can help you with?";
+        conversation = newConvo;
+        genButtonText();
     }
 
     public void advanceConversation(int i) {

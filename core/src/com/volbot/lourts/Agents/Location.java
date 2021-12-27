@@ -43,16 +43,18 @@ public class Location extends Agent {
     public TalkResponse startConversation(Individual a) {
             if (rep.knows(a)) {
                 int recruits = potentialRecruits(a);
-                TalkOption[] promptOptions = new TalkOption[4];
+                TalkOption[] promptOptions;
                 TalkResponse recruitResponse = new TalkResponse(recruits>0?"Hmm... If memory serves me right, I can think of "+recruits+" able-bodied citizens.":"No, I am afraid not.",
                         new TalkOption[]{
-                                new TalkOption("R I'd like to recruit all "+recruits+".", new TalkResponse("Ok.")),
+                                new TalkOption("R I'd like to recruit all "+recruits+".",
+                                        new TalkResponse("I'll notify them; they should be ready to leave when you are.",
+                                        new TalkOption[]{new TalkOption("M Thank you.",null)})),
                                 new TalkOption("M Never mind.", null)
                         });
                 promptOptions = new TalkOption[]{
                         new TalkOption("  Do you know of any people looking to join a caravan? ", recruitResponse),
                         new TalkOption("T Which of these many, many sidewalks gets me to the market? ", new TalkResponse("None of them.")),
-                        new TalkOption("- Good to see you too, " + getName() + ".", new TalkResponse("Safe travels.")),
+                        null,
                         new TalkOption("  I must take my leave. <exit>", new TalkResponse("Safe travels.")),
                 };
                 return new TalkResponse("Good to see you, " + a.getName() + ". Welcome back.", promptOptions);

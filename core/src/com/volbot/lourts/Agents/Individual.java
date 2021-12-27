@@ -35,7 +35,7 @@ public class Individual extends Agent{
             Vector3 destLoc = new Vector3(dest.position.x,dest.position.y,0);
             move(destLoc);
             if(position.dst(dest.position)<20){
-                Main.gui.sendGUIMessage();
+                Main.gui.sendGUIMessage(this,dest);
                 if(location==null && dest instanceof Location){
                     Main.entities.remove(this);
                     ((Location) dest).heroes.add(this);

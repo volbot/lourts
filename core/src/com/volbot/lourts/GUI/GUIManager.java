@@ -3,6 +3,7 @@ package com.volbot.lourts.GUI;
 import com.volbot.lourts.Agents.Agent;
 import com.volbot.lourts.Agents.Location;
 import com.volbot.lourts.Agents.Demographic;
+import com.volbot.lourts.Data.TalkResponse;
 import com.volbot.lourts.Main;
 
 public class GUIManager {
@@ -13,12 +14,17 @@ public class GUIManager {
 
     }
 
-    public void sendGUIMessage() {
+    public void sendGUIMessage(Agent initiator, Agent target) {
         if (currmenu instanceof InteractMenu) {
             InteractMenu menu = (InteractMenu) currmenu;
             if (menu.buttons[0].isChecked()) {
                 menu.buttons[0].setChecked(false);
-                Main.gui.drawTalkMenu(menu.getAgent());
+                if(initiator==Main.player){
+                    Main.gui.drawTalkMenu(target);
+                } else
+                if(target==Main.player){
+                    Main.gui.drawTalkMenu(initiator);
+                }
             } else if (menu.buttons[1].isChecked()) {
                 menu.buttons[1].setChecked(false);
             }
@@ -35,6 +41,8 @@ public class GUIManager {
             for (int i = 0; i < 4; i++) {
                 if (menu.buttons[i].isChecked()) {
                     if (i >= menu.conversation.options.length) continue;
+                    menu.buttons[i].setChecked(false);
+                    boolean reset = false;
                     switch (menu.conversation.options[i].option.charAt(0)) {
                         case '+':
                             menu.entity.rep.impress(Main.player, 1);
@@ -59,10 +67,15 @@ public class GUIManager {
                             Location loc = (Location)menu.entity;
                             loc.setPopulation(loc.getPopulationInternal()-num);
                             Main.player.getParty().add(new Demographic(loc,num));
+                            break;
+                        case 'M':
+                            menu.resetConvo();
+                            reset = true;
                     }
-
                     menu.buttons[i].setChecked(false);
-                    menu.advanceConversation(i);
+                    if(!reset) {
+                        menu.advanceConversation(i);
+                    }
                 }
             }
         }

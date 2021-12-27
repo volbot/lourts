@@ -4,6 +4,9 @@ import com.badlogic.gdx.math.Vector3;
 import com.volbot.lourts.Data.Reputation;
 import com.volbot.lourts.Data.TalkOption;
 import com.volbot.lourts.Data.TalkResponse;
+import com.volbot.lourts.Main;
+
+import java.util.ArrayList;
 
 public class Agent {
 
@@ -27,12 +30,36 @@ public class Agent {
 
     public void think() { }
 
+    public Location closestLoc() {
+        Location closest = null;
+        float closestdst = 0f;
+        for(Agent a : Main.entities){
+            if(a instanceof Location){
+                float dst = a.position.dst(this.position);
+                if(dst<closestdst || closest==null){
+                    closest=(Location)a;
+                    closestdst=dst;
+                }
+            }
+        }
+        return closest;
+    }
+
     public TalkResponse startConversation(Individual a) {
         if(this.rep.knows(a)) {
+            ArrayList<Individual> known = rep.known();
+            TalkOption[] searchList = new TalkOption[known.size()+1];
+            int i = 0;
+            for(Individual a2 : rep.known()){
+                searchList[i++] = new TalkOption("  "+a2.getName(), new TalkResponse(a2.location!=null?
+                        a2.getName()+" should be in "+a2.location+".":
+                        a2.getName()+" should be near "+a2.closestLoc().getName()+".", new TalkOption[]{new TalkOption("M Thank you.",null)}));
+            }
+            searchList[i++] = new TalkOption("M Never mind.", null);
             return new TalkResponse("Good to see you, "+a.getName()+".", new TalkOption[]{
                     new TalkOption("  Good to see you too, "+getName()+".",    new TalkResponse("Safe travels.")),
-                    new TalkOption("  Good to see you too, "+getName()+".",    new TalkResponse("Safe travels.")),
-                    new TalkOption("  Good to see you too, "+getName()+".",    new TalkResponse("Safe travels.")),
+                    new TalkOption("  I'm looking for someone.",    new TalkResponse("Who can I help you find?", searchList)),
+                    null,
                     new TalkOption("  I must take my leave. <exit>",            new TalkResponse("Safe travels.")),
             });
         } else {
