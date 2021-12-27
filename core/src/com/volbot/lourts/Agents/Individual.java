@@ -69,6 +69,12 @@ public class Individual extends Agent{
     }
 
     @Override
+    public void setFaction(Faction faction) {
+        super.setFaction(faction);
+        faction.heroes.add(this);
+    }
+
+    @Override
     public int getPopulation() {
         int popu = 1;
         for(Demographic demo : population.pop) popu+=demo.getPopulation();

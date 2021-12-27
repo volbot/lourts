@@ -19,9 +19,24 @@ public class Location extends Agent {
 
     public ArrayList<Individual> heroes = new ArrayList<>();
 
+    public Location(String name, String figureheadname, Faction faction, int xpos, int ypos, int population){
+        super(name);
+        this.population=population;
+        this.faction=faction;
+        wealth=0;
+        position.x=xpos;
+        position.y=ypos;
+        figurehead=new Hero(figureheadname,this);
+        figurehead.faction=faction;
+        figurehead.texID=0;
+        figurehead.getParty().add(new Demographic(this,population/8));
+        personality=figurehead.getPersonality();
+    }
+
     public Location(String name, String figureheadname, int xpos, int ypos, int population){
         super(name);
         this.population=population;
+        this.faction=null;
         wealth=0;
         position.x=xpos;
         position.y=ypos;
@@ -51,6 +66,9 @@ public class Location extends Agent {
                                         new TalkOption[]{new TalkOption("M Thank you.",null)})),
                                 new TalkOption("M Never mind.", null)
                         });
+                if(recruits==0){
+                    recruitResponse.options=new TalkOption[]{recruitResponse.options[1]};
+                }
                 promptOptions = new TalkOption[]{
                         new TalkOption("  Do you know of any people looking to join a caravan? ", recruitResponse),
                         new TalkOption("T Which of these many, many sidewalks gets me to the market? ", new TalkResponse("None of them.")),
@@ -78,13 +96,20 @@ public class Location extends Agent {
         }
     }
 
+    @Override
+    public void setFaction(Faction faction) {
+        super.setFaction(faction);
+        this.getFigurehead().setFaction(faction);
+    }
+
     public int potentialRecruits(Individual a) {
         int reputation = rep.get(a);
         //
-        if(reputation < -20 || population <= 12) return 0;
+        if(reputation < -20) return 0;
         float repPercent = ((reputation + 20) / 120f);
         float popPercent = 0.4f;
         int fightingPop = Math.round(popPercent*population);
+        if(fightingPop<15) return 0;
         return Math.round(repPercent*fightingPop);
     }
 

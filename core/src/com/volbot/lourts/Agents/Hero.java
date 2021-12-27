@@ -85,6 +85,11 @@ public class Hero extends Individual {
         }
     }
 
+    @Override
+    public void setFaction(Faction faction) {
+        super.setFaction(faction);
+    }
+
     private Vector3 patrol(Location loc) {
         Vector3 pos = loc.position.cpy();
         Random rand = new Random();

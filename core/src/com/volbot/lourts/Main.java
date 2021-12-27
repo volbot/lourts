@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.volbot.lourts.Agents.Agent;
+import com.volbot.lourts.Agents.Faction;
 import com.volbot.lourts.Agents.Individual;
 import com.volbot.lourts.Agents.Location;
 import com.volbot.lourts.GUI.GUIManager;
@@ -36,6 +37,7 @@ public class Main extends ApplicationAdapter {
 		GAMETIME=0;
 		map = new GameMap();
 		texLoader = new TexLoader();
+
 		Individual crabwizard = new Individual("Crabwizard");
 		player = crabwizard;
 		entities.add(crabwizard);
@@ -43,12 +45,17 @@ public class Main extends ApplicationAdapter {
 		crabwizard.position.x=400;
 		crabwizard.position.y=400;
 		crabwizard.texID=1;
+
 		Location boneland = new Location("Boneland","Skeletrex",200,200, 100);
+		Faction bonebrigade = new Faction("Bone Brigade",boneland.getFigurehead(),0);
 		entities.add(boneland);
+		boneland.setFaction(bonebrigade);
 		boneland.texID=0;
 		Location bonetown = new Location("Bonetown", "Anthony Hopkins",800,440,233);
+		bonetown.setFaction(bonebrigade);
 		entities.add(bonetown);
 		bonetown.texID=0;
+
 		cam = new OrthographicCamera();
 		cam.setToOrtho(false,1024,576);
 		cam.position.x=0;

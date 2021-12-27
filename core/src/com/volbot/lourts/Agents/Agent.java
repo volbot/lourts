@@ -14,6 +14,8 @@ public class Agent {
 
     public String theme;
 
+    public Faction faction;
+
     public Vector3 position = new Vector3();
 
     public final Reputation rep;
@@ -48,14 +50,19 @@ public class Agent {
     public TalkResponse startConversation(Individual a) {
         if(this.rep.knows(a)) {
             ArrayList<Individual> known = rep.known();
+            for(Individual h : faction.heroes){
+                if(!known.contains(h)){
+                    known.add(h);
+                }
+            }
             TalkOption[] searchList = new TalkOption[known.size()+1];
             int i = 0;
-            for(Individual a2 : rep.known()){
-                if(a2.equals(Main.player)){
+            for(Individual a2 : known){
+                if(a2.equals(Main.player)||a2.equals(this)){
                     continue;
                 }
                 searchList[i++] = new TalkOption("  "+a2.getName(), new TalkResponse(a2.location!=null?
-                        a2.getName()+" should be in "+a2.location+".":
+                        a2.getName()+" should be in "+a2.location.getName()+".":
                         a2.getName()+" should be near "+a2.closestLoc().getName()+".", new TalkOption[]{new TalkOption("M Thank you.",null)}));
             }
             searchList[i++] = new TalkOption("M Never mind.", null);
@@ -75,6 +82,10 @@ public class Agent {
                     new TalkOption("- I must take my leave. <exit>",                            new TalkResponse("Ok... Good day... to you, then?")),
             });
         }
+    }
+
+    public void setFaction(Faction faction) {
+        this.faction = faction;
     }
 
     public int getPopulation() {
