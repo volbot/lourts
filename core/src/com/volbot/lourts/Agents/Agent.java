@@ -51,6 +51,9 @@ public class Agent {
             TalkOption[] searchList = new TalkOption[known.size()+1];
             int i = 0;
             for(Individual a2 : rep.known()){
+                if(a2.equals(Main.player)){
+                    continue;
+                }
                 searchList[i++] = new TalkOption("  "+a2.getName(), new TalkResponse(a2.location!=null?
                         a2.getName()+" should be in "+a2.location+".":
                         a2.getName()+" should be near "+a2.closestLoc().getName()+".", new TalkOption[]{new TalkOption("M Thank you.",null)}));
