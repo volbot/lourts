@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.volbot.lourts.Agents.Agent;
+import com.volbot.lourts.Agents.Combatant;
 import com.volbot.lourts.Agents.Location;
 import com.volbot.lourts.GUI.GameMenu;
 import com.volbot.lourts.GUI.GameWindow;
@@ -68,11 +69,22 @@ public class InputManager implements InputProcessor {
     public Agent entityHovered(Vector3 touchLoc) {
         float thresh = 0;
         float width;
-        for (Agent e : Main.entities) {
-            width = e instanceof Location ? 20*cam.zoom : 10*cam.zoom;
-            if (touchLoc.x < e.position.x + width + thresh && touchLoc.x > e.position.x - width - thresh) {
-                if (touchLoc.y < e.position.y + width + thresh && touchLoc.y > e.position.y - width - thresh) {
-                    return e;
+        if(Main.GAMEMODE==0) {
+            for (Agent e : Main.entities) {
+                width = e instanceof Location ? 20 * cam.zoom : 10 * cam.zoom;
+                if (touchLoc.x < e.position.x + width + thresh && touchLoc.x > e.position.x - width - thresh) {
+                    if (touchLoc.y < e.position.y + width + thresh && touchLoc.y > e.position.y - width - thresh) {
+                        return e;
+                    }
+                }
+            }
+        } else if(Main.GAMEMODE==1){
+            width=10*cam.zoom;
+            for (Combatant c : Main.battle.combatants){
+                if (touchLoc.x < c.position.x + width + thresh && touchLoc.x > c.position.x - width - thresh) {
+                    if (touchLoc.y < c.position.y + width + thresh && touchLoc.y > c.position.y - width - thresh) {
+                        return c.getAgent();
+                    }
                 }
             }
         }
@@ -196,12 +208,16 @@ public class InputManager implements InputProcessor {
                 }
                 if (!returnval) {
                     Main.gui.clearMenu();
-                    if (hoverAgent != null && hoverAgent != Main.player) {
-                        Main.gui.drawInteractMenu(hoverAgent);
-                        Main.player.setDestination(hoverAgent);
-                        returnval = true;
+                    if (Main.GAMEMODE==0) {
+                        if (hoverAgent != null && hoverAgent != Main.player) {
+                            Main.gui.drawInteractMenu(hoverAgent);
+                            Main.player.setDestination(hoverAgent);
+                            returnval = true;
+                        } else {
+                            Main.player.setDestination(boundClick(touchLoc));
+                        }
                     } else {
-                        Main.player.setDestination(boundClick(touchLoc));
+
                     }
                 }
                 return returnval;

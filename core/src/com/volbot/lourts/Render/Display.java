@@ -58,9 +58,8 @@ public class Display {
             }
         } else {
             Battle battle = Main.battle;
-            for(Combatant c : battle.combatants.keySet()){
-                Vector3 v = battle.combatants.get(c);
-                batch.draw(texLoader.texUnits.get(c.theme).heroes.get(c.texID),cam.position.x + v.x * cam.zoom - size / 2, cam.position.y + v.y * cam.zoom - size / 2, size, size);
+            for(Combatant c : battle.combatants){
+                batch.draw(texLoader.texUnits.get(c.theme).heroes.get(c.texID),cam.position.x + c.position.x * cam.zoom - size / 2, cam.position.y + c.position.y * cam.zoom - size / 2, size, size);
             }
         }
         GameMenu tempMenu = Main.gui.currmenu;
@@ -76,7 +75,7 @@ public class Display {
                 menu.drawMenu(batch, cam);
                 if (hovered != null && hovered != menu.getAgent()) {
                     drawName(hovered);
-                    drawPopulation(hovered);
+                    if(Main.GAMEMODE==0) drawPopulation(hovered);
                 }
             } else if (tempMenu instanceof TalkWindow) {
                 TalkWindow menu = (TalkWindow) tempMenu;
@@ -89,19 +88,20 @@ public class Display {
         } else {
             if (hovered != null) {
                 drawName(hovered);
-                drawPopulation(hovered);
+                if(Main.GAMEMODE==0) drawPopulation(hovered);
             }
         }
         cam.update();
         batch.end();
     }
 
-
     public void drawName(Agent a) {
+        Vector3 drawPos = Main.GAMEMODE==0?a.position.cpy():
+                (Main.battle.aggressor.equals(a)?Main.battle.combatants.get(0).position.cpy():Main.battle.combatants.get(1).position.cpy());
         font.getData().setScale(((cam.zoom-1)/2)+1);
         GlyphLayout layout = new GlyphLayout(font, a.getName());
         int tempHeight = a instanceof Location ? 40 : 30;
-        font.draw(batch, layout, cam.position.x + a.position.x*cam.zoom - layout.width / 2, cam.position.y + a.position.y*cam.zoom + tempHeight*cam.zoom);
+        font.draw(batch, layout, cam.position.x + drawPos.x*cam.zoom - layout.width / 2, cam.position.y + drawPos.y*cam.zoom + tempHeight*cam.zoom);
     }
 
     public void drawPopulation(Agent a) {

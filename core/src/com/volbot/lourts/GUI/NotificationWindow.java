@@ -60,13 +60,13 @@ public class NotificationWindow extends GameWindow {
     public void activateButton(int buttonDex) {
         switch(buttonDex) {
             case 0:
-                if(type=="retreat"){
+                if(type.equals("retreat")){
                     Main.endBattle();
                     Main.gui.clearMenu();
                 }
                 break;
             case 1:
-                if(type=="retreat"){
+                if(type.equals("retreat")){
                     Main.gui.clearMenu();
                 }
                 break;

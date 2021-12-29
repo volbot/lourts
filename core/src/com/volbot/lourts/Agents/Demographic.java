@@ -9,7 +9,8 @@ public class Demographic {
         this.level=1;
         this.origin=origin;
         this.population=population;
-        texID=1;
+        this.theme=origin.theme;
+        texID=0;
     }
 
     public Location getOrigin() {

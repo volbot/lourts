@@ -82,9 +82,9 @@ public class Main extends ApplicationAdapter {
 			map=new BattleMap();
 		}
 		if(GAMEMODE == 0){
-			massThink();
 			GAMETIME++;
 		}
+		massThink();
 		ScreenUtils.clear(1, 0, 0, 1);
 		if(gui.currmenu!=null){
 			gui.loop();
@@ -94,31 +94,38 @@ public class Main extends ApplicationAdapter {
 	}
 
 	public void massThink () {
-		int len1 = entities.size();
-		Agent entity;
-		for(int j = 0; j<len1; j++){
-			entity = entities.get(j);
-			if(entity instanceof Individual){
-				entity.think();
-			} else if(entity instanceof Location){
-				ArrayList<Individual> heroes = ((Location) entity).heroes;
-				if(!heroes.isEmpty()) {
-					int len2 = heroes.size();
-					for (int i = 0; i < len2; i++) {
-						heroes.get(i).think();
-						if (heroes.size() < len2) {
-							len2--;
-							i--;
+		if(GAMEMODE==0) {
+			int len1 = entities.size();
+			Agent entity;
+			for (int j = 0; j < len1; j++) {
+				entity = entities.get(j);
+				if (entity instanceof Individual) {
+					entity.think();
+				} else if (entity instanceof Location) {
+					ArrayList<Individual> heroes = ((Location) entity).heroes;
+					if (!heroes.isEmpty()) {
+						int len2 = heroes.size();
+						for (int i = 0; i < len2; i++) {
+							heroes.get(i).think();
+							if (heroes.size() < len2) {
+								len2--;
+								i--;
+							}
 						}
 					}
 				}
+				if (entities.size() < len1) {
+					len1--;
+					j--;
+				}
+				if (entities.size() > len1) {
+					len1++;
+				}
 			}
-			if(entities.size()<len1){
-				len1--;
-				j--;
-			}
-			if(entities.size()>len1){
-				len1++;
+		} else if (GAMEMODE==1) {
+			int len1=battle.combatants.size();
+			for(int i = 0; i<len1; i++) {
+				battle.combatants.get(i).think();
 			}
 		}
 	}
