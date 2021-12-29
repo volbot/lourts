@@ -9,8 +9,10 @@ import com.volbot.lourts.Agents.Agent;
 import com.volbot.lourts.Agents.Faction;
 import com.volbot.lourts.Agents.Individual;
 import com.volbot.lourts.Agents.Location;
+import com.volbot.lourts.Data.Battle;
 import com.volbot.lourts.GUI.GUIManager;
 import com.volbot.lourts.Input.InputManager;
+import com.volbot.lourts.Map.BattleMap;
 import com.volbot.lourts.Map.GameMap;
 import com.volbot.lourts.Render.Display;
 import com.volbot.lourts.Render.TexLoader;
@@ -23,21 +25,26 @@ public class Main extends ApplicationAdapter {
 
 	public static GUIManager gui;
 	public static Display display;
+	public static Battle battle;
 	public static ArrayList<Agent> entities = new ArrayList<>();
+	public static GameMap worldmap;
 	public static GameMap map;
 	public static TexLoader texLoader;
 	public static InputManager inputs;
 
 	public static Individual player;
 	public static int GAMETIME;
+	public static int GAMEMODE;
 	public static boolean PAUSED = false;
 
 	@Override
 	public void create () {
 		GAMETIME=0;
-		map = new GameMap();
+		GAMEMODE=0;
+		battle = null;
+		worldmap = new GameMap();
+		map = worldmap;
 		texLoader = new TexLoader();
-
 		Individual crabwizard = new Individual("Crabwizard");
 		player = crabwizard;
 		entities.add(crabwizard);
@@ -67,9 +74,18 @@ public class Main extends ApplicationAdapter {
 
 	@Override
 	public void render () {
-		GAMETIME++;
+		if(GAMEMODE==0&&map!=worldmap){
+			map=worldmap;
+			initWorld();
+		}
+		if(GAMEMODE==1&&map==worldmap){
+			map=new BattleMap();
+		}
+		if(GAMEMODE == 0){
+			massThink();
+			GAMETIME++;
+		}
 		ScreenUtils.clear(1, 0, 0, 1);
-		massThink();
 		if(gui.currmenu!=null){
 			gui.loop();
 		}
@@ -111,6 +127,14 @@ public class Main extends ApplicationAdapter {
 	public void dispose () {
 		display.dispose();
 		texLoader.dispose();
+	}
+
+	public static void endBattle() {
+		GAMEMODE=0;
+	}
+
+	public void initWorld() {
+
 	}
 
 	public static void setPaused(boolean val){

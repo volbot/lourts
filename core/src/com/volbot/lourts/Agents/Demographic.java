@@ -2,10 +2,14 @@ package com.volbot.lourts.Agents;
 
 public class Demographic {
 
+    public int texID;
+    public String theme;
+
     public Demographic(Location origin, int population) {
         this.level=1;
         this.origin=origin;
         this.population=population;
+        texID=1;
     }
 
     public Location getOrigin() {

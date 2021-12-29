@@ -47,6 +47,15 @@ public class Agent {
         return closest;
     }
 
+    public TalkResponse startCombat(Individual a) {
+        TalkResponse response = new TalkResponse("Hm?",new TalkOption[]{
+                new TalkOption("  I say this once, "+getName()+". Surrender, or die!",new TalkResponse("Wait, what? Really? Okay.", new TalkOption[]{new TalkOption("FFEnter battle", null)})),
+                new TalkOption("- Just dropping by to let you know you're a piece of shit. ",new TalkResponse("Burn in hell, "+a.getName()+".")),
+                null,
+                new TalkOption("  Never mind.", null)
+        });
+        return response;
+    }
     public TalkResponse startConversation(Individual a) {
         if(this.rep.knows(a)) {
             ArrayList<Individual> known = rep.known();

@@ -35,6 +35,9 @@ public class Reputation {
     }
 
     public void impress(Agent a, double mag) {
+        if(!knows(a)){
+            meet(a);
+        }
         float newrep = repmap.get(a)+(float)mag;
         if(Math.abs(newrep)<=100){
             repmap.put(a, newrep);

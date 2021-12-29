@@ -143,6 +143,11 @@ public class InputManager implements InputProcessor {
 
     @Override
     public boolean keyDown(int keycode) {
+        if(Main.GAMEMODE==1){ // battle mode
+            if(keycode==Input.Keys.TAB){
+                Main.gui.drawNotificationWindow("retreat");
+            }
+        }
         return Gdx.input.isKeyPressed(keycode);
     }
 

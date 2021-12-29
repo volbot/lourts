@@ -59,29 +59,30 @@ public class Hero extends Individual {
 
     protected void decide() {
         decisionTime++;
-        if (intent == 0 || intent == 2) {
-            intent = 2;
-                for(Agent a : Main.entities){
-                    if(a instanceof Location || a.equals(this)) continue;
-                    if(position.dst(a.position)<viewDistance){
-                        if(!rep.knows(a)){
-                            decisionTime = 0;
-                            intent = 1;
-                            setDestination(a);
-                        }
-                    }
+        /* search for people to meet
+        for(Agent a : Main.entities){
+            if(a instanceof Location || a.equals(this)) continue;
+            if(position.dst(a.position)<viewDistance){
+                if(!rep.knows(a)){
+                    decisionTime = 0;
+                    intent = 1;
+                    setDestination(a);
                 }
-                if (!(Main.gui.currmenu instanceof GameWindow) && intent!=2) {
-                    if(dest==null && goalPos==null){
-                        dest=background.origin;
-                    }
-                }
-        }
-        if(intent == 2) {
-            if(decisionTime>500) {
-                decisionTime=0;
-                setDestination(patrol(background.origin));
             }
+        }
+         */
+        switch(intent){
+            case 0: //default
+                intent = 2; //switch to patrol
+                break;
+            case 1:
+                break;
+            case 2:
+                if(decisionTime>500) {
+                    decisionTime=0;
+                    setDestination(patrol(background.origin));
+                }
+                break;
         }
     }
 

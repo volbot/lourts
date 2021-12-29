@@ -8,10 +8,13 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.volbot.lourts.Agents.Agent;
+import com.volbot.lourts.Agents.Combatant;
 import com.volbot.lourts.Agents.Individual;
 import com.volbot.lourts.Agents.Location;
+import com.volbot.lourts.Data.Battle;
 import com.volbot.lourts.GUI.GameMenu;
 import com.volbot.lourts.GUI.InteractMenu;
+import com.volbot.lourts.GUI.NotificationWindow;
 import com.volbot.lourts.GUI.TalkWindow;
 import com.volbot.lourts.Main;
 
@@ -40,21 +43,33 @@ public class Display {
         ScreenUtils.clear(1, 0, 0, 1);
         batch.begin();
         drawMap();
-        for (Agent a : Main.entities) {
-            if (a instanceof Individual) {
-                if(a != Main.player) batch.draw(texLoader.texUnits.get(a.theme).heroes.get(a.texID), cam.position.x + a.position.x*cam.zoom - size/2, cam.position.y + a.position.y*cam.zoom - size/2, size, size);
+        if(Main.GAMEMODE==0) {
+            for (Agent a : Main.entities) {
+                if (a instanceof Individual) {
+                    if (a != Main.player)
+                        batch.draw(texLoader.texUnits.get(a.theme).heroes.get(a.texID), cam.position.x + a.position.x * cam.zoom - size / 2, cam.position.y + a.position.y * cam.zoom - size / 2, size, size);
+                }
+                if (a instanceof Location) {
+                    batch.draw(texLoader.texUnits.get(a.theme).towns.get(a.texID), a.position.x * cam.zoom - size + cam.position.x, a.position.y * cam.zoom - size + cam.position.y, size * 2, size * 2);
+                }
             }
-            if (a instanceof Location) {
-                //System.out.println(a.x+"     "+a.y);
-                batch.draw(texLoader.texUnits.get(a.theme).towns.get(a.texID), a.position.x*cam.zoom - size + cam.position.x, a.position.y*cam.zoom - size + cam.position.y , size*2, size*2);
+            if (Main.player.location == null) {
+                batch.draw(texLoader.texUnits.get(Main.player.theme).heroes.get(Main.player.texID), Main.player.position.x * cam.zoom - size / 2 + cam.position.x, Main.player.position.y * cam.zoom - size / 2 + cam.position.y, size, size);
             }
-        }
-        if(Main.player.location==null) {
-            batch.draw(texLoader.texUnits.get(Main.player.theme).heroes.get(Main.player.texID), Main.player.position.x * cam.zoom - size / 2 + cam.position.x, Main.player.position.y * cam.zoom - size / 2 + cam.position.y, size, size);
+        } else {
+            Battle battle = Main.battle;
+            for(Combatant c : battle.combatants.keySet()){
+                Vector3 v = battle.combatants.get(c);
+                batch.draw(texLoader.texUnits.get(c.theme).heroes.get(c.texID),cam.position.x + v.x * cam.zoom - size / 2, cam.position.y + v.y * cam.zoom - size / 2, size, size);
+            }
         }
         GameMenu tempMenu = Main.gui.currmenu;
         Agent hovered = Main.inputs.entityHovered(Main.inputs.getTouchPos());
         if (tempMenu != null) {
+            if (tempMenu instanceof NotificationWindow) {
+                NotificationWindow menu = (NotificationWindow) tempMenu;
+                menu.drawMenu(batch,cam);
+            }
             if (tempMenu instanceof InteractMenu) {
                 InteractMenu menu = (InteractMenu) tempMenu;
                 drawName(menu.getAgent());
@@ -63,9 +78,9 @@ public class Display {
                     drawName(hovered);
                     drawPopulation(hovered);
                 }
-            } else if(tempMenu instanceof TalkWindow) {
+            } else if (tempMenu instanceof TalkWindow) {
                 TalkWindow menu = (TalkWindow) tempMenu;
-                if(menu.conversation!=null) {
+                if (menu.conversation != null) {
                     menu.drawMenu(batch, cam);
                 } else {
                     Main.gui.clearMenu();
@@ -83,7 +98,7 @@ public class Display {
 
 
     public void drawName(Agent a) {
-        font.getData().setScale(cam.zoom);
+        font.getData().setScale(((cam.zoom-1)/2)+1);
         GlyphLayout layout = new GlyphLayout(font, a.getName());
         int tempHeight = a instanceof Location ? 40 : 30;
         font.draw(batch, layout, cam.position.x + a.position.x*cam.zoom - layout.width / 2, cam.position.y + a.position.y*cam.zoom + tempHeight*cam.zoom);

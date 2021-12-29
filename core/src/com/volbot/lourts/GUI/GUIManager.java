@@ -3,6 +3,7 @@ package com.volbot.lourts.GUI;
 import com.volbot.lourts.Agents.Agent;
 import com.volbot.lourts.Agents.Location;
 import com.volbot.lourts.Agents.Demographic;
+import com.volbot.lourts.Data.Battle;
 import com.volbot.lourts.Data.TalkResponse;
 import com.volbot.lourts.Main;
 
@@ -19,26 +20,38 @@ public class GUIManager {
             InteractMenu menu = (InteractMenu) currmenu;
             if (menu.buttons[0].isChecked()) {
                 menu.buttons[0].setChecked(false);
-                if(initiator==Main.player){
+                if (initiator == Main.player) {
                     Main.gui.drawTalkMenu(target);
-                } else
-                if(target==Main.player){
+                } else if (target == Main.player) {
                     Main.gui.drawTalkMenu(initiator);
                 }
             } else if (menu.buttons[1].isChecked()) {
                 menu.buttons[1].setChecked(false);
+                Main.gui.drawCombatMenu(target);
             }
         }
     }
 
     public void loop() {
+        if(currmenu==null){
+            return;
+        }
+        if(currmenu instanceof NotificationWindow) {
+            NotificationWindow menu = (NotificationWindow) currmenu;
+            for(int i = 0; i < menu.buttons.length; i++) {
+                if(menu.buttons[i].isChecked()){
+                    menu.activateButton(i);
+                }
+            }
+        }
         if (currmenu instanceof TalkWindow) {
             TalkWindow menu = (TalkWindow) currmenu;
-            if (menu.conversation == null) {
+            if (menu.conversation == null || menu.conversation.options==null) {
                 clearMenu();
                 return;
             }
-            for (int i = 0; i < 4; i++) {
+            if(menu.buttons==null)return;
+            for (int i = 0; i < menu.buttons.length; i++) {
                 if (menu.buttons[i].isChecked()) {
                     if (i >= menu.conversation.options.length) continue;
                     menu.buttons[i].setChecked(false);
@@ -52,28 +65,32 @@ public class GUIManager {
                         case '-':
                             menu.entity.rep.impress(Main.player, -1);
                             break;
+                        case 'F':
+                            Main.GAMEMODE=1;
+                            Main.battle = new Battle(Main.player,menu.entity);
+                            break;
                         case 'R':
                             int num = 0;
                             int numDex = 2;
                             String option = menu.conversation.options[i].option;
-                            while(!Character.isDigit(option.charAt(numDex))){
+                            while (!Character.isDigit(option.charAt(numDex))) {
                                 numDex++;
                             }
-                            while(Character.isDigit(option.charAt(numDex))){
-                                num*=10;
-                                num+=Character.getNumericValue(option.charAt(numDex));
+                            while (Character.isDigit(option.charAt(numDex))) {
+                                num *= 10;
+                                num += Character.getNumericValue(option.charAt(numDex));
                                 numDex++;
                             }
-                            Location loc = (Location)menu.entity;
-                            loc.setPopulation(loc.getPopulationInternal()-num);
-                            Main.player.getParty().add(new Demographic(loc,num));
+                            Location loc = (Location) menu.entity;
+                            loc.setPopulation(loc.getPopulationInternal() - num);
+                            Main.player.getParty().add(new Demographic(loc, num));
                             break;
                         case 'M':
                             menu.resetConvo();
                             reset = true;
                     }
                     menu.buttons[i].setChecked(false);
-                    if(!reset) {
+                    if (!reset) {
                         menu.advanceConversation(i);
                     }
                 }
@@ -87,7 +104,17 @@ public class GUIManager {
 
     public void drawTalkMenu(Agent a) {
         Main.setPaused(true);
-        currmenu=new TalkWindow(a);
+        currmenu = new TalkWindow(a,0);
+    }
+
+    public void drawNotificationWindow(String type){
+        Main.setPaused(true);
+        currmenu = new NotificationWindow(type);
+    }
+
+    public void drawCombatMenu(Agent a) {
+        Main.setPaused(true);
+        currmenu = new TalkWindow(a,1);
     }
 
     public void clearMenu() {
