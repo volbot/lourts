@@ -20,13 +20,14 @@ public class Battle {
         this.defender = defender;
         combatants = new ArrayList<>();
         combatants.add(new Combatant(aggressor).setPosition(new Vector3(100,100,0)));
-        combatants.add(new Combatant(defender).setPosition(new Vector3(300,100,0)));
+        combatants.add(new Combatant(defender).setPosition(new Vector3(600,100,0)));
         if(aggressor instanceof Individual){
             int j = 1;
             for(Demographic d : ((Individual) aggressor).getParty().pop){
+                System.out.println("deez");
                 int i = 0;
                 while(i < d.getPopulation()) {
-                    combatants.add(new Combatant(d,aggressor).setPosition(combatants.get(0).position.cpy().add(-j*10,10*i,0)));
+                    combatants.add(new Combatant(d,aggressor).setPosition(combatants.get(0).position.cpy().add(-j*40,30*i,0)));
                     i++;
                 }
                 j++;
@@ -38,7 +39,7 @@ public class Battle {
                 System.out.println("deez");
                 int i = 0;
                 while(i < d.getPopulation()) {
-                    combatants.add(new Combatant(d,defender).setPosition(combatants.get(0).position.cpy().add(j*10,10*i,0)));
+                    combatants.add(new Combatant(d,defender).setPosition(combatants.get(1).position.cpy().add(j*40,30*i,0)));
                     i++;
                 }
                 j++;
