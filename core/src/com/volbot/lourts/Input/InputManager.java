@@ -29,7 +29,7 @@ public class InputManager implements InputProcessor {
         camSpeed = 300;
     }
 
-    private Vector3 boundClick(Vector3 touchPos){
+    public Vector3 boundClick(Vector3 touchPos){
         Vector3 touchLoc = touchPos.cpy();
         touchLoc.x=Math.max(0,touchLoc.x);
         touchLoc.y=Math.max(0,touchLoc.y);

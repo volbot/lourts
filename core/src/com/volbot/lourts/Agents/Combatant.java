@@ -12,20 +12,22 @@ public class Combatant {
     public Vector3 position;
     public Agent allegiance;
     private Combatant target = null;
+    private Combatant buddy = null;
 
     public Combatant(Agent a) {
         entity = a;
         texID = a.texID;
         theme = a.theme;
         allegiance = a;
-        position = new Vector3(0,0,0);
+        position = new Vector3(0, 0, 0);
     }
+
     public Combatant(Demographic d, Agent a) {
         entity = d;
         texID = d.texID;
         theme = d.theme;
-        allegiance=a;
-        position = new Vector3(0,0,0);
+        allegiance = a;
+        position = new Vector3(0, 0, 0);
     }
 
     public Combatant setPosition(Vector3 position) {
@@ -34,72 +36,82 @@ public class Combatant {
     }
 
     public Agent getAgent() {
+        String name;
         if (entity instanceof Agent) {
-            return (Agent) entity;
+            name = ((Agent) entity).getName();
         } else {
             Demographic d = (Demographic) entity;
-            return new Agent(d.getName());
+            name = d.getName();
         }
+        Agent temp = new Agent(name);
+        temp.position.set(position.cpy());
+        return temp;
     }
 
     public void think() {
-        if(target==null){
-            target=closestEnemy();
-        }
-        if(target!=null){
+        perceive();
+        if (target != null) {
             move(target.position);
         }
     }
 
-    private Combatant closestEnemy() {
+    private void perceive() {
         Combatant closestEnemy = null;
-        float closestDist = 0.0f;
-        for(Combatant c : Main.battle.combatants){
-            if(c.allegiance==this.allegiance) continue;
+        float closestEnemyDist = 0.0f;
+        for (Combatant c : Main.battle.combatants) {
             float dst = position.dst(c.position);
-            if(closestEnemy==null || dst<closestDist){
-                closestEnemy=c;
-                closestDist=dst;
+            if (c.allegiance == this.allegiance) {
+                if (!c.equals(this) && (buddy == null || dst < buddy.position.dst(position))) {
+                    if(c.buddy!=null && !c.buddy.equals(this)) {
+                        buddy = c;
+                    }
+                }
+            } else {
+                if (closestEnemy == null || dst < closestEnemyDist) {
+                    if (buddy == null || !c.equals(buddy.target)) {
+                        closestEnemy = c;
+                        closestEnemyDist = dst;
+                    }
+                }
             }
         }
-        return closestEnemy;
+        if (target == null) {
+            target = closestEnemy;
+        }
+        if(buddy!=null && position.dst(buddy.position)<20){
+            move(position.cpy().sub(buddy.position));
+        }
     }
 
-    public boolean move(Vector3 goal) {
-        if(Main.PAUSED){
+    public boolean move(Vector3 goalIn) {
+        if (Main.PAUSED) {
             return true;
         }
-        double xdist = goal.x - position.x;
-        double ydist = goal.y - position.y;
-        double xtravel = 0;
-        double ytravel = 0;
-        double workingSpeed = Gdx.graphics.getDeltaTime() * 70;
+        Vector3 goal = goalIn.cpy();
+        if (buddy != null) {
+            if (goal.dst(target.position) < 20) {
+                goal.rotate(position,30);
+                if (goal.dst(buddy.target.position) < 20) {
+                    goal.rotate(position,-60);
+                    if (goal.dst(buddy.target.position) < 20) {
+                        return true;
+                    }
+                }
+            }
+        }
+        float dst = goal.cpy().dst(position);
+        Vector3 movement;
+        float workingSpeed = Gdx.graphics.getDeltaTime() * 70;
 
-        if (Math.abs(xdist) > 2*workingSpeed || Math.abs(ydist) > 2*workingSpeed) {
-            //if far from goal, go to it
-            xtravel = workingSpeed * (Math.abs(xdist) / (Math.abs(xdist) + Math.abs(ydist)));
-            ytravel = workingSpeed - xtravel;
-            xtravel = Math.ceil(xtravel);
-            ytravel = Math.ceil(ytravel);
+        Vector3 newPos = position.cpy();
+        if (dst > 30) {
+            movement = goal.cpy().sub(position).limit(workingSpeed);
+            newPos.add(movement);
         }
-
-        //set directions
-        if (xdist < 0 && xtravel > 0) {
-            xtravel = -xtravel;
+        if (position.dst(newPos) != 0) {
+            position = newPos.cpy();
+            return true;
         }
-        if (ydist < 0 && ytravel > 0) {
-            ytravel = -ytravel;
-        }
-
-        boolean returnval = false;
-        if (Math.abs(xdist) > 10) {
-            position.x += xtravel;
-            returnval = true;
-        }
-        if (Math.abs(ydist) > 10) {
-            position.y += ytravel;
-            returnval = true;
-        }
-        return returnval;
+        return false;
     }
 }

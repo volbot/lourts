@@ -30,6 +30,10 @@ public class TexLoader {
                 unit.heroes.remove(tex);
                 tex.dispose();
             }
+            for (Texture tex : unit.combatants) {
+                unit.combatants.remove(tex);
+                tex.dispose();
+            }
         }
     }
 
@@ -55,6 +59,10 @@ public class TexLoader {
                 if (heroesFiles != null && heroesFiles.length > 0)
                     for (File file : heroesFiles)
                         texUnits.get(unitName).heroes.add(new Texture(file.getPath()));
+                File[] combatantsFiles = new File(unitFolder.getPath() + "/combatants/").listFiles();
+                if (combatantsFiles != null && combatantsFiles.length > 0)
+                    for (File file : combatantsFiles)
+                        texUnits.get(unitName).combatants.add(new Texture(file.getPath()));
             }
     }
 }

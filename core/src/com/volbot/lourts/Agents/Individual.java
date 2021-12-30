@@ -115,7 +115,7 @@ public class Individual extends Agent{
             double ytravel = 0;
             double workingSpeed = Gdx.graphics.getDeltaTime() * moveSpeed;
 
-            if (Math.abs(xdist) > 2*workingSpeed || Math.abs(ydist) > 2*workingSpeed) {
+            if (Math.abs(xdist) > 7*workingSpeed || Math.abs(ydist) > 7*workingSpeed) {
                 //if far from goal, go to it
                 xtravel = workingSpeed * (Math.abs(xdist) / (Math.abs(xdist) + Math.abs(ydist)));
                 ytravel = workingSpeed - xtravel;

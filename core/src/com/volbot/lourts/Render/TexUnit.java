@@ -7,6 +7,7 @@ import java.util.ArrayList;
 public class TexUnit {
     public ArrayList<Texture> towns = new ArrayList<>();
     public ArrayList<Texture> heroes = new ArrayList<>();
+    public ArrayList<Texture> combatants = new ArrayList<>();
 
     public TexUnit() {
 

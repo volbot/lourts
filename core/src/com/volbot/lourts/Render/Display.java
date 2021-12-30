@@ -59,7 +59,13 @@ public class Display {
         } else {
             Battle battle = Main.battle;
             for(Combatant c : battle.combatants){
-                batch.draw(texLoader.texUnits.get(c.theme).heroes.get(c.texID),cam.position.x + c.position.x * cam.zoom - size / 2, cam.position.y + c.position.y * cam.zoom - size / 2, size, size);
+                Texture tex;
+                if(c.getAgent().getName().equals(battle.aggressor.getName()) || c.getAgent().getName().equals(battle.defender.getName())){
+                    tex=texLoader.texUnits.get(c.theme).heroes.get(c.texID);
+                } else {
+                    tex=texLoader.texUnits.get(c.theme).combatants.get(c.texID);
+                }
+                batch.draw(tex,cam.position.x + c.position.x * cam.zoom - size / 2, cam.position.y + c.position.y * cam.zoom - size / 2, size, size);
             }
         }
         GameMenu tempMenu = Main.gui.currmenu;
@@ -96,8 +102,7 @@ public class Display {
     }
 
     public void drawName(Agent a) {
-        Vector3 drawPos = Main.GAMEMODE==0?a.position.cpy():
-                (Main.battle.aggressor.equals(a)?Main.battle.combatants.get(0).position.cpy():Main.battle.combatants.get(1).position.cpy());
+        Vector3 drawPos = a.position.cpy();
         font.getData().setScale(((cam.zoom-1)/2)+1);
         GlyphLayout layout = new GlyphLayout(font, a.getName());
         int tempHeight = a instanceof Location ? 40 : 30;
