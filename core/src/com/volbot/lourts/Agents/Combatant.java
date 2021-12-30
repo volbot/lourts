@@ -12,7 +12,6 @@ public class Combatant {
     public Vector3 position;
     public Agent allegiance;
     private Combatant target = null;
-    private Combatant buddy = null;
 
     public Combatant(Agent a) {
         entity = a;
@@ -60,26 +59,22 @@ public class Combatant {
         float closestEnemyDist = 0.0f;
         for (Combatant c : Main.battle.combatants) {
             float dst = position.dst(c.position);
-            if (c.allegiance == this.allegiance) {
-                if (!c.equals(this) && (buddy == null || dst < buddy.position.dst(position))) {
-                    if(c.buddy!=null && !c.buddy.equals(this)) {
-                        buddy = c;
-                    }
+            if(!c.equals(this)){
+                while((dst=c.position.dst(position))<20) {
+                    c.position.add(c.position.cpy().sub(position).scl(0.1f));
                 }
-            } else {
+            }
+            position=Main.inputs.boundClick(position);
+            if (c.allegiance != this.allegiance) {
                 if (closestEnemy == null || dst < closestEnemyDist) {
-                    if (buddy == null || !c.equals(buddy.target)) {
-                        closestEnemy = c;
-                        closestEnemyDist = dst;
-                    }
+                    closestEnemy = c;
+                    closestEnemyDist = dst;
+
                 }
             }
         }
         if (target == null) {
             target = closestEnemy;
-        }
-        if(buddy!=null && position.dst(buddy.position)<20){
-            move(position.cpy().sub(buddy.position));
         }
     }
 
@@ -88,17 +83,6 @@ public class Combatant {
             return true;
         }
         Vector3 goal = goalIn.cpy();
-        if (buddy != null) {
-            if (goal.dst(target.position) < 20) {
-                goal.rotate(position,30);
-                if (goal.dst(buddy.target.position) < 20) {
-                    goal.rotate(position,-60);
-                    if (goal.dst(buddy.target.position) < 20) {
-                        return true;
-                    }
-                }
-            }
-        }
         float dst = goal.cpy().dst(position);
         Vector3 movement;
         float workingSpeed = Gdx.graphics.getDeltaTime() * 70;
