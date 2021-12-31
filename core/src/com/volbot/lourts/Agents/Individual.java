@@ -34,13 +34,14 @@ public class Individual extends Agent{
         if(dest!=null){
             Vector3 destLoc = new Vector3(dest.position.x,dest.position.y,0);
             move(destLoc);
-            if(position.dst(dest.position)<20){
-                Main.gui.sendGUIMessage(this,dest);
+            if(position.dst(dest.position)<10 || dest.equals(this.location)){
+                if(this.equals(Main.player)) Main.gui.playerOpenWindow();
                 if(location==null && dest instanceof Location){
                     Main.entities.remove(this);
                     ((Location) dest).heroes.add(this);
                     this.location=(Location)dest;
                 }
+                dest=null;
             }
         }
         if (goalPos != null) {
@@ -98,48 +99,27 @@ public class Individual extends Agent{
     }
 
     public boolean move(Vector3 goal) {
-        if(Main.PAUSED){
+        if (Main.PAUSED) {
             return true;
         }
-        if(location!=null){
-            location.heroes.remove(this);
+        if(this.location!=null){
+            this.location.heroes.remove(this);
+            this.location=null;
             Main.entities.add(this);
-            this.position.x=location.position.x;
-            this.position.y=location.position.y;
-            location=null;
+        }
+        float dst = goal.cpy().dst(position);
+        Vector3 movement;
+        float workingSpeed = Gdx.graphics.getDeltaTime() * moveSpeed;
+
+        Vector3 newPos = position.cpy();
+        if (dst > 10) {
+            movement = goal.cpy().sub(position).setLength(workingSpeed);
+            newPos.add(movement);
+        }
+        if (position.dst(newPos) != 0) {
+            position = newPos.cpy();
             return true;
         }
-        double xdist = goal.x - position.x;
-            double ydist = goal.y - position.y;
-            double xtravel = 0;
-            double ytravel = 0;
-            double workingSpeed = Gdx.graphics.getDeltaTime() * moveSpeed;
-
-            if (Math.abs(xdist) > 7*workingSpeed || Math.abs(ydist) > 7*workingSpeed) {
-                //if far from goal, go to it
-                xtravel = workingSpeed * (Math.abs(xdist) / (Math.abs(xdist) + Math.abs(ydist)));
-                ytravel = workingSpeed - xtravel;
-                xtravel = Math.ceil(xtravel);
-                ytravel = Math.ceil(ytravel);
-            }
-
-            //set directions
-            if (xdist < 0 && xtravel > 0) {
-                xtravel = -xtravel;
-            }
-            if (ydist < 0 && ytravel > 0) {
-                ytravel = -ytravel;
-            }
-
-            boolean returnval = false;
-            if (Math.abs(xdist) > 10) {
-                position.x += xtravel;
-                returnval = true;
-            }
-            if (Math.abs(ydist) > 10) {
-                position.y += ytravel;
-                returnval = true;
-            }
-            return returnval;
+        return false;
     }
 }

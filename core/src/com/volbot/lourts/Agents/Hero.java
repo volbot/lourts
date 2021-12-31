@@ -20,19 +20,21 @@ public class Hero extends Individual {
 
     public Hero(String name, Location origin) {
         super(name);
+        decisionTime=Main.GAMETIME;
         personality = origin.getPersonality();
         background = new Background(origin, 0);
-        this.location=origin;
-        this.position=origin.position.cpy();
+        this.location = origin;
+        this.position = origin.position.cpy();
         origin.heroes.add(this);
     }
 
     @Override
     public void interact(Agent a) {
         super.interact(a);
-        if(dest.equals(Main.player)) {
+        if (dest.equals(Main.player)) {
             if (!(Main.gui.currmenu instanceof GameWindow)) {
-                Main.gui.drawTalkMenu(this);
+                if (intent == 1 || intent == 2) Main.gui.drawTalkMenu(this);
+                if (intent == 3) Main.gui.drawCombatMenu(this);
             }
         }
     }
@@ -40,48 +42,43 @@ public class Hero extends Individual {
     @Override
     public void think() {
         super.think();
-        if(dest!=null) {
+        if (dest != null) {
             if (position.dst(dest.position) < 20) {
-                if (intent == 1) {
-                    this.interact(dest);
-
-                    intent = 2;
-                }
-                dest=null;
+                interact(dest);
+                dest = null;
             }
-        } else if(goalPos!=null) {
-            if(position.dst(goalPos)<10){
-                goalPos=null;
+        } else if (goalPos != null) {
+            if (position.dst(goalPos) < 10) {
+                goalPos = null;
             }
         }
         decide();
     }
 
     protected void decide() {
-        decisionTime++;
-        /* search for people to meet
-        for(Agent a : Main.entities){
-            if(a instanceof Location || a.equals(this)) continue;
-            if(position.dst(a.position)<viewDistance){
-                if(!rep.knows(a)){
-                    decisionTime = 0;
-                    intent = 1;
-                    setDestination(a);
-                }
-            }
-        }
-         */
-        switch(intent){
+        switch (intent) {
             case 0: //default
                 intent = 2; //switch to patrol
                 break;
-            case 1:
+            case 1: //talk to agent
                 break;
-            case 2:
-                if(decisionTime>500) {
-                    decisionTime=0;
-                    setDestination(patrol(background.origin));
+            case 2: //patrol
+                System.out.println(Main.GAMETIME-decisionTime);
+                if (Main.GAMETIME-decisionTime > 200 && Main.random.nextInt(6)>=5) {
+                        decisionTime = Main.GAMETIME;
+                        setDestination(patrol(background.origin));
                 }
+                for (Agent a : Main.entities) {
+                    if (a instanceof Location || a.equals(this)) continue;
+                    if (position.dst(a.position) < viewDistance && Main.random.nextInt(6)>=1) {
+                        if (!rep.knows(a)) {
+                            decisionTime = Main.GAMETIME;
+                            setDestination(a);
+                        }
+                    }
+                }
+                break;
+            case 3: //battle agent
                 break;
         }
     }
@@ -94,8 +91,8 @@ public class Hero extends Individual {
     private Vector3 patrol(Location loc) {
         Vector3 pos = loc.position.cpy();
         Random rand = new Random();
-        pos.x+=rand.nextInt(200)+(-100);
-        pos.y+=rand.nextInt(200)+(-100);
+        pos.x += rand.nextInt(200) + (-100);
+        pos.y += rand.nextInt(200) + (-100);
         return pos;
     }
 

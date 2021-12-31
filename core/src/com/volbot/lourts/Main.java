@@ -18,6 +18,7 @@ import com.volbot.lourts.Render.Display;
 import com.volbot.lourts.Render.TexLoader;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 public class Main extends ApplicationAdapter {
 
@@ -31,6 +32,7 @@ public class Main extends ApplicationAdapter {
 	public static GameMap map;
 	public static TexLoader texLoader;
 	public static InputManager inputs;
+	public static Random random = new Random();
 
 	public static Individual player;
 	public static int GAMETIME;
@@ -74,15 +76,15 @@ public class Main extends ApplicationAdapter {
 
 	@Override
 	public void render () {
-		if(GAMEMODE==0&&map!=worldmap){
-			map=worldmap;
-			initWorld();
+		if(GAMEMODE==0){
+			GAMETIME++;
+			if(map!=worldmap) {
+				map = worldmap;
+				initWorld();
+			}
 		}
 		if(GAMEMODE==1&&map==worldmap){
 			map=new BattleMap();
-		}
-		if(GAMEMODE == 0){
-			GAMETIME++;
 		}
 		massThink();
 		ScreenUtils.clear(1, 0, 0, 1);

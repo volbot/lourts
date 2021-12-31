@@ -16,41 +16,44 @@ public class GUIManager {
     }
 
     public void sendGUIMessage(Agent initiator, Agent target) {
-        if (currmenu instanceof InteractMenu) {
-            InteractMenu menu = (InteractMenu) currmenu;
-            if (menu.buttons[0].isChecked()) {
-                menu.buttons[0].setChecked(false);
-                if (initiator == Main.player) {
-                    Main.gui.drawTalkMenu(target);
-                } else if (target == Main.player) {
-                    Main.gui.drawTalkMenu(initiator);
-                }
-            } else if (menu.buttons[1].isChecked()) {
-                menu.buttons[1].setChecked(false);
-                Main.gui.drawCombatMenu(target);
-            }
-        }
+
     }
 
+    public void playerOpenWindow() {
+        playerOpenWindow = true;
+    }
+
+    boolean playerOpenWindow = false;
+
     public void loop() {
-        if(currmenu==null){
+        if (currmenu == null) {
             return;
         }
-        if(currmenu instanceof NotificationWindow) {
+        if (currmenu instanceof InteractMenu) {
+            if(playerOpenWindow) {
+                InteractMenu menu = (InteractMenu) currmenu;
+                if (menu.buttons[0].isChecked()) {
+                    menu.buttons[0].setChecked(false);
+                    Main.gui.drawTalkMenu(menu.entity);
+                } else if (menu.buttons[1].isChecked()) {
+                    menu.buttons[1].setChecked(false);
+                    Main.gui.drawCombatMenu(menu.entity);
+                }
+            }
+        } else if (currmenu instanceof NotificationWindow) {
             NotificationWindow menu = (NotificationWindow) currmenu;
-            for(int i = 0; i < menu.buttons.length; i++) {
-                if(menu.buttons[i].isChecked()){
+            for (int i = 0; i < menu.buttons.length; i++) {
+                if (menu.buttons[i].isChecked()) {
                     menu.activateButton(i);
                 }
             }
-        }
-        if (currmenu instanceof TalkWindow) {
+        } else if (currmenu instanceof TalkWindow) {
             TalkWindow menu = (TalkWindow) currmenu;
-            if (menu.conversation == null || menu.conversation.options==null) {
+            if (menu.conversation == null || menu.conversation.options == null) {
                 clearMenu();
                 return;
             }
-            if(menu.buttons==null)return;
+            if (menu.buttons == null) return;
             for (int i = 0; i < menu.buttons.length; i++) {
                 if (menu.buttons[i].isChecked()) {
                     if (i >= menu.conversation.options.length) continue;
@@ -66,8 +69,8 @@ public class GUIManager {
                             menu.entity.rep.impress(Main.player, -1);
                             break;
                         case 'F':
-                            Main.GAMEMODE=1;
-                            Main.battle = new Battle(Main.player,menu.entity);
+                            Main.GAMEMODE = 1;
+                            Main.battle = new Battle(Main.player, menu.entity);
                             break;
                         case 'R':
                             int num = 0;
@@ -96,6 +99,7 @@ public class GUIManager {
                 }
             }
         }
+
     }
 
     public void drawInteractMenu(Agent a) {
@@ -104,17 +108,17 @@ public class GUIManager {
 
     public void drawTalkMenu(Agent a) {
         Main.setPaused(true);
-        currmenu = new TalkWindow(a,0);
+        currmenu = new TalkWindow(a, 0);
     }
 
-    public void drawNotificationWindow(String type){
+    public void drawNotificationWindow(String type) {
         Main.setPaused(true);
         currmenu = new NotificationWindow(type);
     }
 
     public void drawCombatMenu(Agent a) {
         Main.setPaused(true);
-        currmenu = new TalkWindow(a,1);
+        currmenu = new TalkWindow(a, 1);
     }
 
     public void clearMenu() {

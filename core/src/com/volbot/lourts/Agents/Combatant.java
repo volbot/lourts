@@ -61,7 +61,7 @@ public class Combatant {
             float dst = position.dst(c.position);
             if(!c.equals(this)){
                 while((dst=c.position.dst(position))<20) {
-                    c.position.add(c.position.cpy().sub(position).scl(0.1f));
+                    c.position.add(c.position.cpy().sub(position).scl(0.05f));
                 }
             }
             position=Main.inputs.boundClick(position);
@@ -89,7 +89,7 @@ public class Combatant {
 
         Vector3 newPos = position.cpy();
         if (dst > 30) {
-            movement = goal.cpy().sub(position).limit(workingSpeed);
+            movement = goal.cpy().sub(position).setLength(workingSpeed);
             newPos.add(movement);
         }
         if (position.dst(newPos) != 0) {
