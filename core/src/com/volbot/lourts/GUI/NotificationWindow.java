@@ -61,7 +61,7 @@ public class NotificationWindow extends GameWindow {
         switch(buttonDex) {
             case 0:
                 if(type.equals("retreat")){
-                    Main.endBattle();
+                    Main.endBattle(null);
                     Main.gui.clearMenu();
                 }
                 break;

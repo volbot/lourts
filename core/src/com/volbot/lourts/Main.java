@@ -5,10 +5,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.ScreenUtils;
-import com.volbot.lourts.Agents.Agent;
-import com.volbot.lourts.Agents.Faction;
-import com.volbot.lourts.Agents.Individual;
-import com.volbot.lourts.Agents.Location;
+import com.volbot.lourts.Agents.*;
 import com.volbot.lourts.Data.Battle;
 import com.volbot.lourts.GUI.GUIManager;
 import com.volbot.lourts.Input.InputManager;
@@ -22,131 +19,164 @@ import java.util.Random;
 
 public class Main extends ApplicationAdapter {
 
-	private OrthographicCamera cam;
+    private OrthographicCamera cam;
 
-	public static GUIManager gui;
-	public static Display display;
-	public static Battle battle;
-	public static ArrayList<Agent> entities = new ArrayList<>();
-	public static GameMap worldmap;
-	public static GameMap map;
-	public static TexLoader texLoader;
-	public static InputManager inputs;
-	public static Random random = new Random();
+    public static GUIManager gui;
+    public static Display display;
+    public static Battle battle;
+    public static ArrayList<Agent> entities = new ArrayList<>();
+    public static GameMap worldmap;
+    public static GameMap map;
+    public static TexLoader texLoader;
+    public static InputManager inputs;
+    public static Random random = new Random();
 
-	public static Individual player;
-	public static int GAMETIME;
-	public static int GAMEMODE;
-	public static boolean PAUSED = false;
+    public static Individual player;
+    public static int GAMETIME;
+    public static int GAMEMODE;
+    public static boolean PAUSED = false;
 
-	@Override
-	public void create () {
-		GAMETIME=0;
-		GAMEMODE=0;
-		battle = null;
-		worldmap = new GameMap();
-		map = worldmap;
-		texLoader = new TexLoader();
-		Individual crabwizard = new Individual("Crabwizard");
-		player = crabwizard;
-		entities.add(crabwizard);
-		gui = new GUIManager();
-		crabwizard.position.x=400;
-		crabwizard.position.y=400;
-		crabwizard.texID=1;
+    @Override
+    public void create() {
+        GAMETIME = 0;
+        GAMEMODE = 0;
+        battle = null;
+        worldmap = new GameMap();
+        map = worldmap;
+        texLoader = new TexLoader();
+        Individual crabwizard = new Individual("Crabwizard");
+        player = crabwizard;
+        entities.add(crabwizard);
+        gui = new GUIManager();
+        crabwizard.position.x = 400;
+        crabwizard.position.y = 400;
+        crabwizard.texID = 1;
 
-		Location boneland = new Location("Boneland","Skeletrex",200,200, 100);
-		Faction bonebrigade = new Faction("Bone Brigade",boneland.getFigurehead(),0);
-		entities.add(boneland);
-		boneland.setFaction(bonebrigade);
-		boneland.texID=0;
-		Location bonetown = new Location("Bonetown", "Anthony Hopkins",800,440,233);
-		bonetown.setFaction(bonebrigade);
-		entities.add(bonetown);
-		bonetown.texID=0;
+        Location boneland = new Location("Boneland", "Skeletrex", 200, 200, 100);
+        Faction bonebrigade = new Faction("Bone Brigade", boneland.getFigurehead(), 0);
+        entities.add(boneland);
+        boneland.setFaction(bonebrigade);
+        boneland.texID = 0;
+        Location bonetown = new Location("Bonetown", "Anthony Hopkins", 800, 440, 233);
+        bonetown.setFaction(bonebrigade);
+        entities.add(bonetown);
+        bonetown.texID = 0;
 
-		cam = new OrthographicCamera();
-		cam.setToOrtho(false,1024,576);
-		cam.position.x=0;
-		cam.position.y=0;
-		display = new Display(cam);
-		inputs = new InputManager(cam);
-		Gdx.input.setInputProcessor(inputs);
-	}
+        cam = new OrthographicCamera();
+        cam.setToOrtho(false, 1024, 576);
+        cam.position.x = 0;
+        cam.position.y = 0;
+        display = new Display(cam);
+        inputs = new InputManager(cam);
+        Gdx.input.setInputProcessor(inputs);
+    }
 
-	@Override
-	public void render () {
-		if(GAMEMODE==0){
-			GAMETIME++;
-			if(map!=worldmap) {
-				map = worldmap;
-				initWorld();
-			}
-		}
-		if(GAMEMODE==1&&map==worldmap){
-			map=new BattleMap();
-		}
-		massThink();
-		ScreenUtils.clear(1, 0, 0, 1);
-		if(gui.currmenu!=null){
-			gui.loop();
-		}
-		inputs.parseCameraMovement();
-		display.loop();
-	}
+    @Override
+    public void render() {
+        if (GAMEMODE == 0) {
+            GAMETIME++;
+            if (map != worldmap) {
+                map = worldmap;
+                initWorld();
+            }
+        }
+        if (GAMEMODE == 1 && map == worldmap) {
+            map = new BattleMap();
+        }
+        massThink();
+        ScreenUtils.clear(1, 0, 0, 1);
+        if (gui.currmenu != null) {
+            gui.loop();
+        }
+        inputs.parseCameraMovement();
+        display.loop();
+    }
 
-	public void massThink () {
-		if(GAMEMODE==0) {
-			int len1 = entities.size();
-			Agent entity;
-			for (int j = 0; j < len1; j++) {
-				entity = entities.get(j);
-				if (entity instanceof Individual) {
-					entity.think();
-				} else if (entity instanceof Location) {
-					ArrayList<Individual> heroes = ((Location) entity).heroes;
-					if (!heroes.isEmpty()) {
-						int len2 = heroes.size();
-						for (int i = 0; i < len2; i++) {
-							heroes.get(i).think();
-							if (heroes.size() < len2) {
-								len2--;
-								i--;
-							}
-						}
-					}
-				}
-				if (entities.size() < len1) {
-					len1--;
-					j--;
-				}
-				if (entities.size() > len1) {
-					len1++;
-				}
-			}
-		} else if (GAMEMODE==1) {
-			int len1=battle.combatants.size();
-			for(int i = 0; i<len1; i++) {
-				battle.combatants.get(i).think();
-			}
-		}
-	}
-	
-	@Override
-	public void dispose () {
-		display.dispose();
-		texLoader.dispose();
-	}
+    public void massThink() {
+        if (GAMEMODE == 0) {
+            int len1 = entities.size();
+            Agent entity;
+            for (int j = 0; j < len1; j++) {
+                entity = entities.get(j);
+                if (entity instanceof Individual) {
+                    entity.think();
+                } else if (entity instanceof Location) {
+                    ArrayList<Individual> heroes = ((Location) entity).heroes;
+                    if (!heroes.isEmpty()) {
+                        int len2 = heroes.size();
+                        for (int i = 0; i < len2; i++) {
+                            heroes.get(i).think();
+                            if (heroes.size() < len2) {
+                                len2--;
+                                i--;
+                            }
+                        }
+                    }
+                }
+                if (entities.size() < len1) {
+                    len1--;
+                    j--;
+                }
+                if (entities.size() > len1) {
+                    len1++;
+                }
+            }
+        } else if (GAMEMODE == 1) {
+            int len1 = battle.combatants.size();
+            int aCount = 0;
+            int dCount = 0;
+            for (int i = 0; i < len1; i++) {
+                Combatant c = battle.combatants.get(i);
+                c.think();
+                if(c.health>0) {
+                    if (c.allegiance.getName().equals(battle.aggressor.getName())) aCount++;
+                    else if (c.allegiance.getName().equals(battle.defender.getName())) dCount++;
+                }
+            }
+            if (aCount <= 0) {
+                endBattle((Individual)battle.defender);
+            } else if (dCount <= 0) {
+                endBattle((Individual)battle.aggressor);
+            }
+        }
+    }
 
-	public static void endBattle() {
-		GAMEMODE=0;
-	}
+    @Override
+    public void dispose() {
+        display.dispose();
+        texLoader.dispose();
+    }
 
-	public void initWorld() {
+    public static void endBattle(Individual victor) {
+        ArrayList<Demographic> victorLost = new ArrayList<>();
+        for (Combatant c : battle.combatants) {
+            if (c.allegiance.equals(victor) && c.entity instanceof Demographic) {
+                if(c.health<=0) {
+                    Demographic d = (Demographic) c.entity;
+                    boolean found = false;
+                    for(Demographic d2 : victorLost){
+                        if(d.getName().equals(d2.getName())){
+                            found = true;
+                            d2.setPopulation(d2.getPopulation()+1);
+                        }
+                    }
+                    if(!found){
+                        victorLost.add(d);
+                    }
+                }
+            }
+        }
+        victor.getParty().sub(victorLost);
+        Individual loser = victor.equals(battle.aggressor) ? (Individual) battle.defender : (Individual) battle.aggressor;
+        loser.getParty().pop = new ArrayList<>();
+        GAMEMODE = 0;
+    }
 
-	}
+    public void initWorld() {
 
-	public static void setPaused(boolean val){
-		PAUSED=val;
-	}
+    }
+
+    public static void setPaused(boolean val) {
+        PAUSED = val;
+    }
 }

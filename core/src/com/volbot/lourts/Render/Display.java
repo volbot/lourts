@@ -59,6 +59,7 @@ public class Display {
         } else {
             Battle battle = Main.battle;
             for(Combatant c : battle.combatants){
+                if(c.health<=0) continue;
                 Texture tex;
                 if(c.getAgent().getName().equals(battle.aggressor.getName()) || c.getAgent().getName().equals(battle.defender.getName())){
                     tex=texLoader.texUnits.get(c.theme).heroes.get(c.texID);

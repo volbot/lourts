@@ -16,4 +16,16 @@ public class Population {
         }
         pop.add(demographic);
     }
+
+    public void sub (ArrayList<Demographic> list) {
+        for(Demographic d : list){
+            for(Demographic d2 : pop) {
+                if(d.getOrigin().equals(d2.getOrigin())){
+                    if(d.getLevel()==d2.getLevel()){
+                        d2.setPopulation(d2.getPopulation()-d.getPopulation());
+                    }
+                }
+            }
+        }
+    }
 }

@@ -5,6 +5,14 @@ public class Demographic {
     public int texID;
     public String theme;
 
+    public Demographic(Location origin, int population, int level) {
+        this.level=level;
+        this.origin=origin;
+        this.population=population;
+        this.theme=origin.theme;
+        texID=0;
+    }
+
     public Demographic(Location origin, int population) {
         this.level=1;
         this.origin=origin;
