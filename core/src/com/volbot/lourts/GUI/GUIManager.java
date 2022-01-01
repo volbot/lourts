@@ -31,6 +31,7 @@ public class GUIManager {
         }
         if (currmenu instanceof InteractMenu) {
             if(playerOpenWindow) {
+                playerOpenWindow=false;
                 InteractMenu menu = (InteractMenu) currmenu;
                 if (menu.buttons[0].isChecked()) {
                     menu.buttons[0].setChecked(false);
