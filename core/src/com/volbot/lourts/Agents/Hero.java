@@ -63,7 +63,6 @@ public class Hero extends Individual {
             case 1: //talk to agent
                 break;
             case 2: //patrol
-                System.out.println(Main.GAMETIME-decisionTime);
                 if (Main.GAMETIME-decisionTime > 200 && Main.random.nextInt(6)>=5) {
                         decisionTime = Main.GAMETIME;
                         setDestination(patrol(background.origin));

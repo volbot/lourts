@@ -24,10 +24,29 @@ public class TalkWindow extends InteractWindow {
         entity = a;
         entityname = a instanceof Location ?
                 (((Location) a).heroes.contains(((Location) a).getFigurehead()) ?
-                        ((Location) a).getFigurehead().getName() : a.getName()+" Representative")
+                        ((Location) a).getFigurehead().getName() : a.getName() + " Representative")
                 : a.getName();
+        conversation = intent == 0 ? a.startConversation(Main.player) : a.startCombat(Main.player);
 
-        conversation = intent==0?a.startConversation(Main.player):a.startCombat(Main.player);
+        windowbg = new Texture("GUI/windows/menublank.png");
+
+        buttons = new TextButton[4];
+
+        buttonStyle = new TextButton.TextButtonStyle();
+        buttonStyle.up = new TextureRegionDrawable(new TextureRegion(new Texture("GUI/windows/buttons/eighthofwindowbutton.png")));
+        buttonStyle.checked = new TextureRegionDrawable(new TextureRegion(new Texture("GUI/windows/buttons/eighthofwindowbuttondown.png")));
+        buttonStyle.font = new BitmapFont();
+
+        genButtonText();
+    }
+
+    public TalkWindow(Agent a, boolean playerWon) {
+        entity = a;
+        entityname = a instanceof Location ?
+                (((Location) a).heroes.contains(((Location) a).getFigurehead()) ?
+                        ((Location) a).getFigurehead().getName() : a.getName() + " Representative")
+                : a.getName();
+        conversation = a.endCombat(Main.player, playerWon);
 
         windowbg = new Texture("GUI/windows/menublank.png");
 
@@ -45,7 +64,7 @@ public class TalkWindow extends InteractWindow {
     public void drawMenu(SpriteBatch batch, OrthographicCamera cam) {
         float widthinc = windowbg.getWidth() * 0.05f;
         float heightinc = windowbg.getHeight() * 0.05f;
-        if(conversation!=null&&conversation.options.length>4){
+        if (conversation != null && conversation.options.length > 4) {
 
         } else {
             float temp = (cam.viewportWidth - windowbg.getWidth()) / 2 + widthinc / 2;
@@ -71,11 +90,11 @@ public class TalkWindow extends InteractWindow {
 
     public void genButtonText() {
         float buttonwidth = windowbg.getWidth() * 0.45f;
-        if(conversation==null) return;
-        for (int i = 0; i < Math.max(conversation.options.length,4); i++) {
+        if (conversation == null) return;
+        for (int i = 0; i < Math.max(conversation.options.length, 4); i++) {
             TextButton temp;
-            if(i >= conversation.options.length||conversation.options[i]==null) {
-                temp = new TextButton("",buttonStyle);
+            if (i >= conversation.options.length || conversation.options[i] == null) {
+                temp = new TextButton("", buttonStyle);
             } else {
                 temp = new TextButton(conversation.options[i].option.substring(2), buttonStyle);
             }
@@ -87,7 +106,7 @@ public class TalkWindow extends InteractWindow {
 
     public void resetConvo() {
         TalkResponse newConvo = entity.startConversation(Main.player);
-        newConvo.response="Is there anything else I can help you with?";
+        newConvo.response = "Is there anything else I can help you with?";
         conversation = newConvo;
         genButtonText();
     }

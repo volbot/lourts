@@ -128,15 +128,15 @@ public class Main extends ApplicationAdapter {
             for (int i = 0; i < len1; i++) {
                 Combatant c = battle.combatants.get(i);
                 c.think();
-                if(c.health>0) {
+                if (c.health > 0) {
                     if (c.allegiance.getName().equals(battle.aggressor.getName())) aCount++;
                     else if (c.allegiance.getName().equals(battle.defender.getName())) dCount++;
                 }
             }
             if (aCount <= 0) {
-                endBattle((Individual)battle.defender);
+                endBattle((Individual) battle.defender);
             } else if (dCount <= 0) {
-                endBattle((Individual)battle.aggressor);
+                endBattle((Individual) battle.aggressor);
             }
         }
     }
@@ -149,27 +149,49 @@ public class Main extends ApplicationAdapter {
 
     public static void endBattle(Individual victor) {
         ArrayList<Demographic> victorLost = new ArrayList<>();
+        ArrayList<Demographic> loserLost = new ArrayList<>();
         for (Combatant c : battle.combatants) {
-            if (c.allegiance.equals(victor) && c.entity instanceof Demographic) {
-                if(c.health<=0) {
+            if (c.entity instanceof Demographic) {
+                if (c.health <= 0) {
                     Demographic d = (Demographic) c.entity;
                     boolean found = false;
-                    for(Demographic d2 : victorLost){
-                        if(d.getName().equals(d2.getName())){
-                            found = true;
-                            d2.setPopulation(d2.getPopulation()+1);
+                    if (c.allegiance.equals(victor)) {
+                        for (Demographic d2 : victorLost) {
+                            if (d.getName().equals(d2.getName())) {
+                                found = true;
+                                d2.setPopulation(d2.getPopulation() + 1);
+                            }
                         }
-                    }
-                    if(!found){
-                        victorLost.add(d);
+                        if (!found) {
+                            victorLost.add(d);
+                        }
+                    } else {
+                        for (Demographic d2 : loserLost) {
+                            if (d.getName().equals(d2.getName())) {
+                                found = true;
+                                d2.setPopulation(d2.getPopulation() + 1);
+                            }
+                            if (!found) {
+                                loserLost.add(d);
+                            }
+                        }
+                        if (!found) {
+                            loserLost.add(d);
+                        }
                     }
                 }
             }
         }
         victor.getParty().sub(victorLost);
         Individual loser = victor.equals(battle.aggressor) ? (Individual) battle.defender : (Individual) battle.aggressor;
-        loser.getParty().pop = new ArrayList<>();
+        loser.getParty().sub(loserLost);
         GAMEMODE = 0;
+        if (victor.equals(Main.player)) {
+            Main.gui.drawTalkMenu(loser, false);
+        } else if (loser.equals(Main.player)) {
+            Main.gui.drawTalkMenu(victor, true);
+        }
+        battle = null;
     }
 
     public void initWorld() {

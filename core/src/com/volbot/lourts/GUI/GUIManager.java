@@ -111,6 +111,15 @@ public class GUIManager {
         currmenu = new TalkWindow(a, 0);
     }
 
+    public void drawTalkMenu(Agent a, boolean playerWon) {
+        Main.setPaused(true);
+        if(!a.rep.knows(Main.player)){
+            a.rep.meet(Main.player);
+            Main.player.rep.meet(a);
+        }
+        currmenu = new TalkWindow(a, playerWon);
+    }
+
     public void drawNotificationWindow(String type) {
         Main.setPaused(true);
         currmenu = new NotificationWindow(type);

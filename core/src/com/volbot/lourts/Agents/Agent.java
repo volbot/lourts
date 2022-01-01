@@ -56,6 +56,12 @@ public class Agent {
         });
         return response;
     }
+
+    public TalkResponse endCombat(Individual a, boolean playerWon) {
+        TalkResponse response = new TalkResponse(playerWon?"You have bested me.":"Yeah, jag off.");
+        return response;
+    }
+
     public TalkResponse startConversation(Individual a) {
         if(this.rep.knows(a)) {
             ArrayList<Individual> known = rep.known();

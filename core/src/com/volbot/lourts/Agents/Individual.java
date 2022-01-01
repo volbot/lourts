@@ -34,7 +34,7 @@ public class Individual extends Agent{
         if(dest!=null){
             Vector3 destLoc = new Vector3(dest.position.x,dest.position.y,0);
             move(destLoc);
-            if(position.dst(dest.position)<10 || dest.equals(this.location)){
+            if(position.dst(destLoc)<10 || (dest instanceof Location && dest.equals(this.location))){
                 if(this.equals(Main.player)) Main.gui.playerOpenWindow();
                 if(location==null && dest instanceof Location){
                     Main.entities.remove(this);
