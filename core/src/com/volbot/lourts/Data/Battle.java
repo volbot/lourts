@@ -23,8 +23,7 @@ public class Battle {
         combatants.add(new Combatant(defender).setPosition(new Vector3(600,100,0)));
         if(aggressor instanceof Individual){
             int j = 1;
-            for(Demographic d : ((Individual) aggressor).getParty().pop){
-                System.out.println("deez");
+            for(Demographic d : aggressor.getParty().pop){
                 int i = 0;
                 while(i < d.getPopulation()) {
                     combatants.add(new Combatant(d,aggressor).setPosition(combatants.get(0).position.cpy().add(-j*40,30*i,0)));
@@ -35,8 +34,7 @@ public class Battle {
         }
         if(defender instanceof Individual){
             int j = 1;
-            for(Demographic d : ((Individual) defender).getParty().pop){
-                System.out.println("deez");
+            for(Demographic d : defender.getParty().pop){
                 int i = 0;
                 while(i < d.getPopulation()) {
                     combatants.add(new Combatant(d,defender).setPosition(combatants.get(1).position.cpy().add(j*40,30*i,0)));

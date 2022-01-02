@@ -85,9 +85,7 @@ public class Main extends ApplicationAdapter {
         }
         massThink();
         ScreenUtils.clear(1, 0, 0, 1);
-        if (gui.currmenu != null) {
-            gui.loop();
-        }
+        gui.loop();
         inputs.parseCameraMovement();
         display.loop();
     }
@@ -122,21 +120,23 @@ public class Main extends ApplicationAdapter {
                 }
             }
         } else if (GAMEMODE == 1) {
-            int len1 = battle.combatants.size();
-            int aCount = 0;
-            int dCount = 0;
-            for (int i = 0; i < len1; i++) {
-                Combatant c = battle.combatants.get(i);
-                c.think();
-                if (c.health > 0) {
-                    if (c.allegiance.getName().equals(battle.aggressor.getName())) aCount++;
-                    else if (c.allegiance.getName().equals(battle.defender.getName())) dCount++;
+            if(gui.currmenu==null) {
+                int len1 = battle.combatants.size();
+                int aCount = 0;
+                int dCount = 0;
+                for (int i = 0; i < len1; i++) {
+                    Combatant c = battle.combatants.get(i);
+                    c.think();
+                    if (c.health > 0) {
+                        if (c.allegiance.getName().equals(battle.aggressor.getName())) aCount++;
+                        else if (c.allegiance.getName().equals(battle.defender.getName())) dCount++;
+                    }
                 }
-            }
-            if (aCount <= 0) {
-                battleOver((Individual) battle.defender);
-            } else if (dCount <= 0) {
-                battleOver((Individual) battle.aggressor);
+                if (aCount <= 0) {
+                    battleOver((Individual) battle.defender);
+                } else if (dCount <= 0) {
+                    battleOver((Individual) battle.aggressor);
+                }
             }
         }
     }
@@ -159,7 +159,11 @@ public class Main extends ApplicationAdapter {
         }
     }
 
-    public static void endBattle(Individual victor) {
+    public static void endBattle(Agent victorIn) {
+        Agent victor = victorIn;
+        if(victor==null){
+            victor = battle.aggressor;
+        }
         ArrayList<Demographic> victorLost = new ArrayList<>();
         ArrayList<Demographic> loserLost = new ArrayList<>();
         for (Combatant c : battle.combatants) {
@@ -195,13 +199,13 @@ public class Main extends ApplicationAdapter {
             }
         }
         victor.getParty().sub(victorLost);
-        Individual loser = victor.equals(battle.aggressor) ? (Individual) battle.defender : (Individual) battle.aggressor;
+        Agent loser = victor.equals(battle.aggressor) ? battle.defender : battle.aggressor;
         loser.getParty().sub(loserLost);
         GAMEMODE = 0;
-        if (victor.equals(Main.player)) {
-            Main.gui.drawTalkMenu(loser, false);
+        if (victor.equals(Main.player) || victorIn==null) {
+            Main.gui.drawTalkMenu(loser, true);
         } else if (loser.equals(Main.player)) {
-            Main.gui.drawTalkMenu(victor, true);
+            Main.gui.drawTalkMenu(victor, false);
         }
         battle = null;
     }

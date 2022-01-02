@@ -31,7 +31,7 @@ public abstract class InteractWindow extends GameWindow {
         int texID = entity instanceof Location ? ((Location) entity).getFigurehead().texID : entity.texID;
         batch.draw(Main.texLoader.texUnits.get(entity.theme).heroes.get(texID), xleft+windowbg.getWidth()*0.05f, ybot+windowbg.getHeight()*0.5f, 20*scalefac, 20*scalefac);
         font.getData().setScale(2f);
-        int partySize = entity.getPopulation();
+        int partySize = entity.getPopulationSize();
         String facString = entity.faction==null?"n/a":entity.faction.getName();
         String repString = entity.rep.knows(Main.player) ? ""+entity.rep.get(Main.player) : (entity instanceof Location ? "NEW HERE" : "JUST MET");
         GlyphLayout layout = new GlyphLayout(font, entityname + "\n" +

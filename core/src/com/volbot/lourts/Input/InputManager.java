@@ -199,7 +199,7 @@ public class InputManager implements InputProcessor {
                             if(touchLoc.x>bpos.x&&touchLoc.x<bpos.x+bsize.x){
                                 if(touchLoc.y>bpos.y&&touchLoc.y<bpos.y+bsize.y){
                                     b.setChecked(true);
-                                    for(Button b2 : tempMenu.buttons) if(b!=b2) b2.setChecked(false);
+                                    for(Button b2 : tempMenu.buttons) if(!b.equals(b2)) b2.setChecked(false);
                                     returnval=true;
                                 }
                             }

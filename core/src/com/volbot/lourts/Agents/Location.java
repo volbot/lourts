@@ -117,7 +117,7 @@ public class Location extends Agent {
         return personality;
     }
 
-    public int getPopulation() {
+    public int getPopulationSize() {
         int returnPop = population;
         for(Individual a : heroes){
             if(!a.equals(Main.player)) {

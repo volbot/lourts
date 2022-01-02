@@ -18,8 +18,8 @@ public class NotificationWindow extends GameWindow {
 
     public static float width;
     public static float height;
-    private BitmapFont font = new BitmapFont();
-    private String type;
+    private final BitmapFont font = new BitmapFont();
+    private final String type;
     private String notification;
     public NotificationWindow(String type){
         this.type=type;
@@ -71,18 +71,22 @@ public class NotificationWindow extends GameWindow {
     public void activateButton(int buttonDex) {
         switch(buttonDex) {
             case 0:
-                if(type.equals("retreat")){
-                    Main.endBattle(null);
-                } else if(type.equals("battlewon")){
-                    Main.endBattle(Main.player);
-                } else if(type.equals("battlelost")){
-                    if(Main.battle.aggressor.equals(Main.player)){
-                        Main.endBattle((Individual)Main.battle.defender);
-                    } else {
-                        Main.endBattle((Individual)Main.battle.aggressor);
-                    }
+                switch (type) {
+                    case "retreat":
+                        Main.endBattle(null);
+                        Main.gui.clearMenu();
+                        break;
+                    case "battlewon":
+                        Main.endBattle(Main.player);
+                        break;
+                    case "battlelost":
+                        if (Main.battle.aggressor.equals(Main.player)) {
+                            Main.endBattle(Main.battle.defender);
+                        } else {
+                            Main.endBattle(Main.battle.aggressor);
+                        }
+                        break;
                 }
-                Main.gui.clearMenu();
                 break;
             case 1:
                 if(type.equals("retreat")){

@@ -16,7 +16,6 @@ public class Individual extends Agent {
     public Vector3 goalPos;
     public Agent dest;
     public Location location;
-    private final Population population;
 
     public Individual(String name) {
         super(name);
@@ -26,13 +25,11 @@ public class Individual extends Agent {
         goalPos = null;
         dest = null;
         location = null;
-        population = new Population();
     }
 
     @Override
     public void think() {
         if (dest != null) {
-            boolean inTown = false;
             Vector3 destLoc = new Vector3(dest.position.x, dest.position.y, 0);
             move(destLoc);
             if (position.dst(destLoc) < 30) {
@@ -41,9 +38,9 @@ public class Individual extends Agent {
                     ((Location) dest).heroes.add(this);
                     this.location = (Location) dest;
                 }
-            }
-            if (this.equals(Main.player)) {
-                dest = null;
+                if (this.equals(Main.player)) {
+                    dest = null;
+                }
             }
         }
         if (goalPos != null) {
@@ -75,17 +72,6 @@ public class Individual extends Agent {
     public void setFaction(Faction faction) {
         super.setFaction(faction);
         faction.heroes.add(this);
-    }
-
-    @Override
-    public int getPopulation() {
-        int popu = 1;
-        for (Demographic demo : population.pop) popu += demo.getPopulation();
-        return popu;
-    }
-
-    public Population getParty() {
-        return population;
     }
 
     @Override

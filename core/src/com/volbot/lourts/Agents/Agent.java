@@ -18,6 +18,8 @@ public class Agent {
 
     public Vector3 position = new Vector3();
 
+    private final Population population;
+
     public final Reputation rep;
     private final String name;
 
@@ -25,6 +27,7 @@ public class Agent {
         rep = new Reputation();
         this.name = name;
         this.theme = "base";
+        population=new Population();
     }
 
     public void interact(Agent a) {
@@ -45,6 +48,10 @@ public class Agent {
             }
         }
         return closest;
+    }
+
+    public Population getParty() {
+        return population;
     }
 
     public TalkResponse startCombat(Individual a) {
@@ -103,8 +110,10 @@ public class Agent {
         this.faction = faction;
     }
 
-    public int getPopulation() {
-        return 1;
+    public int getPopulationSize() {
+        int popu = 1;
+        for (Demographic demo : population.pop) popu += demo.getPopulation();
+        return popu;
     }
 
     public String getName() {

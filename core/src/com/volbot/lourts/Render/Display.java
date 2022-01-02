@@ -112,7 +112,7 @@ public class Display {
 
     public void drawPopulation(Agent a) {
         font.getData().setScale(cam.zoom);
-        GlyphLayout layout = new GlyphLayout(font, ""+a.getPopulation());
+        GlyphLayout layout = new GlyphLayout(font, ""+a.getPopulationSize());
         int tempHeight = a instanceof Location ? 25 : 15;
         font.draw(batch, layout, cam.position.x + a.position.x*cam.zoom - layout.width / 2, cam.position.y + a.position.y*cam.zoom - tempHeight*cam.zoom);
     }
