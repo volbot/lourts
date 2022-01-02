@@ -11,6 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
+import com.volbot.lourts.Agents.Individual;
 import com.volbot.lourts.Main;
 
 public class NotificationWindow extends GameWindow {
@@ -33,6 +34,16 @@ public class NotificationWindow extends GameWindow {
             buttons[0]=new TextButton("Retreat",buttonStyle);
             buttons[1]=new TextButton("Stay",buttonStyle);
             notification = "Are you sure you want to retreat?";
+        }
+        if(type.compareTo("battlewon")==0){
+            buttons[0]=new TextButton("Continue",buttonStyle);
+            buttons[1]=new TextButton("Stay",buttonStyle);
+            notification = "You have won!";
+        }
+        if(type.compareTo("battlelost")==0){
+            buttons[0]=new TextButton("Continue",buttonStyle);
+            buttons[1]=new TextButton("Stay",buttonStyle);
+            notification = "You have lost.";
         }
     }
 
@@ -62,8 +73,16 @@ public class NotificationWindow extends GameWindow {
             case 0:
                 if(type.equals("retreat")){
                     Main.endBattle(null);
-                    Main.gui.clearMenu();
+                } else if(type.equals("battlewon")){
+                    Main.endBattle(Main.player);
+                } else if(type.equals("battlelost")){
+                    if(Main.battle.aggressor.equals(Main.player)){
+                        Main.endBattle((Individual)Main.battle.defender);
+                    } else {
+                        Main.endBattle((Individual)Main.battle.aggressor);
+                    }
                 }
+                Main.gui.clearMenu();
                 break;
             case 1:
                 if(type.equals("retreat")){

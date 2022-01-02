@@ -15,10 +15,6 @@ public class GUIManager {
 
     }
 
-    public void sendGUIMessage(Agent initiator, Agent target) {
-
-    }
-
     public void playerOpenWindow() {
         playerOpenWindow = true;
     }
@@ -30,9 +26,8 @@ public class GUIManager {
             return;
         }
         if (currmenu instanceof InteractMenu) {
-            if(playerOpenWindow) {
-                playerOpenWindow=false;
-                InteractMenu menu = (InteractMenu) currmenu;
+            InteractMenu menu = (InteractMenu) currmenu;
+            if (Main.player.position.dst(menu.entity.position) < 30 || menu.entity.equals(Main.player.location)) {
                 if (menu.buttons[0].isChecked()) {
                     menu.buttons[0].setChecked(false);
                     Main.gui.drawTalkMenu(menu.entity);
@@ -40,6 +35,7 @@ public class GUIManager {
                     menu.buttons[1].setChecked(false);
                     Main.gui.drawCombatMenu(menu.entity);
                 }
+                playerOpenWindow = false;
             }
         } else if (currmenu instanceof NotificationWindow) {
             NotificationWindow menu = (NotificationWindow) currmenu;
@@ -114,7 +110,7 @@ public class GUIManager {
 
     public void drawTalkMenu(Agent a, boolean playerWon) {
         Main.setPaused(true);
-        if(!a.rep.knows(Main.player)){
+        if (!a.rep.knows(Main.player)) {
             a.rep.meet(Main.player);
             Main.player.rep.meet(a);
         }

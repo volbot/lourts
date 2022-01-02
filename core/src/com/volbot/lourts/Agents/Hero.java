@@ -31,7 +31,7 @@ public class Hero extends Individual {
     @Override
     public void interact(Agent a) {
         super.interact(a);
-        if (dest.equals(Main.player)) {
+        if (dest==Main.player) {
             if (!(Main.gui.currmenu instanceof GameWindow)) {
                 if (intent == 1 || intent == 2) Main.gui.drawTalkMenu(this);
                 if (intent == 3) Main.gui.drawCombatMenu(this);
@@ -43,7 +43,7 @@ public class Hero extends Individual {
     public void think() {
         super.think();
         if (dest != null) {
-            if (position.dst(dest.position) < 20) {
+            if (position.dst(dest.position) < 30) {
                 interact(dest);
                 dest = null;
             }

@@ -134,9 +134,9 @@ public class Main extends ApplicationAdapter {
                 }
             }
             if (aCount <= 0) {
-                endBattle((Individual) battle.defender);
+                battleOver((Individual) battle.defender);
             } else if (dCount <= 0) {
-                endBattle((Individual) battle.aggressor);
+                battleOver((Individual) battle.aggressor);
             }
         }
     }
@@ -145,6 +145,18 @@ public class Main extends ApplicationAdapter {
     public void dispose() {
         display.dispose();
         texLoader.dispose();
+    }
+
+    public static void battleOver(Individual victor) {
+        if(victor==Main.player) Main.gui.drawNotificationWindow("battlewon");
+        else if(Main.player.equals(
+                Main.battle.aggressor.equals(victor)?
+                        Main.battle.defender:
+                        Main.battle.aggressor)){
+            Main.gui.drawNotificationWindow("battlelost");
+        } else {
+            endBattle(victor);
+        }
     }
 
     public static void endBattle(Individual victor) {

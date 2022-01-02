@@ -10,7 +10,7 @@ import com.volbot.lourts.Main;
 
 import java.util.ArrayList;
 
-public class Individual extends Agent{
+public class Individual extends Agent {
     private final Stats stats; //INT, WIS, STR, DEX, CHA, PSI
     private int moveSpeed;
     public Vector3 goalPos;
@@ -18,35 +18,37 @@ public class Individual extends Agent{
     public Location location;
     private final Population population;
 
-    public Individual(String name){
+    public Individual(String name) {
         super(name);
-        theme="base";
+        theme = "base";
         stats = new Stats();
         moveSpeed = 70;
-        goalPos=null;
-        dest=null;
-        location=null;
+        goalPos = null;
+        dest = null;
+        location = null;
         population = new Population();
     }
 
     @Override
     public void think() {
-        if(dest!=null){
-            Vector3 destLoc = new Vector3(dest.position.x,dest.position.y,0);
+        if (dest != null) {
+            boolean inTown = false;
+            Vector3 destLoc = new Vector3(dest.position.x, dest.position.y, 0);
             move(destLoc);
-            if(position.dst(destLoc)<10 || (dest instanceof Location && dest.equals(this.location))){
-                if(this.equals(Main.player)) Main.gui.playerOpenWindow();
-                if(location==null && dest instanceof Location){
+            if (position.dst(destLoc) < 30) {
+                if (location == null && dest instanceof Location) {
                     Main.entities.remove(this);
                     ((Location) dest).heroes.add(this);
-                    this.location=(Location)dest;
+                    this.location = (Location) dest;
                 }
-                dest=null;
+            }
+            if (this.equals(Main.player)) {
+                dest = null;
             }
         }
         if (goalPos != null) {
-            if(!move(goalPos)){
-                goalPos=null;
+            if (!move(goalPos)) {
+                goalPos = null;
             }
         }
     }
@@ -65,7 +67,7 @@ public class Individual extends Agent{
     }
 
     public void setDestination(Agent destination) {
-        this.goalPos=null;
+        this.goalPos = null;
         this.dest = destination;
     }
 
@@ -78,13 +80,14 @@ public class Individual extends Agent{
     @Override
     public int getPopulation() {
         int popu = 1;
-        for(Demographic demo : population.pop) popu+=demo.getPopulation();
+        for (Demographic demo : population.pop) popu += demo.getPopulation();
         return popu;
     }
 
     public Population getParty() {
         return population;
     }
+
     @Override
     public void interact(Agent a) {
 
@@ -94,7 +97,8 @@ public class Individual extends Agent{
         this.dest = null;
         this.goalPos = goalPos;
     }
-    public Agent getDestination(){
+
+    public Agent getDestination() {
         return this.dest;
     }
 
@@ -102,9 +106,9 @@ public class Individual extends Agent{
         if (Main.PAUSED) {
             return true;
         }
-        if(this.location!=null){
+        if (this.location != null) {
             this.location.heroes.remove(this);
-            this.location=null;
+            this.location = null;
             Main.entities.add(this);
         }
         float dst = goal.cpy().dst(position);
@@ -112,7 +116,7 @@ public class Individual extends Agent{
         float workingSpeed = Gdx.graphics.getDeltaTime() * moveSpeed;
 
         Vector3 newPos = position.cpy();
-        if (dst > 10) {
+        if (dst > 30) {
             movement = goal.cpy().sub(position).setLength(workingSpeed);
             newPos.add(movement);
         }
