@@ -13,7 +13,6 @@ import java.util.Random;
 
 public class Location extends Agent {
     private Hero figurehead;
-    private int population;
     private int wealth;
     private Personality personality;
 
@@ -21,7 +20,6 @@ public class Location extends Agent {
 
     public Location(String name, String figureheadname, Faction faction, int xpos, int ypos, int population){
         super(name);
-        this.population=population;
         this.faction=faction;
         wealth=0;
         position.x=xpos;
@@ -31,11 +29,11 @@ public class Location extends Agent {
         figurehead.texID=0;
         figurehead.getParty().add(new Demographic(this,population/8));
         personality=figurehead.getPersonality();
+        this.population.add(new Demographic(this,population));
     }
 
     public Location(String name, String figureheadname, int xpos, int ypos, int population){
         super(name);
-        this.population=population;
         this.faction=null;
         wealth=0;
         position.x=xpos;
@@ -44,11 +42,11 @@ public class Location extends Agent {
         figurehead.texID=0;
         figurehead.getParty().add(new Demographic(this,population/8));
         personality=figurehead.getPersonality();
+        this.population.add(new Demographic(this,population));
     }
 
     public Location(String name) {
         super(name);
-        this.population=1;
         wealth=0;
         figurehead=new Hero("Skeletrex",this);
         figurehead.texID=0;
@@ -90,10 +88,7 @@ public class Location extends Agent {
 
     @Override
     public void think() {
-        population+=new Random().nextInt((2*population) + 1) - population;
-        if(population==0){
-            //towndies
-        }
+
     }
 
     @Override
@@ -104,34 +99,22 @@ public class Location extends Agent {
 
     public int potentialRecruits(Individual a) {
         int reputation = rep.get(a);
-        //
         if(reputation < -20) return 0;
         float repPercent = ((reputation + 20) / 120f);
         float popPercent = 0.4f;
-        int fightingPop = Math.round(popPercent*population);
+        int fightingPop = Math.round(popPercent*getPopulationSize());
         if(fightingPop<15) return 0;
         return Math.round(repPercent*fightingPop);
     }
 
+    public Demographic recruit(int num){
+        Demographic d = new Demographic(this,num);
+        population.sub(d);
+        return d;
+    }
+
     public Personality getPersonality() {
         return personality;
-    }
-
-    public int getPopulationSize() {
-        int returnPop = population;
-        for(Individual a : heroes){
-            if(!a.equals(Main.player)) {
-                returnPop += 1;
-                for (Demographic d : a.getParty().pop) {
-                    returnPop += d.population;
-                }
-            }
-        }
-        return returnPop;
-    }
-
-    public int getPopulationInternal() {
-        return population;
     }
 
     public Hero getFigurehead() {
@@ -140,10 +123,6 @@ public class Location extends Agent {
 
     public int getWealth() {
         return wealth;
-    }
-
-    public void setPopulation(int population) {
-        this.population = population;
     }
 
     public void setFigurehead(Hero figurehead) {

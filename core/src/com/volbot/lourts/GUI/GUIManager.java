@@ -82,8 +82,7 @@ public class GUIManager {
                                 numDex++;
                             }
                             Location loc = (Location) menu.entity;
-                            loc.setPopulation(loc.getPopulationInternal() - num);
-                            Main.player.getParty().add(new Demographic(loc, num));
+                            Main.player.getParty().add(loc.recruit(num));
                             break;
                         case 'M':
                             menu.resetConvo();
@@ -96,7 +95,6 @@ public class GUIManager {
                 }
             }
         }
-
     }
 
     public void drawInteractMenu(Agent a) {

@@ -18,7 +18,7 @@ public class Agent {
 
     public Vector3 position = new Vector3();
 
-    private final Population population;
+    protected final Population population;
 
     public final Reputation rep;
     private final String name;

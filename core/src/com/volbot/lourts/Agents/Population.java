@@ -28,4 +28,10 @@ public class Population {
             }
         }
     }
+
+    public void sub (Demographic d) {
+        ArrayList<Demographic> list = new ArrayList<>();
+        list.add(d);
+        sub(list);
+    }
 }
