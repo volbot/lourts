@@ -80,6 +80,7 @@ public class Individual extends Agent {
     }
 
     public void setDestination(Vector3 goalPos) {
+        if(Main.map.tileAt(goalPos.x,goalPos.y)!=0) return;
         this.dest = null;
         this.goalPos = goalPos;
     }
@@ -102,11 +103,11 @@ public class Individual extends Agent {
         float workingSpeed = Gdx.graphics.getDeltaTime() * moveSpeed;
 
         Vector3 newPos = position.cpy();
-        if (dst > 30) {
+        if (dst > 10) {
             movement = goal.cpy().sub(position).setLength(workingSpeed);
             newPos.add(movement);
         }
-        if (position.dst(newPos) != 0) {
+        if (position.dst(newPos) != 0 && Main.map.tileAt(newPos.x,newPos.y)==0) {
             position = newPos.cpy();
             return true;
         }
