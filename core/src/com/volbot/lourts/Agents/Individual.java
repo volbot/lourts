@@ -80,7 +80,7 @@ public class Individual extends Agent {
     }
 
     public void setDestination(Vector3 goalPos) {
-        if(Main.map.tileAt(goalPos.x,goalPos.y)!=0) return;
+        //if(!Main.map.chunks.getTile(goalPos.x,goalPos.y).walkable) return;
         this.dest = null;
         this.goalPos = goalPos;
     }
@@ -107,10 +107,11 @@ public class Individual extends Agent {
             movement = goal.cpy().sub(position).setLength(workingSpeed);
             newPos.add(movement);
         }
-        if (position.dst(newPos) != 0 && Main.map.tileAt(newPos.x,newPos.y)==0) {
+        if (position.dst(newPos) != 0) {
             position = newPos.cpy();
             return true;
         }
+        System.out.println("NOT WALKABLE!");
         return false;
     }
 }

@@ -17,6 +17,7 @@ import com.volbot.lourts.GUI.InteractMenu;
 import com.volbot.lourts.GUI.NotificationWindow;
 import com.volbot.lourts.GUI.TalkWindow;
 import com.volbot.lourts.Main;
+import com.volbot.lourts.Map.GameMap;
 
 import java.util.ArrayList;
 
@@ -42,7 +43,7 @@ public class Display {
 
         ScreenUtils.clear(1, 0, 0, 1);
         batch.begin();
-        drawMap();
+        Main.map.chunks.drawNode(batch,cam);
         if(Main.GAMEMODE==0) {
             for (Agent a : Main.entities) {
                 if (a instanceof Individual) {
@@ -117,56 +118,16 @@ public class Display {
         font.draw(batch, layout, cam.position.x + a.position.x*cam.zoom - layout.width / 2, cam.position.y + a.position.y*cam.zoom - tempHeight*cam.zoom);
     }
 
-    private void drawChunk(int chunkx, int chunky) {
-        float size = (20)*(cam.zoom);
-        float posx = (chunkx * (size*24)) + cam.position.x;
-        float posy;
-        for (int drawx = 0; drawx < 24; drawx++) {
-            posy = (chunky * (size*24)) + cam.position.y;
-            for (int drawy = 0; drawy < 24; drawy++) {
-                if ((chunkx >= Main.map.chunks.size() || chunkx < 0) || (chunky >= Main.map.chunks.get(chunkx).size() || chunky < 0)) {
-                    batch.draw(texLoader.tiles.get(1),drawx * size + posx, drawy * size + posy,size,size);
-                } else {
-                    batch.draw(
-                            texLoader.tiles.get(
-                                    Main.map.chunks
-                                            .get(chunkx)
-                                            .get(chunky)
-                                            [drawx][drawy]),
-                            drawx * size + posx, drawy * size + posy, size, size
-                    );
-                }
-            }
-        }
-    }
-
     private void drawMap() {
         float size = (20)*(cam.zoom);
         Vector3 camPosAbs = cam.position.cpy();
         camPosAbs.scl(-1f);
         float camxstart = camPosAbs.x;
-        float camystart =camPosAbs.y;
-        float camxend = camPosAbs.x + cam.viewportWidth;
-        float camyend = camPosAbs.y + cam.viewportHeight;
-        ArrayList<Integer> chunksx = new ArrayList<>();
-        ArrayList<Integer> chunksy = new ArrayList<>();
-        chunksx.add((int) Math.floor(camxstart / (24*size))-1);
-        chunksx.add((int) Math.ceil(camxend / (24*size))+1);
-        int i = chunksx.get(0);
-        while (i < chunksx.get(1)) {
-            chunksx.add(i);
-            i++;
-        }
-        chunksy.add((int) Math.floor(camystart / (24*size))-1);
-        chunksy.add((int) Math.ceil(camyend / (24*size))+1);
-        i = chunksy.get(0);
-        while (i < chunksy.get(1)) {
-            chunksy.add(i);
-            i++;
-        }
-        for (int chunkx : chunksx) {
-            for (int chunky : chunksy) {
-                drawChunk(chunkx, chunky);
+        float camystart = camPosAbs.y;
+
+        for(float x = camxstart; x<cam.viewportWidth+camxstart; x+=size){
+            for(float y = camystart; y<cam.viewportHeight+camystart; y+=size){
+
             }
         }
     }

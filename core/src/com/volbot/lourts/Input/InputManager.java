@@ -33,8 +33,8 @@ public class InputManager implements InputProcessor {
         Vector3 touchLoc = touchPos.cpy();
         touchLoc.x=Math.max(0,touchLoc.x);
         touchLoc.y=Math.max(0,touchLoc.y);
-        touchLoc.x=Math.min(Main.map.chunks.size()*480,touchLoc.x);
-        touchLoc.y=Math.min(Main.map.chunks.get(0).size()*480,touchLoc.y);
+        touchLoc.x=Math.min(Main.map.size(),touchLoc.x);
+        touchLoc.y=Math.min(Main.map.size(),touchLoc.y);
         return touchLoc;
     }
 
@@ -138,19 +138,21 @@ public class InputManager implements InputProcessor {
         if (inputs[3]) {
             cam.position.x -= moveSpeed;
         }
-
+/*
         if(camLockedToMap){
             if(cam.position.x>camBound){
                 cam.position.x=camBound;
-            } else if(cam.position.x-cam.viewportWidth<-camBound-(Main.map.chunks.size()*480)){
-                cam.position.x=-camBound+cam.viewportWidth-(Main.map.chunks.size()*480);
+            } else if(cam.position.x-cam.viewportWidth<-camBound-(Main.map.size())){
+                cam.position.x=-camBound+cam.viewportWidth-(Main.map.size());
             }
             if(cam.position.y>camBound){
                 cam.position.y=camBound;
-            } else if(cam.position.y-cam.viewportHeight<-camBound-(Main.map.chunks.get(0).size()*480)){
-                cam.position.y=-camBound+cam.viewportHeight-(Main.map.chunks.get(0).size()*480);
+            } else if(cam.position.y-cam.viewportHeight<-camBound-(Main.map.size())){
+                cam.position.y=-camBound+cam.viewportHeight-(Main.map.size());
             }
         }
+
+ */
     }
 
     @Override
