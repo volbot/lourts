@@ -81,9 +81,8 @@ public class GameMap {
                 if(xdraw<cam.position.x || ydraw<cam.position.y){
                     return;
                 }
-                if (xdraw > cam.position.x + cam.viewportWidth || ydraw > cam.position.y + cam.viewportHeight) {
-                    return;
-                }
+                if(xdraw+cam.position.x>cam.position.x+cam.viewportWidth || ydraw+cam.position.y>cam.position.y+cam.viewportHeight)return;
+
                 tl.drawNode(batch,cam);
                 tr.drawNode(batch,cam);
                 br.drawNode(batch,cam);
@@ -91,9 +90,27 @@ public class GameMap {
             }
         }
 
-        public QuadNode setTile(Tile t) {
-            this.tile = t;
-            return this;
+        public Tile getTile(int xIn, int yIn) {
+            int x = xIn;
+            int y = yIn;
+            if(depth==0){
+                return tile;
+            } else {
+                int len = (int)Math.pow(2,depth)/2;
+                if(x >= bl.xkey && x < br.xkey && y >= bl.ykey && y < tl.ykey){
+                    return bl.getTile(x,y);
+                }
+                if(x >= br.xkey && x < br.xkey + len && y >= br.ykey && y < tr.ykey){
+                    return br.getTile(x,y);
+                }
+                if(x >= tr.xkey && x < tr.xkey + len && y >= tr.ykey && y < tr.ykey+len){
+                    return tr.getTile(x,y);
+                }
+                if(x >= tl.xkey && x < tr.xkey && y >= tl.ykey && y < tl.ykey+len){
+                    return tl.getTile(x,y);
+                }
+                return new Tile("block");
+            }
         }
 
         public QuadNode get(int i) {
@@ -133,19 +150,21 @@ public class GameMap {
     public QuadNode chunks;
 
     public GameMap() {
-        chunks = new QuadNode(6);
-        chunks.insert(6,6,new Tile("water"));
-        chunks.insert(2,6,new Tile("water"));
-        chunks.insert(1,3,new Tile("water"));
-        chunks.insert(7,3,new Tile("water"));
-        chunks.insert(6,2,new Tile("water"));
-        chunks.insert(5,2,new Tile("water"));
-        chunks.insert(4,2,new Tile("water"));
-        chunks.insert(3,2,new Tile("water"));
-        chunks.insert(2,2,new Tile("water"));
+        chunks = new QuadNode(7);
+        chunks.insert(6,6,new Tile("block"));
+        chunks.insert(2,6,new Tile("block"));
+        chunks.insert(1,3,new Tile("block"));
+        chunks.insert(7,3,new Tile("block"));
+        chunks.insert(6,2,new Tile("block"));
+        chunks.insert(5,2,new Tile("block"));
+        chunks.insert(4,2,new Tile("block"));
+        chunks.insert(3,2,new Tile("block"));
+        chunks.insert(2,2,new Tile("block"));
+
+        for(int x = 10; x<25; x++) for(int y = 50; y<75; y++) chunks.insert(x,y,new Tile("water"));
     }
 
     public int size() {
-        return chunks.depth*4;
+        return 20*(int)Math.pow(2,chunks.depth);
     }
 }

@@ -12,6 +12,7 @@ import com.volbot.lourts.Agents.Location;
 import com.volbot.lourts.GUI.GameMenu;
 import com.volbot.lourts.GUI.GameWindow;
 import com.volbot.lourts.Main;
+import com.volbot.lourts.Map.Tile;
 
 public class InputManager implements InputProcessor {
 
@@ -216,7 +217,10 @@ public class InputManager implements InputProcessor {
                             Main.player.setDestination(hoverAgent);
                             returnval = true;
                         } else {
-                            Main.player.setDestination(boundClick(touchLoc));
+                            Tile tile = Main.map.chunks.getTile((int)touchLoc.x/20,(int)touchLoc.y/20);
+                            if(tile.walkable) {
+                                Main.player.setDestination(touchLoc);
+                            }
                         }
                     } else {
 
@@ -225,7 +229,7 @@ public class InputManager implements InputProcessor {
                 return returnval;
             case 1:
                 if (camHold == null && hoverAgent != null) {
-                    Main.player.setDestination(boundClick(touchLoc));
+                    //Main.player.setDestination(touchLoc);
                 }
                 if(Main.gui.currmenu instanceof GameWindow){
                     Main.gui.clearMenu();
@@ -252,7 +256,10 @@ public class InputManager implements InputProcessor {
             cam.update();
         } else {
             if(Main.player.getDestination()==null && !(Main.gui.currmenu instanceof GameWindow)) {
-                Main.player.setDestination(boundClick(touchLoc));
+                /*
+                Main.player.setDestination(touchLoc);
+
+                 */
             }
         }
         return false;

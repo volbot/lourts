@@ -7,6 +7,7 @@ import com.volbot.lourts.GUI.GUIManager;
 import com.volbot.lourts.GUI.GameMenu;
 import com.volbot.lourts.GUI.InteractMenu;
 import com.volbot.lourts.Main;
+import com.volbot.lourts.Map.Tile;
 
 import java.util.ArrayList;
 
@@ -93,11 +94,13 @@ public class Individual extends Agent {
         if (Main.PAUSED) {
             return true;
         }
+
         if (this.location != null) {
             this.location.heroes.remove(this);
             this.location = null;
             Main.entities.add(this);
         }
+
         float dst = goal.cpy().dst(position);
         Vector3 movement;
         float workingSpeed = Gdx.graphics.getDeltaTime() * moveSpeed;
@@ -107,11 +110,15 @@ public class Individual extends Agent {
             movement = goal.cpy().sub(position).setLength(workingSpeed);
             newPos.add(movement);
         }
+        Tile tile = Main.map.chunks.getTile((int)newPos.x/20,(int)newPos.y/20);
+        System.out.println(tile.walkable);
+        if(!tile.walkable) {
+            return false;
+        }
         if (position.dst(newPos) != 0) {
             position = newPos.cpy();
             return true;
         }
-        System.out.println("NOT WALKABLE!");
         return false;
     }
 }
