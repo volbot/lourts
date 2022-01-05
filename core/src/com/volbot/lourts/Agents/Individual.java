@@ -111,7 +111,6 @@ public class Individual extends Agent {
             newPos.add(movement);
         }
         Tile tile = Main.map.chunks.getTile((int)newPos.x/20,(int)newPos.y/20);
-        System.out.println(tile.walkable);
         if(!tile.walkable) {
             return false;
         }

@@ -6,7 +6,7 @@ import com.volbot.lourts.Main;
 
 public class GameMap {
 
-    public class QuadNode {
+    public static class QuadNode {
         QuadNode bl;
         QuadNode tl;
         QuadNode br;
@@ -23,15 +23,15 @@ public class GameMap {
             if (depth > 0) {
                 int len = (int)Math.pow(2,depth);
                 bl = new QuadNode(depth - 1, xkey, ykey);
-                br = new QuadNode(depth - 1, xkey+(len/2),ykey);
-                tl = new QuadNode(depth - 1, xkey, ykey+(len/2));
-                tr = new QuadNode(depth - 1, xkey+(len/2),ykey+(len/2));
+                br = new QuadNode(depth - 1, xkey + (len / 2), ykey);
+                tl = new QuadNode(depth - 1, xkey, ykey + (len / 2));
+                tr = new QuadNode(depth - 1, xkey + (len / 2), ykey + (len / 2));
             } else {
                 tile = new Tile("grass");
             }
         }
 
-        public QuadNode(int depth, int x, int y) {
+        private QuadNode(int depth, int x, int y) {
 
             this.depth=depth;
             this.xkey=x;
@@ -40,9 +40,9 @@ public class GameMap {
             if (depth > 0) {
                 int len = (int)Math.pow(2,depth);
                 bl = new QuadNode(depth - 1, xkey, ykey);
-                br = new QuadNode(depth - 1, xkey+(len/2),ykey);
-                tl = new QuadNode(depth - 1, xkey, ykey+(len/2));
-                tr = new QuadNode(depth - 1, xkey+(len/2),ykey+(len/2));
+                br = new QuadNode(depth - 1, xkey + (len / 2), ykey);
+                tl = new QuadNode(depth - 1, xkey, ykey + (len / 2));
+                tr = new QuadNode(depth - 1, xkey + (len / 2), ykey + (len / 2));
             } else {
                 tile = new Tile("grass");
             }
@@ -78,9 +78,7 @@ public class GameMap {
             if(depth==0){
                 batch.draw(Main.texLoader.tiles.get(tile.texID),xdraw,ydraw,20*cam.zoom,20*cam.zoom);
             } else {
-                if(xdraw<cam.position.x || ydraw<cam.position.y){
-                    return;
-                }
+                if(xdraw<cam.position.x || ydraw<cam.position.y) return;
                 if(xdraw+cam.position.x>cam.position.x+cam.viewportWidth || ydraw+cam.position.y>cam.position.y+cam.viewportHeight)return;
 
                 tl.drawNode(batch,cam);
@@ -126,31 +124,13 @@ public class GameMap {
             }
             return null;
         }
-
-
-        public QuadNode set(int i, QuadNode node) {
-            switch (i) {
-                case 0:
-                    tl=node;
-                    break;
-                case 1:
-                    tr=node;
-                    break;
-                case 2:
-                    br=node;
-                    break;
-                case 3:
-                    bl=node;
-                    break;
-            }
-            return this;
-        }
     }
 
     public QuadNode chunks;
 
     public GameMap() {
         chunks = new QuadNode(7);
+
         chunks.insert(6,6,new Tile("block"));
         chunks.insert(2,6,new Tile("block"));
         chunks.insert(1,3,new Tile("block"));

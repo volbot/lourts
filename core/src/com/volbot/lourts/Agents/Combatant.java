@@ -3,6 +3,7 @@ package com.volbot.lourts.Agents;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector3;
 import com.volbot.lourts.Main;
+import com.volbot.lourts.Map.Tile;
 
 public class Combatant {
 
@@ -95,7 +96,6 @@ public class Combatant {
                     c.position.add(c.position.cpy().sub(position).scl(0.05f));
                 }
             }
-            position=Main.inputs.boundClick(position);
             if (c.allegiance != this.allegiance) {
                 if (closestEnemy == null || dst < closestEnemyDist) {
                     closestEnemy = c;
@@ -118,6 +118,10 @@ public class Combatant {
         if (dst > attackDistance) {
             movement = goal.cpy().sub(position).setLength(workingSpeed);
             newPos.add(movement);
+        }
+        Tile tile = Main.map.chunks.getTile((int)newPos.x/20,(int)newPos.y/20);
+        if(!tile.walkable) {
+            return false;
         }
         if (position.dst(newPos) != 0) {
             position = newPos.cpy();
