@@ -1,19 +1,19 @@
 package com.volbot.lourts.Map;
 
 public class Tile {
-    public int texID;
+    public String texID;
     public boolean walkable;
     Tile(String material){
         if(material.equals("grass")){
-            texID=0;
+            texID="grass";
             walkable=true;
         }
         if(material.equals("water")){
-            texID=2;
+            texID="water";
             walkable=false;
         }
         if(material.equals("block")){
-            texID=1;
+            texID="nothing";
             walkable=false;
         }
     }

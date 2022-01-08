@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class TexLoader {
-    public ArrayList<Texture> tiles = new ArrayList<>();
+    public HashMap<String, Texture> tiles = new HashMap<>();
 
     public HashMap<String, TexUnit> texUnits;
 
@@ -17,9 +17,9 @@ public class TexLoader {
     }
 
     public void dispose() {
-        for (Texture tex : tiles) {
-            tiles.remove(tex);
-            tex.dispose();
+        for (String tileName : tiles.keySet()) {
+            tiles.get(tileName).dispose();
+            tiles.remove(tileName);
         }
         for (TexUnit unit : texUnits.values()) {
             for (Texture tex : unit.towns) {
@@ -41,7 +41,7 @@ public class TexLoader {
         File[] tilesFiles = new File("tiles/").listFiles();
         if (tilesFiles != null && tilesFiles.length > 0) {
             for (File file : tilesFiles) {
-                tiles.add(new Texture("tiles/" + file.getName()));
+                tiles.put(file.getName().substring(0, file.getName().indexOf(".")),new Texture("tiles/" + file.getName()));
             }
         }
 
