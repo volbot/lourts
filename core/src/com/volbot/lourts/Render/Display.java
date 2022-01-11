@@ -41,7 +41,7 @@ public class Display {
     public void loop() {
         float size = (20)*(cam.zoom);
 
-        ScreenUtils.clear(1, 0, 0, 1);
+        ScreenUtils.clear(0, 0, 0, 1);
         batch.begin();
         Main.map.chunks.drawNode(batch,cam);
         if(Main.GAMEMODE==0) {

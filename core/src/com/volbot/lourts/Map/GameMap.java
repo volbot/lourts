@@ -1,12 +1,16 @@
 package com.volbot.lourts.Map;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Vector3;
 import com.volbot.lourts.Main;
 
 public class GameMap {
 
-    public static class QuadNode {
+    protected Perlin rand = new Perlin();
+
+    public class QuadNode {
         QuadNode bl;
         QuadNode tl;
         QuadNode br;
@@ -15,24 +19,9 @@ public class GameMap {
         public int depth;
         public int xkey;
         public int ykey;
+        public int height;
 
-        public QuadNode(int depth) {
-            this.depth=depth;
-            this.xkey=0;
-            this.ykey=0;
-            if (depth > 0) {
-                int len = (int)Math.pow(2,depth);
-                bl = new QuadNode(depth - 1, xkey, ykey);
-                br = new QuadNode(depth - 1, xkey + (len / 2), ykey);
-                tl = new QuadNode(depth - 1, xkey, ykey + (len / 2));
-                tr = new QuadNode(depth - 1, xkey + (len / 2), ykey + (len / 2));
-            } else {
-                tile = new Tile("grass");
-            }
-        }
-
-        private QuadNode(int depth, int x, int y) {
-
+        public QuadNode(int depth, int x, int y) {
             this.depth=depth;
             this.xkey=x;
             this.ykey=y;
@@ -44,7 +33,10 @@ public class GameMap {
                 tl = new QuadNode(depth - 1, xkey, ykey + (len / 2));
                 tr = new QuadNode(depth - 1, xkey + (len / 2), ykey + (len / 2));
             } else {
-                tile = new Tile("grass");
+                Vector3 seed = new Vector3(xkey,ykey,0);
+                float temp = rand.noise(seed.scl(5f));
+                this.height = Math.round(Math.abs(temp));
+                tile=height>95?new Tile("block"):new Tile("grass");
             }
         }
 
@@ -74,9 +66,10 @@ public class GameMap {
             float ydraw = 20*cam.zoom*ykey;
             xdraw+=cam.position.x;
             ydraw+=cam.position.y;
-
             if(depth==0){
+                if(tile.walkable) batch.setColor(1f,1f,1f,((height/3f)+66)/100f);
                 batch.draw(Main.texLoader.tiles.get(tile.texID),xdraw,ydraw,20*cam.zoom,20*cam.zoom);
+                batch.setColor(Color.WHITE);
             } else {
                 if(xdraw<cam.position.x || ydraw<cam.position.y) return;
                 if(xdraw+cam.position.x>cam.position.x+cam.viewportWidth || ydraw+cam.position.y>cam.position.y+cam.viewportHeight)return;
@@ -129,7 +122,7 @@ public class GameMap {
     public QuadNode chunks;
 
     public GameMap() {
-        chunks = new QuadNode(7);
+        chunks = new QuadNode(10,0,0);
 
         chunks.insert(6,6,new Tile("block"));
         chunks.insert(2,6,new Tile("block"));

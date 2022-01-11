@@ -50,7 +50,7 @@ public class Main extends ApplicationAdapter {
         gui = new GUIManager();
         crabwizard.position.x = 400;
         crabwizard.position.y = 400;
-        crabwizard.texID = 2;
+        crabwizard.texID = 0;
 
         Location boneland = new Location("Boneland", "Skeletrex", 200, 200, 100);
         Faction bonebrigade = new Faction("Bone Brigade", boneland.getFigurehead(), 0);

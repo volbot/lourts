@@ -41,7 +41,7 @@ public class TexLoader {
         File[] tilesFiles = new File("tiles/").listFiles();
         if (tilesFiles != null && tilesFiles.length > 0) {
             for (File file : tilesFiles) {
-                tiles.put(file.getName().substring(0, file.getName().indexOf(".")),new Texture("tiles/" + file.getName()));
+                tiles.put(file.getName().substring(0, file.getName().indexOf(".")), new Texture("tiles/" + file.getName()));
             }
         }
 

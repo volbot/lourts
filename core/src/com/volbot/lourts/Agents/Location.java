@@ -26,7 +26,7 @@ public class Location extends Agent {
         position.y=ypos;
         figurehead=new Hero(figureheadname,this);
         figurehead.faction=faction;
-        figurehead.texID=0;
+        figurehead.texID=1;
         figurehead.getParty().add(new Demographic(this,population/8));
         personality=figurehead.getPersonality();
         this.population.add(new Demographic(this,population));
@@ -39,7 +39,7 @@ public class Location extends Agent {
         position.x=xpos;
         position.y=ypos;
         figurehead=new Hero(figureheadname,this);
-        figurehead.texID=0;
+        figurehead.texID=1;
         figurehead.getParty().add(new Demographic(this,population/8));
         personality=figurehead.getPersonality();
         this.population.add(new Demographic(this,population));
@@ -49,7 +49,7 @@ public class Location extends Agent {
         super(name);
         wealth=0;
         figurehead=new Hero("Skeletrex",this);
-        figurehead.texID=0;
+        figurehead.texID=1;
         personality=figurehead.getPersonality();
     }
 
