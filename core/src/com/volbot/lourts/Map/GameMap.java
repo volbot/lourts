@@ -67,7 +67,7 @@ public class GameMap {
             xdraw+=cam.position.x;
             ydraw+=cam.position.y;
             if(depth==0){
-                if(tile.walkable) batch.setColor(1f,1f,1f,((height/3f)+66)/100f);
+                if(tile.walkable && cam.zoom>0.2) batch.setColor(1f,1f,1f,((height/3f)+66)/100f);
                 batch.draw(Main.texLoader.tiles.get(tile.texID),xdraw,ydraw,20*cam.zoom,20*cam.zoom);
                 batch.setColor(Color.WHITE);
             } else {
