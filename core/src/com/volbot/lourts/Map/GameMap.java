@@ -36,7 +36,8 @@ public class GameMap {
                 Vector3 seed = new Vector3(xkey,ykey,0);
                 float temp = rand.noise(seed.scl(5f));
                 this.height = Math.round(Math.abs(temp));
-                tile=height>150?new Tile("block"):new Tile("grass");
+                if(height<5) tile=new Tile("water");
+                else tile=height>150?new Tile("block"):new Tile("grass");
             }
         }
 
