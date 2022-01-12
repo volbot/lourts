@@ -274,7 +274,6 @@ public class InputManager implements InputProcessor {
             } else {
                 cam.position.mulAdd(camPos, -0.02f / cam.zoom);
             }
-            System.out.println(cam.zoom);
         }
         return true;
     }
