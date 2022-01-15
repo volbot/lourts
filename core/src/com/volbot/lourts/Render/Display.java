@@ -1,5 +1,6 @@
 package com.volbot.lourts.Render;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -40,7 +41,6 @@ public class Display {
 
     public void loop() {
         float size = (20)*(cam.zoom);
-
         ScreenUtils.clear(0, 0, 0, 1);
         batch.begin();
         Main.map.chunks.drawNode(batch,cam);
