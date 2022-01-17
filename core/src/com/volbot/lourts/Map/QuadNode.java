@@ -32,10 +32,18 @@ public class QuadNode {
             tl = new QuadNode(depth - 1, xkey, ykey + (len / 2), tile);
             tr = new QuadNode(depth - 1, xkey + (len / 2), ykey + (len / 2), tile);
         } else {
-            Vector3 seed = new Vector3(xkey, ykey, 0);
-            float temp = rand.noise(seed.cpy().scl(20));
-            this.height = (int) temp;
-            this.tile = tile;
+            if (tile.walkable) {
+                Vector3 seed = new Vector3(xkey, ykey, 0);
+                float temp = rand.noise(seed.cpy().scl(5));
+                System.out.println(temp);
+                this.height = (int) temp;
+                if (height > 90) {
+                    this.tile = new Tile("block");
+                } else this.tile = tile;
+            } else {
+                this.height=100;
+                this.tile = tile;
+            }
         }
     }
 
@@ -69,26 +77,8 @@ public class QuadNode {
             insert(node.br);
             insert(node.tl);
             insert(node.tr);
-            /*
-            if (!(x > bl.xkey + len || x < bl.xkey || y > bl.ykey + len || y < bl.ykey)) {
-                System.out.println("bl"+depth);
-                insert(node.bl);
-            }
-            if (!(x > br.xkey + len || x < br.xkey || y > br.ykey + len || y < br.ykey)) {
-                System.out.println("br"+depth);
-                insert(node.br);
-            }
-            if (!(x > tl.xkey + len || x < tl.xkey || y > tl.ykey + len || y < tl.ykey)) {
-                System.out.println("tl"+depth);
-                insert(node.tl);
-            }
-            if (!(x > tr.xkey + len || x < tr.xkey || y > tr.ykey + len || y < tr.ykey)) {
-                System.out.println("tr"+depth);
-                insert(node.tr);
-            }
-             */
         } else {
-            insert(node.xkey,node.ykey,node.tile);
+            insert(node.xkey, node.ykey, node.tile);
         }
     }
 
@@ -99,9 +89,9 @@ public class QuadNode {
         ydraw += cam.position.y;
         if (depth == 0) {
             if (tile != null) {
-                if (tile.texID.equals("grass") && cam.zoom > 0.2)
-                    batch.setColor(1f, 1f, 1f, ((height / 3f) + 66) / 100f);
-                batch.draw(Main.texLoader.tiles.get(tile.texID), xdraw, ydraw, 20 * cam.zoom, 20 * cam.zoom);
+                if (tile.tileType.equals("grass") && cam.zoom > 0.2)
+                    batch.setColor(1f, 1f, 1f, ((height / 4f) + 66) / 100f);
+                batch.draw(Main.texLoader.tiles.get(tile.tileType), xdraw, ydraw, 20 * cam.zoom, 20 * cam.zoom);
                 batch.setColor(Color.WHITE);
             }
         } else {
@@ -139,17 +129,26 @@ public class QuadNode {
         }
     }
 
-    public QuadNode get(int i) {
-        switch (i) {
-            case 0:
-                return tl;
-            case 1:
-                return tr;
-            case 2:
-                return br;
-            case 3:
-                return bl;
+    public QuadNode get(int xIn, int yIn) {
+        int x = xIn;
+        int y = yIn;
+        if (depth == 0) {
+            return this;
+        } else {
+            int len = (int) Math.pow(2, depth) / 2;
+            if (x >= bl.xkey && x < bl.xkey + len && y >= bl.ykey && y < bl.ykey+len) {
+                return bl.get(xIn, yIn);
+            }
+            if (x >= br.xkey && x < br.xkey + len && y >= br.ykey && y < br.ykey+len) {
+                return br.get(xIn, yIn);
+            }
+            if (x >= tr.xkey && x < tr.xkey + len && y >= tr.ykey && y < tr.ykey + len) {
+                return tr.get(xIn, yIn);
+            }
+            if (x >= tl.xkey && x < tl.xkey + len && y >= tl.ykey && y < tl.ykey + len) {
+                return tl.get(xIn, yIn);
+            }
+            return null;
         }
-        return null;
     }
 }

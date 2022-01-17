@@ -11,7 +11,7 @@ public class GameMap {
     public QuadNode chunks;
 
     public GameMap() {
-        chunks = new QuadNode(10, 0, 0, new Tile("grass"));
+        chunks = new QuadNode(9, 0, 0, new Tile("grass"));
 
         chunks.insert(6, 6, new Tile("block"));
         chunks.insert(2, 6, new Tile("block"));
@@ -23,16 +23,62 @@ public class GameMap {
         chunks.insert(3, 2, new Tile("block"));
         chunks.insert(2, 2, new Tile("block"));
 
+        /*
         Lake lakeDoramos = new Lake(new Vector3(40,600,0),4);
         Lake lakePickleChin = new Lake(new Vector3(400, 30, 0), 3);
         Lake lakePickleChin2 = new Lake(new Vector3(660, 60, 0), 4);
-
         chunks.insert(lakeDoramos.map);
         chunks.insert(lakePickleChin.map);
         chunks.insert(lakePickleChin2.map);
+
+         */
+
+        int len = 20 * (int) Math.pow(2, chunks.depth);
+        Perlin p = new Perlin();
+        Vector3 seed;
+        float temp;
+        for (int x = 0; x < len; x += 40) {
+            for (int y = 0; y < len; y += 40) {
+                seed = new Vector3(x, y, 0);
+                temp = p.noise(seed.cpy().scl(30));
+                if (temp < -80) {
+                    dropWater(x, y, 15);
+                }
+            }
+        }
     }
 
     public int size() {
         return 20 * (int) Math.pow(2, chunks.depth);
+    }
+
+    public void dropWater(int x, int y) {
+        if (chunks.get(x/20, y/20) != null)
+            dropWater(x, y, 0);
+    }
+
+    public void dropWater(int xIn, int yIn, int wiggle) {
+        int x = xIn/20;
+        int y = yIn/20;
+        QuadNode chunk = chunks.get(x, y);
+        if (chunk != null) {
+            chunk.tile = new Tile("water");
+            QuadNode left = chunks.get(x - 1, y);
+            if (left != null && left.height <= chunk.height+wiggle && !left.tile.tileType.equals("water")) {
+                dropWater(xIn-20, yIn, wiggle);
+            }
+            QuadNode right = chunks.get(x + 1, y);
+            if (right != null && right.height <= chunk.height+wiggle && !right.tile.tileType.equals("water")) {
+                dropWater(xIn+20, yIn, wiggle);
+            }
+            QuadNode top = chunks.get(x, y + 1);
+            if (top != null && top.height <= chunk.height+wiggle && !top.tile.tileType.equals("water")) {
+                dropWater(xIn, 20 * yIn+20, wiggle);
+            }
+            QuadNode bot = chunks.get(x, y - 1);
+            if (bot != null && bot.height <= chunk.height+wiggle && !bot.tile.tileType.equals("water")) {
+                dropWater(xIn, yIn-20, wiggle);
+            }
+        }
     }
 }
