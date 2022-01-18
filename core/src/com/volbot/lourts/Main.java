@@ -47,8 +47,8 @@ public class Main extends ApplicationAdapter {
         player = crabwizard;
         entities.add(crabwizard);
         gui = new GUIManager();
-        crabwizard.position.x = 400;
-        crabwizard.position.y = 400;
+        crabwizard.position.x = 380;
+        crabwizard.position.y = 380;
         crabwizard.texID = 0;
 
         Location boneland = new Location("Boneland", "Skeletrex", 200, 200, 100);

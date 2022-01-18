@@ -71,4 +71,8 @@ public class GameMap {
             }
         }
     }
+
+    public Vector3 nextPoint(Vector3 curr, Vector3 dest) {
+        return null;
+    }
 }
