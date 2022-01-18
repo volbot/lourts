@@ -35,7 +35,6 @@ public class QuadNode {
             if (tile.walkable) {
                 Vector3 seed = new Vector3(xkey, ykey, 0);
                 float temp = rand.noise(seed.cpy().scl(5));
-                System.out.println(temp);
                 this.height = (int) temp;
                 if (height > 90) {
                     this.tile = new Tile("block");

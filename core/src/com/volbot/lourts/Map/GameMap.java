@@ -23,16 +23,6 @@ public class GameMap {
         chunks.insert(3, 2, new Tile("block"));
         chunks.insert(2, 2, new Tile("block"));
 
-        /*
-        Lake lakeDoramos = new Lake(new Vector3(40,600,0),4);
-        Lake lakePickleChin = new Lake(new Vector3(400, 30, 0), 3);
-        Lake lakePickleChin2 = new Lake(new Vector3(660, 60, 0), 4);
-        chunks.insert(lakeDoramos.map);
-        chunks.insert(lakePickleChin.map);
-        chunks.insert(lakePickleChin2.map);
-
-         */
-
         int len = 20 * (int) Math.pow(2, chunks.depth);
         Perlin p = new Perlin();
         Vector3 seed;
