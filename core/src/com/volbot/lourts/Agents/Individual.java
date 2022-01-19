@@ -27,11 +27,13 @@ public class Individual extends Agent {
     public void think() {
         if (dest != null) {
             Vector3 destLoc = new Vector3(dest.position.x, dest.position.y, 0);
-            if (position.dst(destLoc) < 30) {
-                if (location == null && dest instanceof Location) {
-                    Main.entities.remove(this);
-                    ((Location) dest).heroes.add(this);
-                    this.location = (Location) dest;
+            if (position.dst(dest.position) < 20) {
+                if (position.dst(dest.position) < 30) {
+                    if (location == null && dest instanceof Location) {
+                        Main.entities.remove(this);
+                        ((Location) dest).heroes.add(this);
+                        this.location = (Location) dest;
+                    }
                 }
                 if (this.equals(Main.player)) {
                     dest = null;
@@ -99,11 +101,10 @@ public class Individual extends Agent {
         Vector3 movement;
         float workingSpeed = Gdx.graphics.getDeltaTime() * moveSpeed;
 
-        Vector3 newPos = position.cpy();
         Tile[] tiles = new Tile[5];
         int[][] poss = new int[5][3];
-        poss[0][0] = (int) position.x / 20;
-        poss[0][1] = (int) position.y / 20;
+        poss[0][0] = (int) Math.floor(position.x / 20);
+        poss[0][1] = (int) Math.floor(position.y / 20);
         poss[1][0] = poss[0][0] + 1;
         poss[1][1] = poss[0][1];
         poss[2][0] = poss[0][0] - 1;
@@ -113,41 +114,42 @@ public class Individual extends Agent {
         poss[4][0] = poss[0][0];
         poss[4][1] = poss[0][1] - 1;
 
-        int bdist = 0;
+        int bestPoss = 0;
         for (int i = 0; i < 5; i++) {
             tiles[i] = Main.map.chunks.getTile(poss[i][0], poss[i][1]);
             poss[i][2] = (tiles[i].walkable ? 0 : -1);
             if (poss[i][2] > -1) {
-                if (goal.cpy().dst(new Vector3((poss[i][0] * 20), (poss[i][1] * 20), 0)) <
-                        goal.cpy().dst(new Vector3((poss[bdist][0] * 20), (poss[bdist][1] * 20), 0))) {
-                    if(bdist!=0) poss[bdist][2] -= 1;
-                    bdist = i;
-                    poss[i][2] += 1;
+                float dstTemp = new Vector3(poss[i][0] * 20, poss[i][1] * 20, 0).dst(goal);
+                poss[i][2] += (dstTemp < dst ? 1 : 0);
+                System.out.println(dstTemp + " - " + dst);
+                poss[i][2] += (dst - dstTemp > 10 ? 1 : 0);
+                poss[i][2] += (dst - dstTemp > 20 ? 1 : 0);
+                poss[i][2] += (dst - dstTemp > 30 ? 1 : 0);
+            }
+            System.out.println(poss[i][0] + "  " + poss[i][1] + "  " + poss[i][2]);
+            if (i > 0) {
+                if (poss[i][2] != -1 && poss[i][2] > poss[bestPoss][2]) {
+                    if (new Vector3(20 * poss[bestPoss][0], 20 * poss[bestPoss][1], 0).dst(goal) > new Vector3(20 * poss[i][0], 20 * poss[i][1], 0).dst(goal))
+                        bestPoss = i;
+                } else if (bestPoss == 0) {
+                    if (poss[i][2] > -1) {
+                        bestPoss = i;
+                    }
                 }
             }
-            System.out.println(poss[i][2]);
         }
-        int bestPoss = 0;
-        for (int i = 1; i < 5; i++) {
-            if (poss[i][2] != -1 && poss[i][2] > poss[bestPoss][2]) {
-                bestPoss = i;
-            }
-        }
-        if (poss[bestPoss][2] < 0) {
-            System.out.println("deez");
+
+        if (bestPoss == 0) {
             for (int i = 0; i < 5; i++) {
                 if (poss[i][2] > -1) {
                     position.set(poss[i][0] * 20 + 10, poss[i][1] * 20 + 10, 0);
+                    break;
                 }
             }
-        } else
-        if (dst > 10) {
-            movement = new Vector3((poss[bestPoss][0] * 20), (poss[bestPoss][1] * 20), 0).sub(new Vector3(poss[0][0] * 20, poss[0][1] * 20, 0)).setLength(workingSpeed);
-            newPos.add(movement);
-            if (goal.dst(newPos) < dst) {
-                position.add(movement);
-                return true;
-            }
+        } else if (dst > 10) {
+            movement = new Vector3((poss[bestPoss][0] * 20), (poss[bestPoss][1] * 20), 0).sub((poss[0][0] * 20), (poss[0][1] * 20), 0).setLength(workingSpeed);
+            position.add(movement);
+            return true;
         }
         return false;
     }
