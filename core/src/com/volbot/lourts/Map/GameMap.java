@@ -6,6 +6,8 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector3;
 import com.volbot.lourts.Main;
 
+import java.util.ArrayList;
+
 public class GameMap {
 
     public QuadNode chunks;
@@ -70,6 +72,16 @@ public class GameMap {
                 dropWater(xIn, yIn-20, wiggle);
             }
         }
+    }
+
+    public ArrayList<Vector3> neighbors(Vector3 init) {
+        ArrayList<Vector3> ret = new ArrayList<>();
+        ret.add(init);
+        ret.add(init.cpy().add(20,0,0));
+        ret.add(init.cpy().add(-20,0,0));
+        ret.add(init.cpy().add(0,20,0));
+        ret.add(init.cpy().add(0,-20,0));
+        return ret;
     }
 
     public Vector3 nextPoint(Vector3 curr, Vector3 dest) {
