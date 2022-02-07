@@ -7,6 +7,7 @@ import com.badlogic.gdx.utils.ScreenUtils;
 import com.volbot.lourts.Agents.*;
 import com.volbot.lourts.GUI.GUIManager;
 import com.volbot.lourts.Data.Battle;
+import com.volbot.lourts.GUI.MainMenu;
 import com.volbot.lourts.Input.InputManager;
 import com.volbot.lourts.Map.BattleMap;
 import com.volbot.lourts.Map.GameMap;
@@ -44,18 +45,23 @@ public class Main extends ApplicationAdapter {
         display = new Display(cam);
         GAMETIME = 0;
         GAMEMODE = 0;
+        initDemo();
         battle = null;
+        texLoader = new TexLoader();
+        gui = new GUIManager();
+        inputs = new InputManager(cam);
+        Gdx.input.setInputProcessor(inputs);
+    }
+
+    private void initDemo() {
         worldmap = new GameMap();
         map = worldmap;
-        texLoader = new TexLoader();
         Individual crabwizard = new Individual("Crabwizard");
         player = crabwizard;
         entities.add(crabwizard);
-        gui = new GUIManager();
         crabwizard.position.x = 380;
         crabwizard.position.y = 380;
         crabwizard.texID = 0;
-
         Location boneland = new Location("Boneland", "Skeletrex", 200, 200, 100);
         Faction bonebrigade = new Faction("Bone Brigade", boneland.getFigurehead(), 0);
         entities.add(boneland);
@@ -65,12 +71,18 @@ public class Main extends ApplicationAdapter {
         bonetown.setFaction(bonebrigade);
         entities.add(bonetown);
         bonetown.texID = 0;
-        inputs = new InputManager(cam);
-        Gdx.input.setInputProcessor(inputs);
     }
 
     @Override
     public void render() {
+        if(GAMEMODE==-1){
+            if(!(gui.currmenu instanceof MainMenu)){
+                gui.currmenu = new MainMenu();
+                display.loop();
+                gui.loop();
+            }
+            return;
+        }
         if (GAMEMODE == 0) {
             GAMETIME++;
             if (map != worldmap) {
@@ -87,7 +99,7 @@ public class Main extends ApplicationAdapter {
         if(!texLoader.texUnits.keySet().isEmpty()) {
             display.loop();
         } else {
-            System.out.println("NO TEXTURES");
+            System.out.println("Textures could not be loaded!");
         }
     }
 
