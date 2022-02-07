@@ -2,6 +2,7 @@ package com.volbot.lourts.Map;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector3;
 import com.volbot.lourts.Main;
@@ -88,9 +89,9 @@ public class QuadNode {
         ydraw += cam.position.y;
         if (depth == 0) {
             if (tile != null) {
-                if (tile.tileType.equals("grass") && cam.zoom > 0.2)
-                    batch.setColor(1f, 1f, 1f, ((height / 4f) + 66) / 100f);
-                batch.draw(Main.texLoader.tiles.get(tile.tileType), xdraw, ydraw, 20 * cam.zoom, 20 * cam.zoom);
+                if(tile.tileType.equals("grass") && cam.zoom > 0.2) batch.setColor(1f, 1f, 1f, ((height / 4f) + 66) / 100f);
+                Texture tex = Main.texLoader.tiles.get(tile.tileType);
+                if(tex!=null) batch.draw(tex, xdraw, ydraw, 20 * cam.zoom, 20 * cam.zoom);
                 batch.setColor(Color.WHITE);
             }
         } else {

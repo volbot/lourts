@@ -1,5 +1,6 @@
 package com.volbot.lourts.Render;
 
+import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Texture;
 
 import java.io.File;
@@ -46,6 +47,7 @@ public class TexLoader {
         }
 
         File[] units = new File("texUnits/").listFiles();
+        System.out.println(units==null);
         if (units != null && units.length > 0)
             for (File unitFolder : units) {
                 String unitName = unitFolder.getName();

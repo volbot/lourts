@@ -37,6 +37,11 @@ public class Main extends ApplicationAdapter {
 
     @Override
     public void create() {
+        cam = new OrthographicCamera();
+        cam.setToOrtho(false, 1024, 576);
+        cam.position.x = 0;
+        cam.position.y = 0;
+        display = new Display(cam);
         GAMETIME = 0;
         GAMEMODE = 0;
         battle = null;
@@ -60,12 +65,6 @@ public class Main extends ApplicationAdapter {
         bonetown.setFaction(bonebrigade);
         entities.add(bonetown);
         bonetown.texID = 0;
-
-        cam = new OrthographicCamera();
-        cam.setToOrtho(false, 1024, 576);
-        cam.position.x = 0;
-        cam.position.y = 0;
-        display = new Display(cam);
         inputs = new InputManager(cam);
         Gdx.input.setInputProcessor(inputs);
     }
@@ -76,7 +75,6 @@ public class Main extends ApplicationAdapter {
             GAMETIME++;
             if (map != worldmap) {
                 map = worldmap;
-                initWorld();
             }
         }
         if (GAMEMODE == 1 && map == worldmap) {
@@ -86,7 +84,11 @@ public class Main extends ApplicationAdapter {
         ScreenUtils.clear(1, 0, 0, 1);
         gui.loop();
         inputs.parseCameraMovement();
-        display.loop();
+        if(!texLoader.texUnits.keySet().isEmpty()) {
+            display.loop();
+        } else {
+            System.out.println("NO TEXTURES");
+        }
     }
 
     public void massThink() {
@@ -207,10 +209,6 @@ public class Main extends ApplicationAdapter {
             Main.gui.drawTalkMenu(victor, false);
         }
         battle = null;
-    }
-
-    public void initWorld() {
-
     }
 
     public static void setPaused(boolean val) {

@@ -10,9 +10,9 @@ import java.util.ArrayList;
 
 public class Agent {
 
-    public int texID;
+    public int texID = 0;
 
-    public String theme;
+    public String theme = "base";
 
     public Faction faction;
 
@@ -26,7 +26,6 @@ public class Agent {
     protected Agent(String name) {
         rep = new Reputation();
         this.name = name;
-        this.theme = "base";
         population=new Population();
     }
 

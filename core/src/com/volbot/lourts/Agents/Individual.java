@@ -121,12 +121,12 @@ public class Individual extends Agent {
             if (poss[i][2] > -1) {
                 float dstTemp = new Vector3(poss[i][0] * 20, poss[i][1] * 20, 0).dst(goal);
                 poss[i][2] += (dstTemp < dst ? 1 : 0);
-                System.out.println(dstTemp + " - " + dst);
+                //System.out.println(dstTemp + " - " + dst);
                 poss[i][2] += (dst - dstTemp > 10 ? 1 : 0);
                 poss[i][2] += (dst - dstTemp > 20 ? 1 : 0);
                 poss[i][2] += (dst - dstTemp > 30 ? 1 : 0);
             }
-            System.out.println(poss[i][0] + "  " + poss[i][1] + "  " + poss[i][2]);
+            //System.out.println(poss[i][0] + "  " + poss[i][1] + "  " + poss[i][2]);
             if (i > 0) {
                 if (poss[i][2] != -1 && poss[i][2] > poss[bestPoss][2]) {
                     if (new Vector3(20 * poss[bestPoss][0], 20 * poss[bestPoss][1], 0).dst(goal) > new Vector3(20 * poss[i][0], 20 * poss[i][1], 0).dst(goal))
