@@ -44,6 +44,7 @@ public class Display {
         ScreenUtils.clear(0, 0, 0, 1);
         if(Main.GAMEMODE == -1) {
             Main.gui.currmenu.drawMenu(batch,cam);
+            batch.end();
             return;
         }
         Main.map.chunks.drawNode(batch, cam);

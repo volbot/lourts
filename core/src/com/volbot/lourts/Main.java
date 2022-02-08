@@ -40,12 +40,9 @@ public class Main extends ApplicationAdapter {
     public void create() {
         cam = new OrthographicCamera();
         cam.setToOrtho(false, 1024, 576);
-        cam.position.x = 0;
-        cam.position.y = 0;
         display = new Display(cam);
         GAMETIME = 0;
-        GAMEMODE = 0;
-        initDemo();
+        GAMEMODE = -1;
         battle = null;
         texLoader = new TexLoader();
         gui = new GUIManager();
@@ -53,7 +50,7 @@ public class Main extends ApplicationAdapter {
         Gdx.input.setInputProcessor(inputs);
     }
 
-    private void initDemo() {
+    public static void initDemo() {
         worldmap = new GameMap();
         map = worldmap;
         Individual crabwizard = new Individual("Crabwizard");
@@ -78,9 +75,9 @@ public class Main extends ApplicationAdapter {
         if(GAMEMODE==-1){
             if(!(gui.currmenu instanceof MainMenu)){
                 gui.currmenu = new MainMenu();
-                display.loop();
-                gui.loop();
             }
+            display.loop();
+            gui.loop();
             return;
         }
         if (GAMEMODE == 0) {
@@ -156,8 +153,8 @@ public class Main extends ApplicationAdapter {
 
     @Override
     public void dispose() {
-        display.dispose();
         texLoader.dispose();
+        display.dispose();
     }
 
     public static void battleOver(Individual victor) {

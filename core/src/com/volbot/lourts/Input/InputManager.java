@@ -11,6 +11,7 @@ import com.volbot.lourts.Agents.Combatant;
 import com.volbot.lourts.Agents.Location;
 import com.volbot.lourts.GUI.GameMenu;
 import com.volbot.lourts.GUI.GameWindow;
+import com.volbot.lourts.GUI.MainMenu;
 import com.volbot.lourts.Main;
 import com.volbot.lourts.Map.Tile;
 
@@ -20,7 +21,7 @@ public class InputManager implements InputProcessor {
 
     private final int camSpeed;
 
-    private Vector3 camHold = null;
+    private Vector3 camHold;
 
     public boolean camLockedToMap = true;
     private static final int camBound = 300;
@@ -28,6 +29,8 @@ public class InputManager implements InputProcessor {
     public InputManager(OrthographicCamera camera) {
         cam = camera;
         camSpeed = 300;
+        camHold = null;
+        cam.update();
     }
 
     public Vector3 boundClick(Vector3 touchPos) {

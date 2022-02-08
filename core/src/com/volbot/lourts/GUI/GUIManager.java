@@ -25,6 +25,15 @@ public class GUIManager {
         if (currmenu == null) {
             return;
         }
+        if (currmenu instanceof MainMenu){
+            MainMenu menu = (MainMenu) currmenu;
+            for (int i = 0; i < menu.buttons.length; i++) {
+                if (menu.buttons[i].isChecked()) {
+                    menu.buttons[i].setChecked(false);
+                    menu.menuAction(i);
+                }
+            }
+        }
         if (currmenu instanceof InteractMenu) {
             InteractMenu menu = (InteractMenu) currmenu;
             if (Main.player.position.dst(menu.entity.position) < 30 || menu.entity.equals(Main.player.location)) {
