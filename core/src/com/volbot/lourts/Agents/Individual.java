@@ -101,6 +101,16 @@ public class Individual extends Agent {
         Vector3 movement;
         float workingSpeed = Gdx.graphics.getDeltaTime() * moveSpeed;
 
+        Vector3 newPos = position.cpy();
+        if (dst > 10) {
+            movement = goal.cpy().sub(position).setLength(workingSpeed);
+            newPos.add(movement);
+        }
+        if (position.dst(newPos) != 0 && Main.map.chunks.getTile((int)(newPos.x/20),(int)(newPos.y/20)).walkable) {
+            position = newPos.cpy();
+            return true;
+        }
+
         Tile[] tiles = new Tile[5];
         int[][] poss = new int[5][3];
         poss[0][0] = (int) Math.floor(position.x / 20);
