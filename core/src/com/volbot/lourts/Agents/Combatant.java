@@ -29,8 +29,7 @@ public class Combatant {
     }
 
     public Combatant(Demographic d, Agent a) {
-        Demographic d2 = new Demographic(d.getOrigin(), 1, d.getLevel());
-        entity = d2;
+        entity = new Demographic(d.getOrigin(), 1, d.getLevel());
         texID = d.texID;
         theme = d.theme;
         allegiance = a;
