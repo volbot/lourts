@@ -117,6 +117,16 @@ public class Combatant {
         Vector3 movement;
         float workingSpeed = Gdx.graphics.getDeltaTime() * 70;
 
+        Vector3 newPos = position.cpy();
+        if (dst > 10) {
+            movement = goal.cpy().sub(position).setLength(workingSpeed);
+            newPos.add(movement);
+        }
+        if (position.dst(newPos) != 0 && Main.map.chunks.getTile((int)(newPos.x/20),(int)(newPos.y/20)).walkable) {
+            position = newPos.cpy();
+            return true;
+        }
+
         Tile[] tiles = new Tile[5];
         int[][] poss = new int[5][3];
         poss[0][0] = (int)Math.floor(position.x / 20);
@@ -137,11 +147,9 @@ public class Combatant {
             if(poss[i][2]>-1) {
                 float dstTemp = new Vector3(poss[i][0]*20,poss[i][1]*20,0).dst(goal);
                 poss[i][2] += (dstTemp < dst ? 1 : 0);
-                System.out.println(dstTemp+" - "+dst);
                 poss[i][2] += (dst - dstTemp > 10 ? 1 : 0);
                 poss[i][2] += (dst - dstTemp > 30 ? 1 : 0);
             }
-            System.out.println(poss[i][0]+"  "+poss[i][1]+"  "+poss[i][2]);
             if (i > 0) {
                 if (poss[i][2] != -1 && poss[i][2] > poss[bestPoss][2]) {
                     if(new Vector3(20*poss[bestPoss][0],20*poss[bestPoss][1],0).dst(goal) > new Vector3(20*poss[i][0],20*poss[i][1],0).dst(goal)) bestPoss = i;
