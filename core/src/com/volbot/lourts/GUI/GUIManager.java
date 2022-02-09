@@ -15,24 +15,9 @@ public class GUIManager {
 
     }
 
-    public void playerOpenWindow() {
-        playerOpenWindow = true;
-    }
-
-    boolean playerOpenWindow = false;
-
     public void loop() {
         if (currmenu == null) {
             return;
-        }
-        if (currmenu instanceof MainMenu){
-            MainMenu menu = (MainMenu) currmenu;
-            for (int i = 0; i < menu.buttons.length; i++) {
-                if (menu.buttons[i].isChecked()) {
-                    menu.buttons[i].setChecked(false);
-                    menu.menuAction(i);
-                }
-            }
         }
         if (currmenu instanceof InteractMenu) {
             InteractMenu menu = (InteractMenu) currmenu;
@@ -44,10 +29,9 @@ public class GUIManager {
                     menu.buttons[1].setChecked(false);
                     Main.gui.drawCombatMenu(menu.entity);
                 }
-                playerOpenWindow = false;
             }
-        } else if (currmenu instanceof NotificationWindow) {
-            NotificationWindow menu = (NotificationWindow) currmenu;
+        } else if (currmenu instanceof NotificationWindow | currmenu instanceof MainMenu) {
+            GameWindow menu = (GameWindow) currmenu;
             for (int i = 0; i < menu.buttons.length; i++) {
                 if (menu.buttons[i].isChecked()) {
                     menu.activateButton(i);
@@ -64,43 +48,7 @@ public class GUIManager {
                 if (menu.buttons[i].isChecked()) {
                     if (i >= menu.conversation.options.length) continue;
                     menu.buttons[i].setChecked(false);
-                    boolean reset = false;
-                    switch (menu.conversation.options[i].option.charAt(0)) {
-                        case '+':
-                            menu.entity.rep.impress(Main.player, 1);
-                            break;
-                        case 'U':
-                            break;
-                        case '-':
-                            menu.entity.rep.impress(Main.player, -1);
-                            break;
-                        case 'F':
-                            Main.GAMEMODE = 1;
-                            Main.battle = new Battle(Main.player, menu.entity);
-                            break;
-                        case 'R':
-                            int num = 0;
-                            int numDex = 2;
-                            String option = menu.conversation.options[i].option;
-                            while (!Character.isDigit(option.charAt(numDex))) {
-                                numDex++;
-                            }
-                            while (Character.isDigit(option.charAt(numDex))) {
-                                num *= 10;
-                                num += Character.getNumericValue(option.charAt(numDex));
-                                numDex++;
-                            }
-                            Location loc = (Location) menu.entity;
-                            Main.player.getParty().add(loc.recruit(num));
-                            break;
-                        case 'M':
-                            menu.resetConvo();
-                            reset = true;
-                    }
-                    menu.buttons[i].setChecked(false);
-                    if (!reset) {
-                        menu.advanceConversation(i);
-                    }
+                    menu.activateButton(i);
                 }
             }
         }

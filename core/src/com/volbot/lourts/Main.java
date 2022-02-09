@@ -40,6 +40,7 @@ public class Main extends ApplicationAdapter {
     public void create() {
         cam = new OrthographicCamera();
         cam.setToOrtho(false, 1024, 576);
+        cam.position.set(-100,-100,0);
         display = new Display(cam);
         GAMETIME = 0;
         GAMEMODE = -1;
@@ -108,6 +109,9 @@ public class Main extends ApplicationAdapter {
                 entity = entities.get(j);
                 if (entity instanceof Individual) {
                     entity.think();
+                    if(entity.equals(player) && inputs.camLockedToPlayer){
+                        cam.position.set(player.position.cpy().scl(-1/cam.zoom));
+                    }
                 } else if (entity instanceof Location) {
                     ArrayList<Individual> heroes = ((Location) entity).heroes;
                     if (!heroes.isEmpty()) {

@@ -12,6 +12,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.volbot.lourts.Agents.Agent;
 import com.volbot.lourts.Agents.Location;
+import com.volbot.lourts.Data.Battle;
 import com.volbot.lourts.Data.TalkOption;
 import com.volbot.lourts.Data.TalkResponse;
 import com.volbot.lourts.Main;
@@ -86,6 +87,47 @@ public class TalkWindow extends InteractWindow {
 
         super.drawMenu(batch, cam);
 
+    }
+
+    @Override
+    public void activateButton(int buttonDex) {
+        boolean reset = false;
+        switch (conversation.options[buttonDex].option.charAt(0)) {
+            case '+':
+                entity.rep.impress(Main.player, 1);
+                break;
+            case 'U':
+                break;
+            case '-':
+                entity.rep.impress(Main.player, -1);
+                break;
+            case 'F':
+                Main.GAMEMODE = 1;
+                Main.battle = new Battle(Main.player, entity);
+                break;
+            case 'R':
+                int num = 0;
+                int numDex = 2;
+                String option = conversation.options[buttonDex].option;
+                while (!Character.isDigit(option.charAt(numDex))) {
+                    numDex++;
+                }
+                while (Character.isDigit(option.charAt(numDex))) {
+                    num *= 10;
+                    num += Character.getNumericValue(option.charAt(numDex));
+                    numDex++;
+                }
+                Location loc = (Location) entity;
+                Main.player.getParty().add(loc.recruit(num));
+                break;
+            case 'M':
+                resetConvo();
+                reset = true;
+        }
+        buttons[buttonDex].setChecked(false);
+        if (!reset) {
+            advanceConversation(buttonDex);
+        }
     }
 
     public void genButtonText() {

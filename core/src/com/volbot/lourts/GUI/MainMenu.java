@@ -11,11 +11,12 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.volbot.lourts.Main;
 
-public class MainMenu extends GameMenu{
+public class MainMenu extends GameWindow {
 
     TextButton.TextButtonStyle buttonStyle;
 
     public MainMenu() {
+        windowbg = new Texture("GUI/windows/menublank.png");
         buttons=new Button[4];
         buttonStyle = new TextButton.TextButtonStyle();
         buttonStyle.up = new TextureRegionDrawable(new TextureRegion(new Texture("GUI/windows/buttons/eighthofwindowbutton.png")));
@@ -27,7 +28,17 @@ public class MainMenu extends GameMenu{
         buttons[3]=new TextButton("Quit",buttonStyle);
     }
 
-    public void menuAction(int buttonDex){
+    @Override
+    public void drawMenu(SpriteBatch batch, OrthographicCamera cam) {
+        float temp=(cam.viewportWidth-buttons[0].getWidth())/2;
+        for(Button b : buttons)b.setX(temp);
+        temp=cam.viewportHeight/1.3f;
+        for(Button b : buttons)b.setY(temp-=(cam.viewportHeight/1.5f)/buttons.length);
+        super.drawMenu(batch, cam);
+    }
+
+    @Override
+    public void activateButton(int buttonDex) {
         switch(buttonDex) {
             case 0: //new game
                 Main.initDemo();
@@ -42,16 +53,5 @@ public class MainMenu extends GameMenu{
                 Gdx.app.exit();
                 break;
         }
-    }
-
-    @Override
-    public void drawMenu(SpriteBatch batch, OrthographicCamera cam) {
-        float yInc = buttons[0].getY();
-        for(Button b : buttons) {
-            b.setX((cam.viewportWidth/2)-(b.getWidth()/2));
-            b.setY(yInc);
-            yInc+=(b.getHeight()+15);
-        }
-        super.drawMenu(batch, cam);
     }
 }

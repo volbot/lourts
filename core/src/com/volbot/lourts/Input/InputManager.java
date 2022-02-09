@@ -24,6 +24,7 @@ public class InputManager implements InputProcessor {
     private Vector3 camHold;
 
     public boolean camLockedToMap = true;
+    public boolean camLockedToPlayer = false;
     private static final int camBound = 300;
 
     public InputManager(OrthographicCamera camera) {
@@ -42,7 +43,7 @@ public class InputManager implements InputProcessor {
         return touchLoc;
     }
 
-    private Vector3 positionClick(Vector3 clickLoc) {
+    public Vector3 positionClick(Vector3 clickLoc) {
         Vector3 touchPos = clickLoc.cpy();
         touchPos = cam.unproject(touchPos);
 
@@ -95,6 +96,7 @@ public class InputManager implements InputProcessor {
     }
 
     public void parseCameraMovement() {
+        if(camLockedToPlayer)return;
         boolean[] inputs = new boolean[]{false, false, false, false};
         int dirs = 0;
         if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
@@ -211,7 +213,8 @@ public class InputManager implements InputProcessor {
                         }
                     }
                 }
-                if (!returnval) {
+                if (!returnval
+) {
                     Main.gui.clearMenu();
                     if (Main.GAMEMODE == 0) {
                         if (hoverAgent != null && hoverAgent != Main.player) {
@@ -242,12 +245,14 @@ public class InputManager implements InputProcessor {
 
     @Override
     public boolean touchDragged(int screenX, int screenY, int pointer) {
+        if(camLockedToPlayer)return false;
         Vector3 clickPos = new Vector3(screenX, screenY, 0);
         Vector3 touchLoc = positionClick(clickPos);
         if (camHold != null && cam.zoom>0.2) {
             Vector3 temp = touchLoc.cpy().sub(camHold);
             cam.position.add(temp.scl(cam.zoom));
             cam.update();
+            return true;
         }
         return false;
     }

@@ -21,6 +21,7 @@ public class NotificationWindow extends GameWindow {
     private final BitmapFont font = new BitmapFont();
     private final String type;
     private String notification;
+
     public NotificationWindow(String type){
         this.type=type;
         windowbg = new Texture("GUI/windows/menublank.png");
@@ -68,6 +69,7 @@ public class NotificationWindow extends GameWindow {
         font.draw(batch, notification, (cam.viewportWidth-width)/2, (cam.viewportHeight)/2+(height/4));
     }
 
+    @Override
     public void activateButton(int buttonDex) {
         switch(buttonDex) {
             case 0:

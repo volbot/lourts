@@ -47,7 +47,6 @@ public class TexLoader {
         }
 
         File[] units = new File("texUnits/").listFiles();
-        System.out.println(units==null);
         if (units != null && units.length > 0)
             for (File unitFolder : units) {
                 String unitName = unitFolder.getName();
