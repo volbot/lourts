@@ -2,6 +2,7 @@ package com.volbot.lourts.Render;
 
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.utils.Sort;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -47,23 +48,30 @@ public class TexLoader {
         }
 
         File[] units = new File("texUnits/").listFiles();
+        Sort sort = new Sort();
         if (units != null && units.length > 0)
             for (File unitFolder : units) {
                 String unitName = unitFolder.getName();
                 if (!texUnits.containsKey(unitName))
                     texUnits.put(unitName, new TexUnit());
                 File[] townsFiles = new File(unitFolder.getPath() + "/towns/").listFiles();
-                if (townsFiles != null && townsFiles.length > 0)
+                if (townsFiles != null && townsFiles.length > 0) {
+                    sort.sort(townsFiles);
                     for (File file : townsFiles)
                         texUnits.get(unitName).towns.add(new Texture(file.getPath()));
+                }
                 File[] heroesFiles = new File(unitFolder.getPath() + "/heroes/").listFiles();
-                if (heroesFiles != null && heroesFiles.length > 0)
+                if (heroesFiles != null && heroesFiles.length > 0) {
+                    sort.sort(heroesFiles);
                     for (File file : heroesFiles)
                         texUnits.get(unitName).heroes.add(new Texture(file.getPath()));
+                }
                 File[] combatantsFiles = new File(unitFolder.getPath() + "/combatants/").listFiles();
-                if (combatantsFiles != null && combatantsFiles.length > 0)
+                if (combatantsFiles != null && combatantsFiles.length > 0) {
+                    sort.sort(combatantsFiles);
                     for (File file : combatantsFiles)
                         texUnits.get(unitName).combatants.add(new Texture(file.getPath()));
+                }
             }
     }
 }
