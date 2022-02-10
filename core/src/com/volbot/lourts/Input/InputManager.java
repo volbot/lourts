@@ -96,7 +96,7 @@ public class InputManager implements InputProcessor {
     }
 
     public void parseCameraMovement() {
-        if(camLockedToPlayer)return;
+        if (camLockedToPlayer) return;
         boolean[] inputs = new boolean[]{false, false, false, false};
         int dirs = 0;
         if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
@@ -188,33 +188,36 @@ public class InputManager implements InputProcessor {
         Agent hoverAgent = entityHovered(touchLoc);
         switch (button) {
             case 0:
+                GameMenu tempMenu;
                 if (Main.gui.currmenu != null) {
-                    GameMenu tempMenu = Main.gui.currmenu;
-                    if (tempMenu.buttons != null) {
-                        for (Button b : tempMenu.buttons) {
-                            Vector3 bpos = new Vector3(
-                                    b.getX() - cam.position.x,
-                                    b.getY() - cam.position.y, 0);
-                            Vector3 bsize = new Vector3(
-                                    b.getWidth(),
-                                    b.getHeight(), 0);
-                            bpos.scl(1 / cam.zoom);
-                            if (tempMenu instanceof GameWindow) {
+                    tempMenu = Main.gui.currmenu;
+                } else {
+                    tempMenu = Main.gui.hud;
+                }
+                if (tempMenu.buttons != null) {
+                    for (Button b : tempMenu.buttons) {
+                        Vector3 bpos = new Vector3(
+                                b.getX() - cam.position.x,
+                                b.getY() - cam.position.y, 0);
+                        Vector3 bsize = new Vector3(
+                                b.getWidth(),
+                                b.getHeight(), 0);
+                        bpos.scl(1 / cam.zoom);
+                        if (tempMenu instanceof GameWindow) {
+                            returnval = true;
+                            bsize.scl(1 / cam.zoom);
+                        }
+                        if (touchLoc.x > bpos.x && touchLoc.x < bpos.x + bsize.x) {
+                            if (touchLoc.y > bpos.y && touchLoc.y < bpos.y + bsize.y) {
+                                b.setChecked(true);
+                                for (Button b2 : tempMenu.buttons) if (!b.equals(b2)) b2.setChecked(false);
                                 returnval = true;
-                                bsize.scl(1 / cam.zoom);
-                            }
-                            if (touchLoc.x > bpos.x && touchLoc.x < bpos.x + bsize.x) {
-                                if (touchLoc.y > bpos.y && touchLoc.y < bpos.y + bsize.y) {
-                                    b.setChecked(true);
-                                    for (Button b2 : tempMenu.buttons) if (!b.equals(b2)) b2.setChecked(false);
-                                    returnval = true;
-                                }
                             }
                         }
                     }
                 }
                 if (!returnval
-) {
+                ) {
                     Main.gui.clearMenu();
                     if (Main.GAMEMODE == 0) {
                         if (hoverAgent != null && hoverAgent != Main.player) {
@@ -245,10 +248,10 @@ public class InputManager implements InputProcessor {
 
     @Override
     public boolean touchDragged(int screenX, int screenY, int pointer) {
-        if(camLockedToPlayer)return false;
+        if (camLockedToPlayer) return false;
         Vector3 clickPos = new Vector3(screenX, screenY, 0);
         Vector3 touchLoc = positionClick(clickPos);
-        if (camHold != null && cam.zoom>0.2) {
+        if (camHold != null && cam.zoom > 0.2) {
             Vector3 temp = touchLoc.cpy().sub(camHold);
             cam.position.add(temp.scl(cam.zoom));
             cam.update();

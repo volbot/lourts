@@ -1,5 +1,6 @@
 package com.volbot.lourts.GUI;
 
+import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.volbot.lourts.Agents.Agent;
 import com.volbot.lourts.Agents.Location;
 import com.volbot.lourts.Agents.Demographic;
@@ -7,9 +8,12 @@ import com.volbot.lourts.Data.Battle;
 import com.volbot.lourts.Data.TalkResponse;
 import com.volbot.lourts.Main;
 
+import java.awt.*;
+
 public class GUIManager {
 
     public GameMenu currmenu = null;
+    public HUD hud = new HUD();
 
     public GUIManager() {
 
@@ -17,7 +21,11 @@ public class GUIManager {
 
     public void loop() {
         if (currmenu == null) {
-            return;
+            for (int i = 0; i < hud.buttons.length; i++) {
+                if (hud.buttons[i].isChecked()) {
+                    hud.activateButton(i);
+                }
+            }
         }
         if (currmenu instanceof InteractMenu) {
             InteractMenu menu = (InteractMenu) currmenu;

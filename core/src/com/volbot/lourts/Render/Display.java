@@ -14,10 +14,7 @@ import com.volbot.lourts.Agents.Combatant;
 import com.volbot.lourts.Agents.Individual;
 import com.volbot.lourts.Agents.Location;
 import com.volbot.lourts.Data.Battle;
-import com.volbot.lourts.GUI.GameMenu;
-import com.volbot.lourts.GUI.InteractMenu;
-import com.volbot.lourts.GUI.NotificationWindow;
-import com.volbot.lourts.GUI.TalkWindow;
+import com.volbot.lourts.GUI.*;
 import com.volbot.lourts.Main;
 import com.volbot.lourts.Map.GameMap;
 
@@ -105,6 +102,7 @@ public class Display {
                 }
             }
         } else {
+            Main.gui.hud.drawMenu(batch,cam);
             if (hovered != null) {
                 drawName(hovered);
                 if (Main.GAMEMODE == 0) drawPopulation(hovered);
