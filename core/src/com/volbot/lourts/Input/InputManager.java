@@ -11,6 +11,7 @@ import com.volbot.lourts.Agents.Combatant;
 import com.volbot.lourts.Agents.Location;
 import com.volbot.lourts.GUI.GameMenu;
 import com.volbot.lourts.GUI.GameWindow;
+import com.volbot.lourts.GUI.HUD;
 import com.volbot.lourts.GUI.MainMenu;
 import com.volbot.lourts.Main;
 import com.volbot.lourts.Map.Tile;
@@ -203,7 +204,7 @@ public class InputManager implements InputProcessor {
                                 b.getWidth(),
                                 b.getHeight(), 0);
                         bpos.scl(1 / cam.zoom);
-                        if (tempMenu instanceof GameWindow) {
+                        if (tempMenu instanceof GameWindow && !(tempMenu instanceof HUD)) {
                             returnval = true;
                             bsize.scl(1 / cam.zoom);
                         }

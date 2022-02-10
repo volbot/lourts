@@ -86,6 +86,7 @@ public class Display {
                 menu.drawMenu(batch, cam);
             }
             if (tempMenu instanceof InteractMenu) {
+                Main.gui.hud.drawMenu(batch,cam);
                 InteractMenu menu = (InteractMenu) tempMenu;
                 drawName(menu.getAgent());
                 menu.drawMenu(batch, cam);
@@ -102,7 +103,9 @@ public class Display {
                 }
             }
         } else {
-            Main.gui.hud.drawMenu(batch,cam);
+            if(Main.GAMEMODE==0) {
+                Main.gui.hud.drawMenu(batch, cam);
+            }
             if (hovered != null) {
                 drawName(hovered);
                 if (Main.GAMEMODE == 0) drawPopulation(hovered);
