@@ -14,7 +14,7 @@ public class Tile {
         }
         if(material.equals("block")){
             tileType ="nothing";
-            walkable=false;
+            walkable=true;
         }
     }
 }
