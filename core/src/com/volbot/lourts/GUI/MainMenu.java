@@ -11,21 +11,20 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.volbot.lourts.Main;
 
+import java.io.File;
+
 public class MainMenu extends GameWindow {
 
     TextButton.TextButtonStyle buttonStyle;
+    private int menuType;
 
     public MainMenu() {
         windowbg = new Texture("GUI/windows/menublank.png");
-        buttons=new Button[4];
         buttonStyle = new TextButton.TextButtonStyle();
         buttonStyle.up = new TextureRegionDrawable(new TextureRegion(new Texture("GUI/windows/buttons/eighthofwindowbutton.png")));
         buttonStyle.checked = new TextureRegionDrawable(new TextureRegion(new Texture("GUI/windows/buttons/eighthofwindowbuttondown.png")));
         buttonStyle.font = new BitmapFont();
-        buttons[0]=new TextButton("New Game",buttonStyle);
-        buttons[1]=new TextButton("Load Game",buttonStyle);
-        buttons[2]=new TextButton("Settings",buttonStyle);
-        buttons[3]=new TextButton("Quit",buttonStyle);
+        switchMenu(0);
     }
 
     @Override
@@ -39,18 +38,45 @@ public class MainMenu extends GameWindow {
 
     @Override
     public void activateButton(int buttonDex) {
-        switch(buttonDex) {
-            case 0: //new game
-                Main.initDemo();
-                Main.GAMEMODE=0;
-                Main.gui.currmenu=null;
+        switch(menuType) {
+            case 0:
+                switch(buttonDex) {
+                    case 0: //new game
+                        Main.initDemo();
+                        Main.GAMEMODE=0;
+                        Main.gui.currmenu=null;
+                        break;
+                    case 1: //load game
+                        switchMenu(1);
+                        break;
+                    case 2: //settings
+                        break;
+                    case 3: //quit
+                        Gdx.app.exit();
+                        break;
+                }
                 break;
-            case 1: //load game
+            case 1:
+
                 break;
-            case 2: //settings
+        }
+    }
+
+    public void switchMenu(int menuDex) {
+        menuType=menuDex;
+        switch(menuDex) {
+            case 0:
+                buttons=new Button[4];
+                buttons[0]=new TextButton("New Game",buttonStyle);
+                buttons[1]=new TextButton("Load Game",buttonStyle);
+                buttons[2]=new TextButton("Settings",buttonStyle);
+                buttons[3]=new TextButton("Quit",buttonStyle);
                 break;
-            case 3: //quit
-                Gdx.app.exit();
+            case 1:
+                File[] saves = new File("saves/").listFiles();
+                File saveFolder = null;
+                buttons=new Button[saves.length+1];
+                buttons[buttons.length-1]=new TextButton("Deez",buttonStyle);
                 break;
         }
     }

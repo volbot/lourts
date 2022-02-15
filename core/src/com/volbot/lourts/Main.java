@@ -13,6 +13,7 @@ import com.volbot.lourts.Map.BattleMap;
 import com.volbot.lourts.Map.GameMap;
 import com.volbot.lourts.Render.Display;
 import com.volbot.lourts.Render.TexLoader;
+import com.volbot.lourts.Saves.SaveManager;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -21,15 +22,20 @@ public class Main extends ApplicationAdapter {
 
     private OrthographicCamera cam;
 
+    public static InputManager inputs;
     public static GUIManager gui;
     public static Display display;
+
+    public static Random random = new Random();
+
+    public static TexLoader texLoader;
+    public static SaveManager saveMan = new SaveManager();
+
     public static Battle battle;
+    public static GameMap map;
+
     public static ArrayList<Agent> entities = new ArrayList<>();
     public static GameMap worldmap;
-    public static GameMap map;
-    public static TexLoader texLoader;
-    public static InputManager inputs;
-    public static Random random = new Random();
 
     public static Individual player;
     public static int GAMETIME;
@@ -157,6 +163,7 @@ public class Main extends ApplicationAdapter {
 
     @Override
     public void dispose() {
+        saveMan.saveGame();
         texLoader.dispose();
         display.dispose();
     }

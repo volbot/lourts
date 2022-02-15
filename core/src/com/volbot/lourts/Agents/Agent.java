@@ -11,17 +11,12 @@ import java.util.ArrayList;
 public class Agent {
 
     public int texID = 0;
-
     public String theme = "base";
-
-    public Faction faction;
-
-    public Vector3 position = new Vector3();
-
-    protected final Population population;
-
-    public final Reputation rep;
     private final String name;
+    public Faction faction;
+    public Vector3 position = new Vector3();
+    protected final Population population;
+    public final Reputation rep;
 
     protected Agent(String name) {
         rep = new Reputation();
