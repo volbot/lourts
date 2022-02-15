@@ -1,10 +1,6 @@
 package com.volbot.lourts.Map;
 
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector3;
-import com.volbot.lourts.Main;
 
 import java.util.ArrayList;
 

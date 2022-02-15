@@ -46,7 +46,7 @@ public class Main extends ApplicationAdapter {
     public void create() {
         cam = new OrthographicCamera();
         cam.setToOrtho(false, 1024, 576);
-        cam.position.set(-100,-100,0);
+        cam.position.set(-100, -100, 0);
         display = new Display(cam);
         GAMETIME = 0;
         GAMEMODE = -1;
@@ -81,8 +81,8 @@ public class Main extends ApplicationAdapter {
 
     @Override
     public void render() {
-        if(GAMEMODE==-1){
-            if(!(gui.currmenu instanceof MainMenu)){
+        if (GAMEMODE == -1) {
+            if (!(gui.currmenu instanceof MainMenu)) {
                 gui.currmenu = new MainMenu();
             }
             display.loop();
@@ -98,11 +98,14 @@ public class Main extends ApplicationAdapter {
         if (GAMEMODE == 1 && map == worldmap) {
             map = new BattleMap();
         }
+        if (GAMETIME % 500 == 0) {
+            saveMan.saveGame();
+        }
         massThink();
         ScreenUtils.clear(1, 0, 0, 1);
         gui.loop();
         inputs.parseCameraMovement();
-        if(!texLoader.texUnits.keySet().isEmpty()) {
+        if (!texLoader.texUnits.keySet().isEmpty()) {
             display.loop();
         } else {
             System.out.println("Textures could not be loaded!");
@@ -117,8 +120,8 @@ public class Main extends ApplicationAdapter {
                 entity = entities.get(j);
                 if (entity instanceof Individual) {
                     entity.think();
-                    if(entity.equals(player) && inputs.camLockedToPlayer){
-                        cam.position.set(player.position.cpy().scl(-1/cam.zoom));
+                    if (entity.equals(player) && inputs.camLockedToPlayer) {
+                        cam.position.set(player.position.cpy().scl(-1 / cam.zoom));
                     }
                 } else if (entity instanceof Location) {
                     ArrayList<Individual> heroes = ((Location) entity).heroes;
@@ -142,7 +145,7 @@ public class Main extends ApplicationAdapter {
                 }
             }
         } else if (GAMEMODE == 1) {
-            if(gui.currmenu==null) {
+            if (gui.currmenu == null) {
                 int len1 = battle.combatants.size();
                 int aCount = 0;
                 int dCount = 0;
@@ -171,11 +174,11 @@ public class Main extends ApplicationAdapter {
     }
 
     public static void battleOver(Individual victor) {
-        if(victor==Main.player) Main.gui.drawNotificationWindow("battlewon");
-        else if(Main.player.equals(
-                Main.battle.aggressor.equals(victor)?
-                        Main.battle.defender:
-                        Main.battle.aggressor)){
+        if (victor == Main.player) Main.gui.drawNotificationWindow("battlewon");
+        else if (Main.player.equals(
+                Main.battle.aggressor.equals(victor) ?
+                        Main.battle.defender :
+                        Main.battle.aggressor)) {
             Main.gui.drawNotificationWindow("battlelost");
         } else {
             endBattle(victor);
@@ -184,7 +187,7 @@ public class Main extends ApplicationAdapter {
 
     public static void endBattle(Agent victorIn) {
         Agent victor = victorIn;
-        if(victor==null){
+        if (victor == null) {
             victor = battle.aggressor;
         }
         ArrayList<Demographic> victorLost = new ArrayList<>();
@@ -225,7 +228,7 @@ public class Main extends ApplicationAdapter {
         Agent loser = victor.equals(battle.aggressor) ? battle.defender : battle.aggressor;
         loser.getParty().sub(loserLost);
         GAMEMODE = 0;
-        if (victor.equals(Main.player) || victorIn==null) {
+        if (victor.equals(Main.player) || victorIn == null) {
             Main.gui.drawTalkMenu(loser, true);
         } else if (loser.equals(Main.player)) {
             Main.gui.drawTalkMenu(victor, false);
