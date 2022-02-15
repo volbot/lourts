@@ -46,7 +46,6 @@ public class TexLoader {
                 tiles.put(file.getName().substring(0, file.getName().indexOf(".")), new Texture("tiles/" + file.getName()));
             }
         }
-
         File[] units = new File("texUnits/").listFiles();
         Sort sort = new Sort();
         if (units != null && units.length > 0)
