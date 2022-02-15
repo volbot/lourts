@@ -13,8 +13,8 @@ public class Tile {
             walkable=false;
         }
         if(material.equals("block")){
-            tileType ="grasst";
-            walkable=true;
+            tileType ="mountain";
+            walkable=false;
         }
     }
 }
