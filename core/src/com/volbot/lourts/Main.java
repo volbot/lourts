@@ -60,23 +60,23 @@ public class Main extends ApplicationAdapter {
     public static void initDemo() {
         worldmap = new GameMap();
         map = worldmap;
-        Individual crabwizard = new Individual("Crabwizard");
-        player = crabwizard;
-        entities.add(crabwizard);
-        crabwizard.position.x = 380;
-        crabwizard.position.y = 380;
-        crabwizard.texID = 1;
+        Individual leftusgroblin = new Individual("Leftus Groblin");
+        player = leftusgroblin;
+        entities.add(leftusgroblin);
+        leftusgroblin.position.x = 380;
+        leftusgroblin.position.y = 380;
+        leftusgroblin.texID = 2;
         Location boneland = new Location("Boneland", "Skeletrex", 200, 200, 100);
         Faction bonebrigade = new Faction("Bone Brigade", boneland.getFigurehead(), 0);
         entities.add(boneland);
         boneland.setFaction(bonebrigade);
         boneland.texID = 0;
-        boneland.getFigurehead().texID = 3;
+        boneland.getFigurehead().texID = 4;
         Location bonetown = new Location("Bonetown", "Selgar", 750, 440, 233);
         bonetown.setFaction(bonebrigade);
         entities.add(bonetown);
         bonetown.texID = 0;
-        bonetown.getFigurehead().texID = 2;
+        bonetown.getFigurehead().texID = 3;
     }
 
     @Override
