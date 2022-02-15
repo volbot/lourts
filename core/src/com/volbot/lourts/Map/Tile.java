@@ -5,7 +5,7 @@ public class Tile {
     public boolean walkable;
     Tile(String material){
         if(material.equals("grass")){
-            tileType ="grass";
+            tileType ="grasst";
             walkable=true;
         }
         if(material.equals("water")){
@@ -13,7 +13,7 @@ public class Tile {
             walkable=false;
         }
         if(material.equals("block")){
-            tileType ="nothing";
+            tileType ="grasst";
             walkable=true;
         }
     }
