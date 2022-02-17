@@ -55,11 +55,10 @@ public class Main extends ApplicationAdapter {
         gui = new GUIManager();
         inputs = new InputManager(cam);
         Gdx.input.setInputProcessor(inputs);
+        worldmap = new GameMap();
     }
 
     public static void initDemo() {
-        worldmap = new GameMap();
-        map = worldmap;
         Individual leftusgroblin = new Individual("Leftus Groblin");
         player = leftusgroblin;
         entities.add(leftusgroblin);
