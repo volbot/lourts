@@ -89,7 +89,7 @@ public class QuadNode {
         ydraw += cam.position.y;
         if (depth == 0) {
             if (tile != null) {
-                if(tile.tileType.equals("grass") && cam.zoom > 0.2) batch.setColor(1f, 1f, 1f, ((height / 6f) + 66) / 100f);
+                if(tile.walkable && cam.zoom > 0.2) batch.setColor(1f, 1f, 1f, ((height / 6f) + 66) / 100f);
                 Texture tex = Main.texLoader.tiles.get(tile.tileType);
                 if(tex!=null) batch.draw(tex, xdraw, ydraw, 20 * cam.zoom, 20 * cam.zoom);
                 batch.setColor(Color.WHITE);

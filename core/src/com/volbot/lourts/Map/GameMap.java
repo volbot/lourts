@@ -61,7 +61,7 @@ public class GameMap {
             }
             QuadNode top = chunks.get(x, y + 1);
             if (top != null && top.height <= chunk.height+wiggle && !top.tile.tileType.equals("water")) {
-                dropWater(xIn, 20 * yIn+20, wiggle);
+                dropWater(xIn, yIn+20, wiggle);
             }
             QuadNode bot = chunks.get(x, y - 1);
             if (bot != null && bot.height <= chunk.height+wiggle && !bot.tile.tileType.equals("water")) {
