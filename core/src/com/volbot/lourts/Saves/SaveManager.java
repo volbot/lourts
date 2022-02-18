@@ -21,7 +21,7 @@ public class SaveManager {
         Main.map=Main.worldmap;
         if(saveFolder.exists()&&saveFolder.isDirectory()){
             File saveMaster = new File(saveFolder.getPath()+"/main");
-            if(saveMaster.exists()&&!saveMaster.isDirectory()){
+            if(saveMaster.exists()){
                 try {
                     Scanner saveScanner = new Scanner(saveMaster);
                     String[] values = saveScanner.nextLine().split("\\s\\s+");
@@ -31,6 +31,7 @@ public class SaveManager {
                     Main.player.theme = values[3];
                     Main.player.texID = Integer.parseInt(values[4]);
                     Main.entities.add(Main.player);
+                    Main.cam.position.set(Float.parseFloat(values[5]),Float.parseFloat(values[6]),0);
                     while(saveScanner.hasNextLine()){
                         values = saveScanner.nextLine().split("\\s\\s+");
                         Location loc = new Location(values[0], values[6], (int)Double.parseDouble(values[1]), (int)Double.parseDouble(values[2]), Integer.parseInt(values[5]));
@@ -45,6 +46,7 @@ public class SaveManager {
                         if (folder.exists()) {
                             File repFile = new File(folder.getPath()+"/rep");
                             if (repFile.exists()){
+                                Reputation rep = a.rep;
                                 saveScanner = new Scanner(repFile);
                                 while(saveScanner.hasNextLine()){
                                     values = saveScanner.nextLine().split("\\s\\s+");
@@ -53,6 +55,7 @@ public class SaveManager {
                             }
                             File popFile = new File(folder.getPath()+"/pop");
                             if (popFile.exists()){
+                                Population pop = a.getParty();
                                 saveScanner = new Scanner(repFile);
                                 while(saveScanner.hasNextLine()){
                                     values = saveScanner.nextLine().split("\\s\\s+");
@@ -102,6 +105,9 @@ public class SaveManager {
                 if(a instanceof Location || i == 1){
                     print.print(a.getName()+"\t\t"+a.position.x+"\t\t"+a.position.y+"\t\t");
                     print.print(a.theme+"\t\t"+a.texID+"\t\t");
+                    if(a.equals(Main.player)){
+                        print.print(Main.cam.position.x+"\t\t"+Main.cam.position.y+"\t\t");
+                    }
                     if(a instanceof Location) {
                         print.print(a.getPopulationSize()+"\t\t"+
                                 ((Location) a).getFigurehead().getName()+"\t\t"+
