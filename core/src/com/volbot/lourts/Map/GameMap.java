@@ -9,7 +9,7 @@ public class GameMap {
     public QuadNode chunks;
 
     public GameMap() {
-        chunks = new QuadNode(9, 0, 0, new Tile("grass"));
+        chunks = new QuadNode(9, 0, 0, new Tile("sand"));
 
         chunks.insert(6, 6, new Tile("block"));
         chunks.insert(2, 6, new Tile("block"));
