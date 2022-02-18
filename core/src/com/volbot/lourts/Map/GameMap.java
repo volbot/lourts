@@ -9,7 +9,7 @@ public class GameMap {
     public QuadNode chunks;
 
     public GameMap() {
-        chunks = new QuadNode(9, 0, 0, new Tile("sand"));
+        chunks = new QuadNode(9, 0, 0, new Tile("grass"));
 
         chunks.insert(6, 6, new Tile("block"));
         chunks.insert(2, 6, new Tile("block"));
@@ -41,31 +41,47 @@ public class GameMap {
     }
 
     public void dropWater(int x, int y) {
-        if (chunks.get(x/20, y/20) != null)
+        if (chunks.get(x / 20, y / 20) != null)
             dropWater(x, y, 0);
     }
 
     public void dropWater(int xIn, int yIn, int wiggle) {
-        int x = xIn/20;
-        int y = yIn/20;
+        int x = xIn / 20;
+        int y = yIn / 20;
         QuadNode chunk = chunks.get(x, y);
         if (chunk != null) {
             chunk.tile = new Tile("water");
             QuadNode left = chunks.get(x - 1, y);
-            if (left != null && left.height <= chunk.height+wiggle && !left.tile.tileType.equals("water")) {
-                dropWater(xIn-20, yIn, wiggle);
+            if (left != null && !(left.tile.tileType.equals("water") || (left.tile.tileType.equals("sand")))) {
+                if (left.height <= chunk.height + wiggle) {
+                    dropWater(xIn - 20, yIn, wiggle);
+                } else {
+                    left.tile = new Tile("sand");
+                }
             }
             QuadNode right = chunks.get(x + 1, y);
-            if (right != null && right.height <= chunk.height+wiggle && !right.tile.tileType.equals("water")) {
-                dropWater(xIn+20, yIn, wiggle);
+            if (right != null && !(right.tile.tileType.equals("water") || (right.tile.tileType.equals("sand")))) {
+                if (right.height <= chunk.height + wiggle) {
+                    dropWater(xIn + 20, yIn, wiggle);
+                } else {
+                    right.tile = new Tile("sand");
+                }
             }
             QuadNode top = chunks.get(x, y + 1);
-            if (top != null && top.height <= chunk.height+wiggle && !top.tile.tileType.equals("water")) {
-                dropWater(xIn, 20 * yIn+20, wiggle);
+            if (top != null && !(top.tile.tileType.equals("water") || (top.tile.tileType.equals("sand")))) {
+                if (top.height <= chunk.height + wiggle) {
+                    dropWater(xIn, yIn + 20, wiggle);
+                } else {
+                    top.tile = new Tile("sand");
+                }
             }
             QuadNode bot = chunks.get(x, y - 1);
-            if (bot != null && bot.height <= chunk.height+wiggle && !bot.tile.tileType.equals("water")) {
-                dropWater(xIn, yIn-20, wiggle);
+            if (bot != null && !(bot.tile.tileType.equals("water") || (bot.tile.tileType.equals("sand")))) {
+                if (bot.height <= chunk.height + wiggle) {
+                    dropWater(xIn, yIn - 20, wiggle);
+                } else {
+                    bot.tile = new Tile("sand");
+                }
             }
         }
     }
@@ -73,10 +89,10 @@ public class GameMap {
     public ArrayList<Vector3> neighbors(Vector3 init) {
         ArrayList<Vector3> ret = new ArrayList<>();
         ret.add(init);
-        ret.add(init.cpy().add(20,0,0));
-        ret.add(init.cpy().add(-20,0,0));
-        ret.add(init.cpy().add(0,20,0));
-        ret.add(init.cpy().add(0,-20,0));
+        ret.add(init.cpy().add(20, 0, 0));
+        ret.add(init.cpy().add(-20, 0, 0));
+        ret.add(init.cpy().add(0, 20, 0));
+        ret.add(init.cpy().add(0, -20, 0));
         return ret;
     }
 
