@@ -78,7 +78,7 @@ public class Individual extends Agent {
     }
 
     public void setDestination(Vector3 goalPos) {
-        //if(!Main.map.chunks.getTile(goalPos.x,goalPos.y).walkable) return;
+        //if(!Main.map.chunks.getTile((int)goalPos.x,(int)goalPos.y).walkable) return;
         this.dest = null;
         this.goalPos = goalPos;
     }
@@ -102,6 +102,7 @@ public class Individual extends Agent {
         float workingSpeed = Gdx.graphics.getDeltaTime() * moveSpeed;
 
         Vector3 newPos = position.cpy();
+
         if (dst > 10) {
             movement = goal.cpy().sub(position).setLength(workingSpeed);
             newPos.add(movement);

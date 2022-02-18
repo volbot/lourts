@@ -57,6 +57,10 @@ public class MainMenu extends GameWindow {
                 }
                 break;
             case 1:
+                if (buttonDex == buttons.length - 1) {
+                    switchMenu(0);
+                    return;
+                }
                 File[] saveFolders = new File("saves/").listFiles();
                 if (saveFolders != null) Main.saveMan.loadSave(saveFolders[buttonDex]);
                 Main.GAMEMODE = 0;
@@ -79,8 +83,8 @@ public class MainMenu extends GameWindow {
                 File[] saveFolders = new File("saves/").listFiles();
                 if (saveFolders != null) {
                     buttons = new Button[saveFolders.length + 1];
-                    for(int i = 0; i < saveFolders.length; i++) {
-                        buttons[i] = new TextButton(saveFolders[i].getName(),buttonStyle);
+                    for (int i = 0; i < saveFolders.length; i++) {
+                        buttons[i] = new TextButton(saveFolders[i].getName(), buttonStyle);
                     }
                     buttons[buttons.length - 1] = new TextButton("Back", buttonStyle);
                 }
