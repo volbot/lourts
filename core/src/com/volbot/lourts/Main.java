@@ -58,6 +58,24 @@ public class Main extends ApplicationAdapter {
         worldmap = new GameMap();
     }
 
+    public static Location findLoc(String name) {
+        for(Location l : locations){
+            if(l.getName().equals(name)){
+                return l;
+            }
+        }
+        return null;
+    }
+
+    public static Individual findHero(String name) {
+        for(Individual i : entities){
+            if(i.getName().equals(name)){
+                return i;
+            }
+        }
+        return null;
+    }
+
     public static void initDemo() {
         Individual leftusgroblin = new Individual("Leftus Groblin");
         player = leftusgroblin;

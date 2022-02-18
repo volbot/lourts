@@ -25,7 +25,6 @@ public class SaveManager {
                 try {
                     Scanner saveScanner = new Scanner(saveMaster);
                     String[] values = saveScanner.nextLine().split("\\s\\s+");
-                    System.out.println(Arrays.toString(values));
                     Main.player = new Individual(values[0]);
                     Main.player.position.set(Float.parseFloat(values[1]), Float.parseFloat(values[2]), 0);
                     Main.player.theme = values[3];
@@ -42,26 +41,11 @@ public class SaveManager {
                     }
                     saveScanner.close();
                     for (Agent a : Main.entities) {
-                        File folder = new File(saveFolder.getPath() + "/" + a.getName());
-                        if (folder.exists()) {
-                            File repFile = new File(folder.getPath() + "/rep");
-                            if (repFile.exists()) {
-                                Reputation rep = a.rep;
-                                saveScanner = new Scanner(repFile);
-                                while (saveScanner.hasNextLine()) {
-                                    values = saveScanner.nextLine().split("\\s\\s+");
-                                }
-                                saveScanner.close();
-                            }
-                            File popFile = new File(folder.getPath() + "/pop");
-                            if (popFile.exists()) {
-                                Population pop = a.getParty();
-                                saveScanner = new Scanner(repFile);
-                                while (saveScanner.hasNextLine()) {
-                                    values = saveScanner.nextLine().split("\\s\\s+");
-                                }
-                                saveScanner.close();
-                            }
+                        readHero(a,saveFolder);
+                    }
+                    for (Location l : Main.locations) {
+                        for (Agent a : l.heroes) {
+                            readHero(a, saveFolder);
                         }
                     }
                 } catch (FileNotFoundException e) {
@@ -120,11 +104,11 @@ public class SaveManager {
             }
             print.close();
             for (Agent a : Main.entities) {
-                writeHero(a,saveFolder);
+                writeHero(a, saveFolder);
             }
-            for(Location l : Main.locations) {
-                for(Agent a : l.heroes){
-                    writeHero(a,saveFolder);
+            for (Location l : Main.locations) {
+                for (Agent a : l.heroes) {
+                    writeHero(a, saveFolder);
                 }
             }
             print.close();
@@ -163,6 +147,49 @@ public class SaveManager {
             }
             print.close();
         } catch (IOException e) {
+            System.out.println(e.getMessage());
+            return;
+        }
+    }
+
+    private void readHero(Agent a, File saveFolder) {
+        try {
+            File folder = new File(saveFolder.getPath() + "/" + a.getName());
+            Scanner saveScanner;
+            String[] values;
+            if (folder.exists()) {
+                File repFile = new File(folder.getPath() + "/rep");
+                if (repFile.exists()) {
+                    Reputation rep = a.rep;
+                    saveScanner = new Scanner(repFile);
+                    while (saveScanner.hasNextLine()) {
+                        values = saveScanner.nextLine().split("\\s\\s+");
+                        Agent meetguy = Main.findHero(values[0]);
+                        System.out.println(Arrays.toString(values));
+                        if (meetguy != null) {
+                            rep.meet(meetguy);
+                            rep.impress(meetguy, Integer.parseInt(values[1]));
+                        } else {
+                            meetguy = Main.findLoc(values[0]);
+                            if (meetguy != null) {
+                                rep.meet(meetguy);
+                                rep.impress(meetguy, Integer.parseInt(values[1]));
+                            }
+                        }
+                    }
+                    saveScanner.close();
+                }
+                File popFile = new File(folder.getPath() + "/pop");
+                if (popFile.exists()) {
+                    Population pop = a.getParty();
+                    saveScanner = new Scanner(repFile);
+                    while (saveScanner.hasNextLine()) {
+                        values = saveScanner.nextLine().split("\\s\\s+");
+                    }
+                    saveScanner.close();
+                }
+            }
+        } catch(IOException e){
             System.out.println(e.getMessage());
             return;
         }
