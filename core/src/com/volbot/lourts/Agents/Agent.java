@@ -68,9 +68,11 @@ public class Agent {
     public TalkResponse startConversation(Individual a) {
         if(this.rep.knows(a)) {
             ArrayList<Individual> known = rep.known();
-            for(Individual h : faction.heroes){
-                if(!known.contains(h)){
-                    known.add(h);
+            if(faction!=null) {
+                for (Individual h : faction.heroes) {
+                    if (!known.contains(h)) {
+                        known.add(h);
+                    }
                 }
             }
             TalkOption[] searchList = new TalkOption[known.size()+1];
