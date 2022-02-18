@@ -20,8 +20,7 @@ import java.util.Random;
 
 public class Main extends ApplicationAdapter {
 
-    private OrthographicCamera cam;
-
+    public static OrthographicCamera cam;
     public static InputManager inputs;
     public static GUIManager gui;
     public static Display display;
