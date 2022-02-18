@@ -1,9 +1,7 @@
 package com.volbot.lourts.Saves;
 
-import com.volbot.lourts.Agents.Agent;
-import com.volbot.lourts.Agents.Faction;
-import com.volbot.lourts.Agents.Individual;
-import com.volbot.lourts.Agents.Location;
+import com.volbot.lourts.Agents.*;
+import com.volbot.lourts.Data.Reputation;
 import com.volbot.lourts.Main;
 
 import java.io.File;
@@ -40,6 +38,28 @@ public class SaveManager {
                         loc.getFigurehead().theme=values[9];
                         loc.getFigurehead().texID=Integer.parseInt(values[10]);
                         Main.entities.add(loc);
+                    }
+                    saveScanner.close();
+                    for(Agent a : Main.entities) {
+                        File folder = new File(saveFolder.getPath()+"/"+a.getName());
+                        if (folder.exists()) {
+                            File repFile = new File(folder.getPath()+"/rep");
+                            if (repFile.exists()){
+                                saveScanner = new Scanner(repFile);
+                                while(saveScanner.hasNextLine()){
+                                    values = saveScanner.nextLine().split("\\s\\s+");
+                                }
+                                saveScanner.close();
+                            }
+                            File popFile = new File(folder.getPath()+"/pop");
+                            if (popFile.exists()){
+                                saveScanner = new Scanner(repFile);
+                                while(saveScanner.hasNextLine()){
+                                    values = saveScanner.nextLine().split("\\s\\s+");
+                                }
+                                saveScanner.close();
+                            }
+                        }
                     }
                 } catch (FileNotFoundException e) {
                     System.out.println(e.getMessage());
@@ -92,6 +112,35 @@ public class SaveManager {
                     }
                     print.print("\n");
                 }
+            }
+            print.close();
+            for(Agent a : Main.entities) {
+                File folder = new File(saveFolder.getPath()+"/"+a.getName());
+                if (folder.mkdir()) {
+                    System.out.println("FILE CREATED");
+                }
+                File repFile = new File(folder.getPath()+"/rep");
+                if (repFile.createNewFile()){
+                    System.out.println("FILE CREATED");
+                }
+                print = new PrintStream(repFile);
+                Reputation rep = a.rep;
+                for(Individual inn : rep.known()){
+                    print.println(inn.getName()+"\t\t"+rep.get(inn));
+                }
+                print.close();
+                File popFile = new File(folder.getPath()+"/pop");
+                if (popFile.createNewFile()){
+                    System.out.println("FILE CREATED");
+                }
+                print = new PrintStream(popFile);
+                Population pop = a.getParty();
+                for(Demographic d : pop.pop){
+                    print.println(d.getName()+"\t\t"+d.getLevel()+"\t\t"+
+                            d.getOrigin().getName()+"\t\t"+d.getPopulation()+"\t\t"+
+                            d.theme+"\t\t"+d.texID+"\n");
+                }
+                print.close();
             }
             print.close();
         } catch (IOException e) {
