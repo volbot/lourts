@@ -15,7 +15,7 @@ public class Agent {
     private final String name;
     public Faction faction;
     public Vector3 position = new Vector3();
-    protected final Population population;
+    protected Population population;
     public final Reputation rep;
 
     protected Agent(String name) {
@@ -46,6 +46,9 @@ public class Agent {
 
     public Population getParty() {
         return population;
+    }
+    public void setParty(Population pop) {
+        this.population=pop;
     }
 
     public TalkResponse startCombat(Individual a) {

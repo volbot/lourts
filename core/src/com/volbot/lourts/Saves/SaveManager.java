@@ -141,9 +141,7 @@ public class SaveManager {
             print = new PrintStream(popFile);
             Population pop = a.getParty();
             for (Demographic d : pop.pop) {
-                print.println(d.getName() + "\t\t" + d.getLevel() + "\t\t" +
-                        d.getOrigin().getName() + "\t\t" + d.getPopulation() + "\t\t" +
-                        d.theme + "\t\t" + d.texID + "\n");
+                print.println(d.getOrigin().getName() + "\t\t" + d.getPopulation() + "\t\t" + d.getLevel());
             }
             print.close();
         } catch (IOException e) {
@@ -165,7 +163,6 @@ public class SaveManager {
                     while (saveScanner.hasNextLine()) {
                         values = saveScanner.nextLine().split("\\s\\s+");
                         Agent meetguy = Main.findHero(values[0]);
-                        System.out.println(Arrays.toString(values));
                         if (meetguy != null) {
                             rep.meet(meetguy);
                             rep.impress(meetguy, Integer.parseInt(values[1]));
@@ -181,11 +178,17 @@ public class SaveManager {
                 }
                 File popFile = new File(folder.getPath() + "/pop");
                 if (popFile.exists()) {
-                    Population pop = a.getParty();
-                    saveScanner = new Scanner(repFile);
+                    Population pop;
+                    saveScanner = new Scanner(popFile);
+                    pop = new Population();
                     while (saveScanner.hasNextLine()) {
                         values = saveScanner.nextLine().split("\\s\\s+");
+                        Location loc = Main.findLoc(values[0]);
+                        if(loc!=null){
+                            pop.add(new Demographic(loc,Integer.parseInt(values[1]),Integer.parseInt(values[2])));
+                        }
                     }
+                    a.setParty(pop);
                     saveScanner.close();
                 }
             }
