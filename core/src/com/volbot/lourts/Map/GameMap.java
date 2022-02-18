@@ -19,7 +19,7 @@ public class GameMap {
         chunks.insert(5, 2, new Tile("block"));
         chunks.insert(4, 2, new Tile("block"));
         chunks.insert(3, 2, new Tile("block"));
-        chunks.insert(2, 2, new Tile("block"));
+        chunks.insert(2, 2, new Tile("sand"));
 
         int len = 20 * (int) Math.pow(2, chunks.depth);
         Perlin p = new Perlin();

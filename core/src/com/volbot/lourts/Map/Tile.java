@@ -16,5 +16,10 @@ public class Tile {
             tileType ="mountain";
             walkable=false;
         }
+        if(material.equals("sand")) {
+            tileType = "sand";
+            walkable = true;
+        }
+        }
     }
-}
+

@@ -16,7 +16,6 @@ public class HUD extends GameWindow {
         buttonStyle.checked = new TextureRegionDrawable(new TextureRegion(new Texture("GUI/hud/buttons/partybuttondown.png")));
         buttons[0]=new Button(buttonStyle);
     }
-
     @Override
     public void drawMenu(SpriteBatch batch, OrthographicCamera cam) {
         super.drawMenu(batch, cam);
