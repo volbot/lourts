@@ -33,7 +33,8 @@ public class Main extends ApplicationAdapter {
     public static Battle battle;
     public static GameMap map;
 
-    public static ArrayList<Agent> entities = new ArrayList<>();
+    public static ArrayList<Individual> entities = new ArrayList<>();
+    public static ArrayList<Location> locations = new ArrayList<>();
     public static GameMap worldmap;
 
     public static Individual player;
@@ -66,13 +67,13 @@ public class Main extends ApplicationAdapter {
         leftusgroblin.texID = 2;
         Location boneland = new Location("Boneland", "Skeletrex", 200, 200, 100);
         Faction bonebrigade = new Faction("Bone Brigade", boneland.getFigurehead(), 0);
-        entities.add(boneland);
+        locations.add(boneland);
         boneland.setFaction(bonebrigade);
         boneland.texID = 0;
         boneland.getFigurehead().texID = 4;
         Location bonetown = new Location("Bonetown", "Selgar", 750, 440, 233);
         bonetown.setFaction(bonebrigade);
-        entities.add(bonetown);
+        locations.add(bonetown);
         bonetown.texID = 0;
         bonetown.getFigurehead().texID = 3;
     }
@@ -116,30 +117,25 @@ public class Main extends ApplicationAdapter {
             Agent entity;
             for (int j = 0; j < len1; j++) {
                 entity = entities.get(j);
-                if (entity instanceof Individual) {
-                    entity.think();
-                    if (entity.equals(player) && inputs.camLockedToPlayer) {
-                        cam.position.set(player.position.cpy().scl(-1 / cam.zoom));
-                    }
-                } else if (entity instanceof Location) {
-                    ArrayList<Individual> heroes = ((Location) entity).heroes;
-                    if (!heroes.isEmpty()) {
-                        int len2 = heroes.size();
-                        for (int i = 0; i < len2; i++) {
-                            heroes.get(i).think();
-                            if (heroes.size() < len2) {
-                                len2--;
-                                i--;
-                            }
+                entity.think();
+                if (entity.equals(player) && inputs.camLockedToPlayer) {
+                    cam.position.set(player.position.cpy().scl(-1 / cam.zoom));
+                }
+            }
+            len1 = locations.size();
+            Location loc;
+            for (int j = 0; j < len1; j++) {
+                loc = locations.get(j);
+                ArrayList<Individual> heroes = loc.heroes;
+                if (!heroes.isEmpty()) {
+                    int len2 = heroes.size();
+                    for (int i = 0; i < len2; i++) {
+                        heroes.get(i).think();
+                        if (heroes.size() < len2) {
+                            len2--;
+                            i--;
                         }
                     }
-                }
-                if (entities.size() < len1) {
-                    len1--;
-                    j--;
-                }
-                if (entities.size() > len1) {
-                    len1++;
                 }
             }
         } else if (GAMEMODE == 1) {

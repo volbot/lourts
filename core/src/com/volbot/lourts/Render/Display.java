@@ -39,15 +39,15 @@ public class Display {
         batch.begin();
         float size = (20) * (cam.zoom);
         ScreenUtils.clear(0, 0, 0, 1);
-        if(Main.GAMEMODE == -1) {
-            Main.gui.currmenu.drawMenu(batch,cam);
+        if (Main.GAMEMODE == -1) {
+            Main.gui.currmenu.drawMenu(batch, cam);
             batch.end();
             return;
         }
         Main.map.chunks.drawNode(batch, cam);
         if (Main.GAMEMODE == 0) {
+            Texture tex;
             for (Agent a : Main.entities) {
-                Texture tex;
                 if (a instanceof Individual) {
                     if (a != Main.player) {
                         tex = Main.texLoader.texUnits.get(a.theme).heroes.get(a.texID);
@@ -55,15 +55,18 @@ public class Display {
                             batch.draw(tex, cam.position.x + a.position.x * cam.zoom - size / 2, cam.position.y + a.position.y * cam.zoom - size / 2, size, size);
                     }
                 }
-                if (a instanceof Location) {
-                    tex = Main.texLoader.texUnits.get(a.theme).towns.get(a.texID);
+            }
+            for (Location loc : Main.locations) {
+                if (loc instanceof Location) {
+                    tex = Main.texLoader.texUnits.get(loc.theme).towns.get(loc.texID);
                     if (tex != null)
-                        batch.draw(tex, a.position.x * cam.zoom - size + cam.position.x, a.position.y * cam.zoom - size + cam.position.y, size * 2, size * 2);
+                        batch.draw(tex, loc.position.x * cam.zoom - size + cam.position.x, loc.position.y * cam.zoom - size + cam.position.y, size * 2, size * 2);
                 }
             }
             if (Main.player.location == null) {
-                Texture tex = Main.texLoader.texUnits.get(Main.player.theme).heroes.get(Main.player.texID);
-                if (tex != null) batch.draw(tex, Main.player.position.x * cam.zoom - size / 2 + cam.position.x, Main.player.position.y * cam.zoom - size / 2 + cam.position.y, size, size);
+                tex = Main.texLoader.texUnits.get(Main.player.theme).heroes.get(Main.player.texID);
+                if (tex != null)
+                    batch.draw(tex, Main.player.position.x * cam.zoom - size / 2 + cam.position.x, Main.player.position.y * cam.zoom - size / 2 + cam.position.y, size, size);
             }
         } else {
             Battle battle = Main.battle;
@@ -86,7 +89,7 @@ public class Display {
                 menu.drawMenu(batch, cam);
             }
             if (tempMenu instanceof InteractMenu) {
-                Main.gui.hud.drawMenu(batch,cam);
+                Main.gui.hud.drawMenu(batch, cam);
                 InteractMenu menu = (InteractMenu) tempMenu;
                 drawName(menu.getAgent());
                 menu.drawMenu(batch, cam);
@@ -103,7 +106,7 @@ public class Display {
                 }
             }
         } else {
-            if(Main.GAMEMODE==0) {
+            if (Main.GAMEMODE == 0) {
                 Main.gui.hud.drawMenu(batch, cam);
             }
             if (hovered != null) {
