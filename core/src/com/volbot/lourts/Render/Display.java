@@ -1,7 +1,5 @@
 package com.volbot.lourts.Render;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -15,10 +13,8 @@ import com.volbot.lourts.Agents.Individual;
 import com.volbot.lourts.Agents.Location;
 import com.volbot.lourts.Data.Battle;
 import com.volbot.lourts.GUI.*;
+import com.volbot.lourts.GUI.abstracts.GameMenu;
 import com.volbot.lourts.Main;
-import com.volbot.lourts.Map.GameMap;
-
-import java.util.ArrayList;
 
 public class Display {
 

@@ -10,8 +10,8 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.volbot.lourts.Agents.Agent;
 import com.volbot.lourts.Agents.Location;
 import com.volbot.lourts.Data.Battle;
-import com.volbot.lourts.Data.TalkOption;
 import com.volbot.lourts.Data.TalkResponse;
+import com.volbot.lourts.GUI.abstracts.InteractWindow;
 import com.volbot.lourts.Main;
 
 

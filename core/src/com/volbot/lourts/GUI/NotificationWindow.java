@@ -11,7 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
-import com.volbot.lourts.Agents.Individual;
+import com.volbot.lourts.GUI.abstracts.GameWindow;
 import com.volbot.lourts.Main;
 
 public class NotificationWindow extends GameWindow {

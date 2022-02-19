@@ -8,6 +8,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.volbot.lourts.Agents.Agent;
 import com.volbot.lourts.Agents.Location;
+import com.volbot.lourts.GUI.abstracts.GameMenu;
 
 public class InteractMenu extends GameMenu {
     Agent entity;

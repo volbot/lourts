@@ -1,4 +1,4 @@
-package com.volbot.lourts.GUI;
+package com.volbot.lourts.GUI.abstracts;
 
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;

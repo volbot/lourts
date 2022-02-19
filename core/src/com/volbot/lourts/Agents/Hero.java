@@ -3,8 +3,7 @@ package com.volbot.lourts.Agents;
 import com.badlogic.gdx.math.Vector3;
 import com.volbot.lourts.Data.Background;
 import com.volbot.lourts.Data.Personality;
-import com.volbot.lourts.GUI.GameWindow;
-import com.volbot.lourts.GUI.InteractMenu;
+import com.volbot.lourts.GUI.abstracts.GameWindow;
 import com.volbot.lourts.Main;
 
 import java.util.Random;

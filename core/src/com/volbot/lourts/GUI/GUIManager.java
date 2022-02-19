@@ -1,14 +1,9 @@
 package com.volbot.lourts.GUI;
 
-import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.volbot.lourts.Agents.Agent;
-import com.volbot.lourts.Agents.Location;
-import com.volbot.lourts.Agents.Demographic;
-import com.volbot.lourts.Data.Battle;
-import com.volbot.lourts.Data.TalkResponse;
+import com.volbot.lourts.GUI.abstracts.GameMenu;
+import com.volbot.lourts.GUI.abstracts.GameWindow;
 import com.volbot.lourts.Main;
-
-import java.awt.*;
 
 public class GUIManager {
 

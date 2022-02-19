@@ -10,6 +10,8 @@ import com.volbot.lourts.Agents.Agent;
 import com.volbot.lourts.Agents.Combatant;
 import com.volbot.lourts.Agents.Location;
 import com.volbot.lourts.GUI.*;
+import com.volbot.lourts.GUI.abstracts.GameMenu;
+import com.volbot.lourts.GUI.abstracts.GameWindow;
 import com.volbot.lourts.Main;
 import com.volbot.lourts.Map.Tile;
 
