@@ -9,6 +9,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintStream;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Scanner;
 
@@ -39,6 +40,13 @@ public class SaveManager {
                         loc.getFigurehead().position.set(Float.parseFloat(values[7]), Float.parseFloat(values[8]), 0);
                         loc.getFigurehead().theme = values[9];
                         loc.getFigurehead().texID = Integer.parseInt(values[10]);
+                        loc.heroes = new ArrayList<>();
+                        loc.getFigurehead().location = Main.findLoc(values[11]);
+                        if(loc.getFigurehead().location==null) {
+                            Main.entities.add(loc.getFigurehead());
+                        } else {
+                            loc.getFigurehead().location.heroes.add(loc.getFigurehead());
+                        }
                         Main.locations.add(loc);
                     }
                     saveScanner.close();
@@ -101,7 +109,8 @@ public class SaveManager {
                         a.getFigurehead().position.x + "\t\t" +
                         a.getFigurehead().position.y + "\t\t" +
                         a.getFigurehead().theme + "\t\t" +
-                        a.getFigurehead().texID + "\t\t");
+                        a.getFigurehead().texID + "\t\t" +
+                        (a.getFigurehead().location!=null?a.getFigurehead().location.getName():"null") + "\t\t");
                 print.print("\n");
             }
             print.close();
