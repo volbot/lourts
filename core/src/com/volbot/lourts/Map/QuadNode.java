@@ -9,7 +9,7 @@ import com.volbot.lourts.Main;
 
 public class QuadNode {
 
-    protected Perlin rand = new Perlin();
+    protected Perlin rand = new Perlin(null);
 
     QuadNode bl;
     QuadNode tl;

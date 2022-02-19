@@ -22,7 +22,7 @@ public class GameMap {
         chunks.insert(2, 2, new Tile("sand"));
 
         int len = 20 * (int) Math.pow(2, chunks.depth);
-        Perlin p = new Perlin();
+        Perlin p = new Perlin(null);
         Vector3 seed;
         float temp;
         for (int x = 0; x < len; x += 40) {
