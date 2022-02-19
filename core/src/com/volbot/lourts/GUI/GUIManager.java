@@ -38,7 +38,7 @@ public class GUIManager {
                     Main.gui.drawCombatMenu(menu.entity);
                 }
             }
-        } else if (currmenu instanceof NotificationWindow | currmenu instanceof MainMenu) {
+        } else if (currmenu instanceof NotificationWindow || currmenu instanceof MainMenu || currmenu instanceof PauseMenu) {
             GameWindow menu = (GameWindow) currmenu;
             for (int i = 0; i < menu.buttons.length; i++) {
                 if (menu.buttons[i].isChecked()) {
@@ -83,6 +83,11 @@ public class GUIManager {
     public void drawNotificationWindow(String type) {
         Main.setPaused(true);
         currmenu = new NotificationWindow(type);
+    }
+
+    public void drawPauseMenu() {
+        Main.setPaused(true);
+        currmenu = new PauseMenu();
     }
 
     public void drawCombatMenu(Agent a) {

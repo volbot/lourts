@@ -44,7 +44,8 @@ public class Display {
             batch.end();
             return;
         }
-        Main.map.chunks.drawNode(batch, cam);
+        if (Main.map != null)
+            Main.map.chunks.drawNode(batch, cam);
         if (Main.GAMEMODE == 0) {
             Texture tex;
             for (Agent a : Main.entities) {
@@ -84,9 +85,8 @@ public class Display {
         GameMenu tempMenu = Main.gui.currmenu;
         Agent hovered = Main.inputs.entityHovered(Main.inputs.getTouchPos());
         if (tempMenu != null) {
-            if (tempMenu instanceof NotificationWindow) {
-                NotificationWindow menu = (NotificationWindow) tempMenu;
-                menu.drawMenu(batch, cam);
+            if (tempMenu instanceof NotificationWindow || tempMenu instanceof PauseMenu) {
+                tempMenu.drawMenu(batch, cam);
             }
             if (tempMenu instanceof InteractMenu) {
                 Main.gui.hud.drawMenu(batch, cam);

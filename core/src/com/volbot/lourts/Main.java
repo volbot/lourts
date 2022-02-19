@@ -77,6 +77,7 @@ public class Main extends ApplicationAdapter {
     }
 
     public static void initDemo() {
+        worldmap = new GameMap("deez");
         Individual leftusgroblin = new Individual("Leftus Groblin");
         player = leftusgroblin;
         entities.add(leftusgroblin);
@@ -101,10 +102,19 @@ public class Main extends ApplicationAdapter {
         if (GAMEMODE == -1) {
             if (!(gui.currmenu instanceof MainMenu)) {
                 gui.currmenu = new MainMenu();
+                map = null;
+                worldmap = null;
+                entities = new ArrayList<>();
+                locations = new ArrayList<>();
+                player = null;
+                GAMETIME = 0;
             }
             display.loop();
             gui.loop();
             return;
+        }
+        if (GAMETIME % 1500 == 2) {
+            saveMan.saveGame();
         }
         if (GAMEMODE == 0) {
             GAMETIME++;
@@ -114,9 +124,6 @@ public class Main extends ApplicationAdapter {
         }
         if (GAMEMODE == 1 && map == worldmap) {
             map = new BattleMap();
-        }
-        if (GAMETIME % 500 == 0) {
-            saveMan.saveGame();
         }
         massThink();
         ScreenUtils.clear(1, 0, 0, 1);

@@ -9,10 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.volbot.lourts.Agents.Agent;
 import com.volbot.lourts.Agents.Combatant;
 import com.volbot.lourts.Agents.Location;
-import com.volbot.lourts.GUI.GameMenu;
-import com.volbot.lourts.GUI.GameWindow;
-import com.volbot.lourts.GUI.HUD;
-import com.volbot.lourts.GUI.MainMenu;
+import com.volbot.lourts.GUI.*;
 import com.volbot.lourts.Main;
 import com.volbot.lourts.Map.Tile;
 
@@ -171,6 +168,17 @@ public class InputManager implements InputProcessor {
 
     @Override
     public boolean keyDown(int keycode) {
+        if (Main.GAMEMODE == 0) {
+            if (keycode == Input.Keys.ESCAPE) {
+                if (Main.PAUSED) {
+                    if(Main.gui.currmenu instanceof PauseMenu) {
+                        Main.gui.clearMenu();
+                    }
+                } else {
+                    Main.gui.drawPauseMenu();
+                }
+            }
+        }
         if (Main.GAMEMODE == 1) { // battle mode
             if (keycode == Input.Keys.TAB) {
                 Main.gui.drawNotificationWindow("retreat");
