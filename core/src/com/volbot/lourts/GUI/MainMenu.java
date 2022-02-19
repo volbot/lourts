@@ -43,9 +43,7 @@ public class MainMenu extends GameWindow {
             case 0:
                 switch (buttonDex) {
                     case 0: //new game
-                        Main.initDemo();
-                        Main.GAMEMODE = 0;
-                        Main.gui.currmenu = null;
+                        switchMenu(2);
                         break;
                     case 1: //load game
                         switchMenu(1);
@@ -66,6 +64,18 @@ public class MainMenu extends GameWindow {
                 if (saveFolders != null) Main.saveMan.loadSave(saveFolders[buttonDex]);
                 Main.GAMEMODE = 0;
                 Main.gui.currmenu = null;
+                break;
+            case 2:
+                switch (buttonDex) {
+                    case 0: //new game
+                        Main.initDemo();
+                        Main.GAMEMODE = 0;
+                        Main.gui.currmenu = null;
+                        break;
+                    case 1: //quit
+                        switchMenu(0);
+                        return;
+                }
                 break;
         }
     }
@@ -89,6 +99,11 @@ public class MainMenu extends GameWindow {
                     }
                     buttons[buttons.length - 1] = new TextButton("Back", buttonStyle);
                 }
+                break;
+            case 2:
+                buttons = new Button[2];
+                buttons[0] = new TextButton("Demo Save", buttonStyle);
+                buttons[1] = new TextButton("Back", buttonStyle);
                 break;
         }
     }
