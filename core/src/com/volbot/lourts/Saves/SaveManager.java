@@ -3,6 +3,7 @@ package com.volbot.lourts.Saves;
 import com.volbot.lourts.Agents.*;
 import com.volbot.lourts.Data.Reputation;
 import com.volbot.lourts.Main;
+import com.volbot.lourts.Map.GameMap;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -31,6 +32,7 @@ public class SaveManager {
                     Main.player.texID = Integer.parseInt(values[4]);
                     Main.entities.add(Main.player);
                     Main.cam.position.set(Float.parseFloat(values[5]), Float.parseFloat(values[6]), 0);
+                    Main.worldmap = new GameMap(values[7]);
                     while (saveScanner.hasNextLine()) {
                         values = saveScanner.nextLine().split("\\s\\s+");
                         Location loc = new Location(values[0], values[6], (int) Double.parseDouble(values[1]), (int) Double.parseDouble(values[2]), Integer.parseInt(values[5]));
@@ -87,7 +89,7 @@ public class SaveManager {
                 if (a.equals(Main.player)) {
                     print.print(a.getName() + "\t\t" + a.position.x + "\t\t" + a.position.y + "\t\t");
                     print.print(a.theme + "\t\t" + a.texID + "\t\t");
-                    print.print(Main.cam.position.x + "\t\t" + Main.cam.position.y + "\t\t");
+                    print.print(Main.cam.position.x + "\t\t" + Main.cam.position.y + "\t\t" + Main.map.SEED + "\t\t");
                     print.print("\n");
                 }
             }

@@ -8,7 +8,7 @@ public class Perlin {
 
     float seed;
     public Perlin(String seed) {
-        this.seed = seed != null
+        this.seed = !seed.equals("deez")
                 ? seed.hashCode() % 100000
                 : 53754.5453123f;
     }

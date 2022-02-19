@@ -9,7 +9,8 @@ import com.volbot.lourts.Main;
 
 public class QuadNode {
 
-    protected Perlin rand = new Perlin(null);
+    protected Perlin rand;
+    public String seed;
 
     QuadNode bl;
     QuadNode tl;
@@ -21,21 +22,23 @@ public class QuadNode {
     public int ykey;
     public int height;
 
-    public QuadNode(int depth, int x, int y, Tile tile) {
+    public QuadNode(int depth, int x, int y, Tile tile, String seed) {
+        this.seed = seed;
+        this.rand = new Perlin(seed);
         this.depth = depth;
         this.xkey = x;
         this.ykey = y;
 
         if (depth > 0) {
             int len = (int) Math.pow(2, depth);
-            bl = new QuadNode(depth - 1, xkey, ykey, tile);
-            br = new QuadNode(depth - 1, xkey + (len / 2), ykey, tile);
-            tl = new QuadNode(depth - 1, xkey, ykey + (len / 2), tile);
-            tr = new QuadNode(depth - 1, xkey + (len / 2), ykey + (len / 2), tile);
+            bl = new QuadNode(depth - 1, xkey, ykey, tile, seed);
+            br = new QuadNode(depth - 1, xkey + (len / 2), ykey, tile, seed);
+            tl = new QuadNode(depth - 1, xkey, ykey + (len / 2), tile, seed);
+            tr = new QuadNode(depth - 1, xkey + (len / 2), ykey + (len / 2), tile, seed);
         } else {
             if (tile.walkable) {
-                Vector3 seed = new Vector3(xkey, ykey, 0);
-                float temp = rand.noise(seed.cpy().scl(5));
+                Vector3 seedVec = new Vector3(xkey, ykey, 0);
+                float temp = rand.noise(seedVec.cpy().scl(5));
                 this.height = (int) temp;
                 if (height > 90) {
                     this.tile = new Tile("block");

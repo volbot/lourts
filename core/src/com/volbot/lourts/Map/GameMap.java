@@ -7,9 +7,11 @@ import java.util.ArrayList;
 public class GameMap {
 
     public QuadNode chunks;
+    public String SEED;
 
-    public GameMap() {
-        chunks = new QuadNode(9, 0, 0, new Tile("grass"));
+    public GameMap(String seed) {
+        SEED=seed;
+        chunks = new QuadNode(9, 0, 0, new Tile("grass"), seed);
 
         chunks.insert(6, 6, new Tile("block"));
         chunks.insert(2, 6, new Tile("block"));
@@ -22,13 +24,13 @@ public class GameMap {
         chunks.insert(2, 2, new Tile("sand"));
 
         int len = 20 * (int) Math.pow(2, chunks.depth);
-        Perlin p = new Perlin(null);
-        Vector3 seed;
+        Perlin p = new Perlin(SEED);
+        Vector3 seedVec;
         float temp;
         for (int x = 0; x < len; x += 40) {
             for (int y = 0; y < len; y += 40) {
-                seed = new Vector3(x, y, 0);
-                temp = p.noise(seed.cpy().scl(30));
+                seedVec = new Vector3(x, y, 0);
+                temp = p.noise(seedVec.cpy().scl(30));
                 if (temp < -80) {
                     dropWater(x, y, 15);
                 }
