@@ -33,13 +33,6 @@ public class GUIManager {
                     Main.gui.drawCombatMenu(menu.entity);
                 }
             }
-        } else if (currmenu instanceof NotificationWindow || currmenu instanceof MainMenu || currmenu instanceof PauseMenu) {
-            GameWindow menu = (GameWindow) currmenu;
-            for (int i = 0; i < menu.buttons.length; i++) {
-                if (menu.buttons[i].isChecked()) {
-                    menu.activateButton(i);
-                }
-            }
         } else if (currmenu instanceof TalkWindow) {
             TalkWindow menu = (TalkWindow) currmenu;
             if (menu.conversation == null || menu.conversation.options == null) {
@@ -51,6 +44,13 @@ public class GUIManager {
                 if (menu.buttons[i].isChecked()) {
                     if (i >= menu.conversation.options.length) continue;
                     menu.buttons[i].setChecked(false);
+                    menu.activateButton(i);
+                }
+            }
+        } else if (currmenu instanceof PauseMenu || currmenu instanceof GameWindow) {
+            GameWindow menu = (GameWindow) currmenu;
+            for (int i = 0; i < menu.buttons.length; i++) {
+                if (menu.buttons[i].isChecked()) {
                     menu.activateButton(i);
                 }
             }

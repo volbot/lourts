@@ -3,8 +3,11 @@ package com.volbot.lourts.GUI.abstracts;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 
 public abstract class GameWindow extends GameMenu {
+
+    protected TextButton.TextButtonStyle buttonStyle;
 
     public Texture windowbg = null;
 

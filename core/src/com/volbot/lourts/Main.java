@@ -8,6 +8,7 @@ import com.volbot.lourts.Agents.*;
 import com.volbot.lourts.GUI.GUIManager;
 import com.volbot.lourts.Data.Battle;
 import com.volbot.lourts.GUI.MainMenu;
+import com.volbot.lourts.GUI.NewGameMenu;
 import com.volbot.lourts.Input.InputManager;
 import com.volbot.lourts.Map.BattleMap;
 import com.volbot.lourts.Map.GameMap;
@@ -100,7 +101,7 @@ public class Main extends ApplicationAdapter {
     @Override
     public void render() {
         if (GAMEMODE == -1) {
-            if (!(gui.currmenu instanceof MainMenu)) {
+            if (!(gui.currmenu instanceof MainMenu || gui.currmenu instanceof NewGameMenu)) {
                 gui.currmenu = new MainMenu();
                 map = null;
                 worldmap = null;

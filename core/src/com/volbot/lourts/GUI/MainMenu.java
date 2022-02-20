@@ -16,7 +16,7 @@ import java.io.File;
 
 public class MainMenu extends GameWindow {
 
-    TextButton.TextButtonStyle buttonStyle;
+
     private int menuType;
 
     public MainMenu() {
@@ -33,7 +33,7 @@ public class MainMenu extends GameWindow {
         float temp = (cam.viewportWidth - buttons[0].getWidth()) / 2;
         for (Button b : buttons) b.setX(temp);
         temp = cam.viewportHeight / 1.3f;
-        for (Button b : buttons) b.setY(temp -= (cam.viewportHeight / 1.5f) / buttons.length);
+        for (Button b : buttons) b.setY(temp -= (cam.viewportHeight / 1.5f) / (buttons.length));
         super.drawMenu(batch, cam);
     }
 
@@ -67,12 +67,15 @@ public class MainMenu extends GameWindow {
                 break;
             case 2:
                 switch (buttonDex) {
-                    case 0: //new game
+                    case 0:
+                        Main.gui.currmenu=new NewGameMenu();
+                        break;
+                    case 1: //new game
                         Main.initDemo();
                         Main.GAMEMODE = 0;
                         Main.gui.currmenu = null;
                         break;
-                    case 1: //quit
+                    case 2: //quit
                         switchMenu(0);
                         return;
                 }
@@ -101,9 +104,10 @@ public class MainMenu extends GameWindow {
                 }
                 break;
             case 2:
-                buttons = new Button[2];
-                buttons[0] = new TextButton("Demo Save", buttonStyle);
-                buttons[1] = new TextButton("Back", buttonStyle);
+                buttons = new Button[3];
+                buttons[0] = new TextButton("New Game", buttonStyle);
+                buttons[1] = new TextButton("Demo Save", buttonStyle);
+                buttons[2] = new TextButton("Back", buttonStyle);
                 break;
         }
     }
