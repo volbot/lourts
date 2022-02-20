@@ -6,10 +6,12 @@ import java.util.ArrayList;
 
 public class GameMap {
 
+    public String name;
     public QuadNode chunks;
     public String SEED;
 
-    public GameMap(String seed) {
+    public GameMap(String name, String seed) {
+        this.name = name;
         SEED=seed;
         chunks = new QuadNode(9, 0, 0, new Tile("grass"), seed);
 

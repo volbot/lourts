@@ -33,7 +33,7 @@ public class SaveManager {
                     Main.player.texID = Integer.parseInt(values[4]);
                     Main.entities.add(Main.player);
                     Main.cam.position.set(Float.parseFloat(values[5]), Float.parseFloat(values[6]), 0);
-                    Main.worldmap = new GameMap(values[7]);
+                    Main.worldmap = new GameMap(saveFolder.getName(),values[7]);
                     while (saveScanner.hasNextLine()) {
                         values = saveScanner.nextLine().split("\\s\\s+");
                         Location loc = new Location(values[0], values[6], (int) Double.parseDouble(values[1]), (int) Double.parseDouble(values[2]), Integer.parseInt(values[5]));
@@ -77,7 +77,7 @@ public class SaveManager {
             }
         }
         if (saveFolder == null) {
-            saveFolder = new File("saves/" + playerName + "/");
+            saveFolder = new File("saves/" + Main.map.name + "/");
             try {
                 if (saveFolder.mkdir()) {
                     System.out.println("FILE CREATED");

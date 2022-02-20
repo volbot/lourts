@@ -56,7 +56,7 @@ public class Main extends ApplicationAdapter {
         gui = new GUIManager();
         inputs = new InputManager(cam);
         Gdx.input.setInputProcessor(inputs);
-        worldmap = new GameMap("deez");
+        worldmap = new GameMap("default","deez");
     }
 
     public static Location findLoc(String name) {
@@ -78,7 +78,7 @@ public class Main extends ApplicationAdapter {
     }
 
     public static void initDemo() {
-        worldmap = new GameMap("deez");
+        worldmap = new GameMap("demo","deez");
         Individual leftusgroblin = new Individual("Leftus Groblin");
         player = leftusgroblin;
         entities.add(leftusgroblin);

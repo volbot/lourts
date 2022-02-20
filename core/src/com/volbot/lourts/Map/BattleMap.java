@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public class BattleMap extends GameMap{
     public BattleMap() {
-        super("picklechin");
+        super("battle","picklechin");
         this.chunks = new QuadNode(6, 0, 0, new Tile("grass"),"picklechin");
     }
 }
