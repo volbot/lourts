@@ -15,13 +15,9 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.volbot.lourts.Agents.Individual;
-import com.volbot.lourts.Agents.Location;
-import com.volbot.lourts.GUI.abstracts.GameMenu;
 import com.volbot.lourts.GUI.abstracts.GameWindow;
 import com.volbot.lourts.Main;
 import com.volbot.lourts.Map.GameMap;
-
-import java.lang.management.PlatformLoggingMXBean;
 
 public class NewGameMenu extends GameWindow {
 
