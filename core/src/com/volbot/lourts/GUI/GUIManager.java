@@ -1,5 +1,6 @@
 package com.volbot.lourts.GUI;
 
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.volbot.lourts.Agents.Agent;
 import com.volbot.lourts.GUI.abstracts.GameMenu;
 import com.volbot.lourts.GUI.abstracts.GameWindow;

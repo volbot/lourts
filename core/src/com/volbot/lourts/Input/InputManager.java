@@ -6,6 +6,8 @@ import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
+import com.badlogic.gdx.scenes.scene2d.ui.TextField;
+import com.badlogic.gdx.scenes.scene2d.ui.Widget;
 import com.volbot.lourts.Agents.Agent;
 import com.volbot.lourts.Agents.Combatant;
 import com.volbot.lourts.Agents.Location;
@@ -234,6 +236,25 @@ public class InputManager implements InputProcessor {
                             }
                         }
                     }
+                    if(tempMenu instanceof NewGameMenu) {
+                        for(TextField field : ((NewGameMenu) tempMenu).fields){
+                            Vector3 bpos = new Vector3(
+                                    field.getX() - cam.position.x,
+                                    field.getY() - cam.position.y, 0);
+                            Vector3 bsize = new Vector3(
+                                    field.getWidth(),
+                                    field.getHeight(), 0);
+                            bpos.scl(1 / cam.zoom);
+                            bsize.scl(1 / cam.zoom);
+                            if (touchLoc.x > bpos.x && touchLoc.x < bpos.x + bsize.x) {
+                                if (touchLoc.y > bpos.y && touchLoc.y < bpos.y + bsize.y) {
+                                    field.getStage().setKeyboardFocus(field);
+                                    break;
+                                }
+                            }
+                            field.getStage().setKeyboardFocus(null);
+                        }
+                    }
                 }
                 if (!returnval
                 ) {
@@ -249,14 +270,16 @@ public class InputManager implements InputProcessor {
                                 Main.player.setDestination(touchLoc);
                             }
                         }
+                    } else if (Main.GAMEMODE == -1) {
+                        Gdx.input.setInputProcessor(Main.inputs);
                     }
                 }
                 return returnval;
             case 1:
                 camHold = touchLoc;
-                return false;
+                return true;
         }
-        return false;
+        return true;
     }
 
     @Override
@@ -267,7 +290,7 @@ public class InputManager implements InputProcessor {
 
     @Override
     public boolean touchDragged(int screenX, int screenY, int pointer) {
-        if (camLockedToPlayer) return false;
+        if (camLockedToPlayer || Main.GAMEMODE==-1) return false;
         Vector3 clickPos = new Vector3(screenX, screenY, 0);
         Vector3 touchLoc = positionClick(clickPos);
         if (camHold != null && cam.zoom > 0.2) {
@@ -276,7 +299,7 @@ public class InputManager implements InputProcessor {
             cam.update();
             return true;
         }
-        return false;
+        return true;
     }
 
     @Override
@@ -286,6 +309,7 @@ public class InputManager implements InputProcessor {
 
     @Override
     public boolean scrolled(float amountX, float amountY) {
+        if(Main.GAMEMODE==-1)return false;
         Vector3 camSize = new Vector3(cam.viewportWidth, cam.viewportHeight, 0);
         camSize.scl(0.5f);
         Vector3 camPos = cam.position.cpy();
