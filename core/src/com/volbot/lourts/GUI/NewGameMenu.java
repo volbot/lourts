@@ -8,15 +8,20 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.volbot.lourts.Agents.Individual;
 import com.volbot.lourts.Agents.Location;
 import com.volbot.lourts.GUI.abstracts.GameMenu;
 import com.volbot.lourts.GUI.abstracts.GameWindow;
 import com.volbot.lourts.Main;
+import com.volbot.lourts.Map.GameMap;
+
+import java.lang.management.PlatformLoggingMXBean;
 
 public class NewGameMenu extends GameWindow {
 
@@ -102,8 +107,11 @@ public class NewGameMenu extends GameWindow {
         }
 
         fields[0].setName("NameBox");
+        fields[0].setMessageText("Name");
         fields[1].setName("SeedBox");
+        fields[1].setMessageText("Seed");
         fields[2].setName("WorldBox");
+        fields[2].setMessageText("World Name");
 
 
     }
@@ -112,7 +120,15 @@ public class NewGameMenu extends GameWindow {
     public void activateButton(int buttonDex) {
         switch (buttonDex) {
             case 0:
-
+                Main.player = new Individual(fields[0].getText());
+                Main.player.position = new Vector3(300,300,0);
+                Main.player.texID = this.texID;
+                Main.worldmap=new GameMap(fields[2].getText(),fields[1].getText());
+                Gdx.input.setInputProcessor(Main.inputs);
+                Main.gui.currmenu = null;
+                Main.entities.add(Main.player);
+                Main.GAMEMODE = 0;
+                break;
             case 1:
                 Main.gui.currmenu = new MainMenu();
                 break;
