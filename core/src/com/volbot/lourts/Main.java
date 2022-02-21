@@ -56,7 +56,6 @@ public class Main extends ApplicationAdapter {
         gui = new GUIManager();
         inputs = new InputManager(cam);
         Gdx.input.setInputProcessor(inputs);
-        worldmap = new GameMap("default","deez");
     }
 
     public static Location findLoc(String name) {

@@ -1,6 +1,9 @@
 package com.volbot.lourts.Map;
 
 import com.badlogic.gdx.math.Vector3;
+import com.volbot.lourts.Agents.Location;
+import com.volbot.lourts.Main;
+import com.volbot.lourts.Render.TexUnit;
 
 import java.util.ArrayList;
 
@@ -38,15 +41,31 @@ public class GameMap {
                 }
             }
         }
+
+        for (int x = 0; x < len; x += 40) {
+            for (int y = 0; y < len; y += 40) {
+                temp = Main.random.nextInt(1000);
+                if (temp <= 2 && chunks.getTile(x/20,y/20).walkable) {
+                    temp = Main.random.nextInt(Main.texLoader.texUnits.values().size());
+                    int i = 0;
+                    String texUnit = null;
+                    for(TexUnit u : Main.texLoader.texUnits.values()){
+                        if(i==temp){
+                            texUnit = u.name;
+                            break;
+                        } else {
+                            i++;
+                        }
+                    }
+                    if(texUnit==null) texUnit="base";
+                    Main.locations.add(new Location("Testland", x, y, texUnit, 200));
+                }
+            }
+        }
     }
 
     public int size() {
         return 20 * (int) Math.pow(2, chunks.depth);
-    }
-
-    public void dropWater(int x, int y) {
-        if (chunks.get(x / 20, y / 20) != null)
-            dropWater(x, y, 0);
     }
 
     public void dropWater(int xIn, int yIn, int wiggle) {

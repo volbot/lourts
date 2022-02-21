@@ -4,7 +4,10 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.utils.Sort;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.Scanner;
 
 public class TexLoader {
     public HashMap<String, Texture> tiles = new HashMap<>();
@@ -66,6 +69,20 @@ public class TexLoader {
             sort.sort(combatantsFiles);
             for (File file : combatantsFiles)
                 texUnits.get(unitName).combatants.add(new Texture(file.getPath()));
+        }
+        File namesFile = new File(unitFolder.getPath()+"/names");
+        if(namesFile.exists()){
+            try {
+                Scanner scan = new Scanner(namesFile);
+                String[] values = scan.nextLine().split("\\s\\s+");
+                Collections.addAll(texUnits.get(unitName).names1, values);
+                values = scan.nextLine().split("\\s\\s+");
+                Collections.addAll(texUnits.get(unitName).names2, values);
+                values = scan.nextLine().split("\\s\\s+");
+                Collections.addAll(texUnits.get(unitName).names3, values);
+            } catch (FileNotFoundException e){
+                System.out.println(e.getMessage());
+            }
         }
         return this;
     }

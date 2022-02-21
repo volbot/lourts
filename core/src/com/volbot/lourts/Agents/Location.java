@@ -7,6 +7,7 @@ import com.volbot.lourts.Data.Personality;
 import com.volbot.lourts.Data.TalkOption;
 import com.volbot.lourts.Data.TalkResponse;
 import com.volbot.lourts.Main;
+import com.volbot.lourts.Render.TexUnit;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -40,6 +41,22 @@ public class Location extends Agent {
         position.y=ypos;
         figurehead=new Hero(figureheadname,this);
         figurehead.texID=1;
+        figurehead.getParty().add(new Demographic(this,population/8));
+        personality=figurehead.getPersonality();
+        this.population.add(new Demographic(this,population));
+    }
+
+    public Location(String name, int xpos, int ypos, String theme, int population){
+        super(name);
+        this.faction=null;
+        wealth=0;
+        position.x=xpos;
+        position.y=ypos;
+        this.theme=theme;
+        TexUnit u = Main.texLoader.texUnits.get(theme);
+        figurehead=new Hero(u.getName(),this);
+        figurehead.texID=Main.random.nextInt(u.heroes.size());
+        this.texID=Main.random.nextInt(u.towns.size());
         figurehead.getParty().add(new Demographic(this,population/8));
         personality=figurehead.getPersonality();
         this.population.add(new Demographic(this,population));

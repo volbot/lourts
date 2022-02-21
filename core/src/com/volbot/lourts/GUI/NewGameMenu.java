@@ -117,13 +117,25 @@ public class NewGameMenu extends GameWindow {
         switch (buttonDex) {
             case 0:
                 Main.player = new Individual(fields[0].getText());
-                Main.player.position = new Vector3(300,300,0);
                 Main.player.texID = this.texID;
                 Main.worldmap=new GameMap(fields[2].getText(),fields[1].getText());
+
+                double mapSize = Math.pow(2, Main.worldmap.chunks.depth);
+                Main.player.position = new Vector3(
+                        Main.random.nextInt((int)mapSize),
+                        Main.random.nextInt((int)mapSize),0);
+                while(!Main.worldmap.chunks.getTile(
+                        (int)Main.player.position.x,(int)Main.player.position.y).walkable)
+                    Main.player.position = new Vector3(
+                            Main.random.nextInt((int)mapSize),
+                            Main.random.nextInt((int)mapSize),0);
+
                 Gdx.input.setInputProcessor(Main.inputs);
                 Main.gui.currmenu = null;
+
                 Main.entities.add(Main.player);
                 Main.GAMEMODE = 0;
+
                 break;
             case 1:
                 Main.gui.currmenu = new MainMenu();
