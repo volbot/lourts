@@ -1,11 +1,9 @@
 package com.volbot.lourts.Render;
 
-import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.utils.Sort;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.HashMap;
 
 public class TexLoader {
@@ -15,7 +13,7 @@ public class TexLoader {
 
     public TexLoader() {
         texUnits = new HashMap<>();
-        loadTextures();
+        loadTiles();
     }
 
     public void dispose() {
@@ -25,52 +23,50 @@ public class TexLoader {
         }
         for (TexUnit unit : texUnits.values()) {
             for (Texture tex : unit.towns) {
-                unit.towns.remove(tex);
                 tex.dispose();
             }
             for (Texture tex : unit.heroes) {
-                unit.heroes.remove(tex);
                 tex.dispose();
             }
             for (Texture tex : unit.combatants) {
-                unit.combatants.remove(tex);
                 tex.dispose();
             }
         }
+        texUnits = new HashMap<>();
     }
 
-    public void loadTextures() {
+    public void loadTiles() {
         File[] tilesFiles = new File("tiles/").listFiles();
         if (tilesFiles != null && tilesFiles.length > 0) {
             for (File file : tilesFiles) {
                 tiles.put(file.getName().substring(0, file.getName().indexOf(".")), new Texture("tiles/" + file.getName()));
             }
         }
-        File[] units = new File("texUnits/").listFiles();
+    }
+
+    public TexLoader loadUnit(String unitName) {
         Sort sort = new Sort();
-        if (units != null && units.length > 0)
-            for (File unitFolder : units) {
-                String unitName = unitFolder.getName();
-                if (!texUnits.containsKey(unitName))
-                    texUnits.put(unitName, new TexUnit());
-                File[] townsFiles = new File(unitFolder.getPath() + "/towns/").listFiles();
-                if (townsFiles != null && townsFiles.length > 0) {
-                    sort.sort(townsFiles);
-                    for (File file : townsFiles)
-                        texUnits.get(unitName).towns.add(new Texture(file.getPath()));
-                }
-                File[] heroesFiles = new File(unitFolder.getPath() + "/heroes/").listFiles();
-                if (heroesFiles != null && heroesFiles.length > 0) {
-                    sort.sort(heroesFiles);
-                    for (File file : heroesFiles)
-                        texUnits.get(unitName).heroes.add(new Texture(file.getPath()));
-                }
-                File[] combatantsFiles = new File(unitFolder.getPath() + "/combatants/").listFiles();
-                if (combatantsFiles != null && combatantsFiles.length > 0) {
-                    sort.sort(combatantsFiles);
-                    for (File file : combatantsFiles)
-                        texUnits.get(unitName).combatants.add(new Texture(file.getPath()));
-                }
-            }
+        File unitFolder = new File("texUnits/" + unitName);
+        if (!texUnits.containsKey(unitName))
+            texUnits.put(unitName, new TexUnit(unitName));
+        File[] townsFiles = new File(unitFolder.getPath() + "/towns/").listFiles();
+        if (townsFiles != null && townsFiles.length > 0) {
+            sort.sort(townsFiles);
+            for (File file : townsFiles)
+                texUnits.get(unitName).towns.add(new Texture(file.getPath()));
+        }
+        File[] heroesFiles = new File(unitFolder.getPath() + "/heroes/").listFiles();
+        if (heroesFiles != null && heroesFiles.length > 0) {
+            sort.sort(heroesFiles);
+            for (File file : heroesFiles)
+                texUnits.get(unitName).heroes.add(new Texture(file.getPath()));
+        }
+        File[] combatantsFiles = new File(unitFolder.getPath() + "/combatants/").listFiles();
+        if (combatantsFiles != null && combatantsFiles.length > 0) {
+            sort.sort(combatantsFiles);
+            for (File file : combatantsFiles)
+                texUnits.get(unitName).combatants.add(new Texture(file.getPath()));
+        }
+        return this;
     }
 }
