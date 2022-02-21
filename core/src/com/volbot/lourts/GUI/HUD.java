@@ -1,5 +1,6 @@
 package com.volbot.lourts.GUI;
 
+
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -9,6 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.volbot.lourts.GUI.abstracts.GameWindow;
 
 public class HUD extends GameWindow {
+
 
     public HUD() {
         buttons=new Button[1];
@@ -20,12 +22,13 @@ public class HUD extends GameWindow {
     @Override
     public void drawMenu(SpriteBatch batch, OrthographicCamera cam) {
         super.drawMenu(batch, cam);
-        buttons[0].setWidth(0.07f*cam.viewportWidth);
-        buttons[0].setHeight(0.07f*cam.viewportHeight);
+        buttons[0].setWidth(0.08f*cam.viewportWidth);
+        buttons[0].setHeight(0.06f*cam.viewportHeight);
     }
 
     @Override
     public void activateButton(int buttonDex) {
+            }
+        }
 
-    }
-}
+
