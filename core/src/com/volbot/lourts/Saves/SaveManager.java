@@ -4,6 +4,8 @@ import com.volbot.lourts.Agents.*;
 import com.volbot.lourts.Data.Reputation;
 import com.volbot.lourts.Main;
 import com.volbot.lourts.Map.GameMap;
+import com.volbot.lourts.Render.TexLoader;
+import com.volbot.lourts.Render.TexUnit;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -11,6 +13,7 @@ import java.io.IOException;
 import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Scanner;
 
 public class SaveManager {
@@ -34,6 +37,11 @@ public class SaveManager {
                     Main.entities.add(Main.player);
                     Main.cam.position.set(Float.parseFloat(values[5]), Float.parseFloat(values[6]), 0);
                     Main.worldmap = new GameMap(saveFolder.getName(),values[7]);
+                    values = saveScanner.nextLine().split("\\s\\s+");
+                    Main.texLoader = new TexLoader();
+                    for(String s : values) {
+                        Main.texLoader.loadUnit(s);
+                    }
                     while (saveScanner.hasNextLine()) {
                         values = saveScanner.nextLine().split("\\s\\s+");
                         Location loc = new Location(values[0], values[6], (int) Double.parseDouble(values[1]), (int) Double.parseDouble(values[2]), Integer.parseInt(values[5]));
@@ -99,6 +107,12 @@ public class SaveManager {
                     print.print(a.theme + "\t\t" + a.texID + "\t\t");
                     print.print(Main.cam.position.x + "\t\t" + Main.cam.position.y + "\t\t" + Main.map.SEED + "\t\t");
                     print.print("\n");
+                    Collection<TexUnit> vals = Main.texLoader.texUnits.values();
+                    for(TexUnit u : vals) {
+                        print.print(u.name+"\t\t");
+                    }
+                    print.print("\n");
+
                 }
             }
             for (Location a : Main.locations) {
@@ -122,7 +136,6 @@ public class SaveManager {
                     writeHero(a, saveFolder);
                 }
             }
-            print.close();
         } catch (IOException e) {
             System.out.println(e.getMessage());
             return;

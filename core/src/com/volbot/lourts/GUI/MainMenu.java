@@ -16,7 +16,6 @@ import java.io.File;
 
 public class MainMenu extends GameWindow {
 
-
     private int menuType;
 
     public MainMenu() {

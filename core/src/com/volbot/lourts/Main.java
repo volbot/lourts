@@ -52,11 +52,10 @@ public class Main extends ApplicationAdapter {
         GAMETIME = 0;
         GAMEMODE = -1;
         battle = null;
-        texLoader = new TexLoader();
+        texLoader = new TexLoader().loadUnit("base");
         gui = new GUIManager();
         inputs = new InputManager(cam);
         Gdx.input.setInputProcessor(inputs);
-        worldmap = new GameMap("default","deez");
     }
 
     public static Location findLoc(String name) {
