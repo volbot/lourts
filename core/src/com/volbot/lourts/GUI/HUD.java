@@ -22,13 +22,15 @@ public class HUD extends GameWindow {
     @Override
     public void drawMenu(SpriteBatch batch, OrthographicCamera cam) {
         super.drawMenu(batch, cam);
-        buttons[0].setWidth(0.08f*cam.viewportWidth);
-        buttons[0].setHeight(0.06f*cam.viewportHeight);
+        buttons[0].setWidth(0.085f*cam.viewportWidth);
+        buttons[0].setHeight(0.09f*cam.viewportHeight);
+        buttons[0].setPosition(0.915f*cam.viewportWidth,-0.03f*cam.viewportHeight);
     }
 
     @Override
     public void activateButton(int buttonDex) {
             }
+
         }
 
 
