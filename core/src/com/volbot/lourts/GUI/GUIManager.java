@@ -95,4 +95,9 @@ public class GUIManager {
         Main.setPaused(false);
         currmenu = null;
     }
+
+    public void drawPartyMenu() {
+        Main.setPaused(true);
+        currmenu = new PartyWindow();
+    }
 }

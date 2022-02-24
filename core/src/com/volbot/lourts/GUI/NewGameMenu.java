@@ -108,8 +108,6 @@ public class NewGameMenu extends GameWindow {
         fields[1].setMessageText("Seed");
         fields[2].setName("WorldBox");
         fields[2].setMessageText("World Name");
-
-
     }
 
     @Override

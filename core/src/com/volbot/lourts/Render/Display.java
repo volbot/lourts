@@ -81,7 +81,7 @@ public class Display {
         GameMenu tempMenu = Main.gui.currmenu;
         Agent hovered = Main.inputs.entityHovered(Main.inputs.getTouchPos());
         if (tempMenu != null) {
-            if (tempMenu instanceof NotificationWindow || tempMenu instanceof PauseMenu) {
+            if (tempMenu instanceof NotificationWindow || tempMenu instanceof PauseMenu || tempMenu instanceof PartyWindow) {
                 tempMenu.drawMenu(batch, cam);
             }
             if (tempMenu instanceof InteractMenu) {

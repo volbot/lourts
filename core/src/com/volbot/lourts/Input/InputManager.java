@@ -175,7 +175,7 @@ public class InputManager implements InputProcessor {
         if (Main.GAMEMODE == 0) {
             if (keycode == Input.Keys.ESCAPE) {
                 if (Main.PAUSED) {
-                    if(Main.gui.currmenu instanceof PauseMenu) {
+                    if (Main.gui.currmenu instanceof PauseMenu) {
                         Main.gui.clearMenu();
                     }
                 } else {
@@ -236,8 +236,8 @@ public class InputManager implements InputProcessor {
                             }
                         }
                     }
-                    if(tempMenu instanceof NewGameMenu) {
-                        for(TextField field : ((NewGameMenu) tempMenu).fields){
+                    if (tempMenu instanceof NewGameMenu) {
+                        for (TextField field : ((NewGameMenu) tempMenu).fields) {
                             Vector3 bpos = new Vector3(
                                     field.getX() - cam.position.x,
                                     field.getY() - cam.position.y, 0);
@@ -290,7 +290,7 @@ public class InputManager implements InputProcessor {
 
     @Override
     public boolean touchDragged(int screenX, int screenY, int pointer) {
-        if (camLockedToPlayer || Main.GAMEMODE==-1) return false;
+        if (camLockedToPlayer || Main.GAMEMODE == -1) return false;
         Vector3 clickPos = new Vector3(screenX, screenY, 0);
         Vector3 touchLoc = positionClick(clickPos);
         if (camHold != null && cam.zoom > 0.2) {
@@ -309,24 +309,25 @@ public class InputManager implements InputProcessor {
 
     @Override
     public boolean scrolled(float amountX, float amountY) {
-        if(Main.GAMEMODE==-1)return false;
+        if (Main.GAMEMODE == -1) return false;
         Vector3 camSize = new Vector3(cam.viewportWidth, cam.viewportHeight, 0);
         camSize.scl(0.5f);
+        float AMT = 0.05f;
         Vector3 camPos = cam.position.cpy();
         camPos.sub(camSize);
         if (amountY < 0) {
-            cam.zoom += 0.02f;
+            cam.zoom += AMT;
             if (cam.zoom > 2.3f) {
                 cam.zoom = 2.3f;
             } else {
-                cam.position.mulAdd(camPos, 0.02f / cam.zoom);
+                cam.position.mulAdd(camPos, AMT / cam.zoom);
             }
         } else {
-            cam.zoom -= 0.02f;
+            cam.zoom -= AMT;
             if (cam.zoom < 0.05) {
                 cam.zoom = 0.05f;
             } else {
-                cam.position.mulAdd(camPos, -0.02f / cam.zoom);
+                cam.position.mulAdd(camPos, -AMT / cam.zoom);
             }
         }
         return true;
