@@ -45,13 +45,17 @@ public class PartyWindow extends GameWindow {
 
         buttons[0].setX(0);
         buttons[1].setX(buttons[0].getWidth());
-        buttons[2].setX(buttons[0].getWidth()*2);
+        buttons[2].setX(buttons[0].getWidth() * 2);
 
+
+        genCombatants();
+    }
+
+    protected void genCombatants() {
         Population party = Main.player.getParty();
-
         combatants = new TextButton[party.pop.size()];
-        for(int i = 0; i < combatants.length; i++){
-            combatants[i]=new TextButton(party.pop.get(i).getName(),buttonStyle);
+        for (int i = 0; i < combatants.length; i++) {
+            combatants[i] = new TextButton(party.pop.get(i).getName(), buttonStyle);
             combatants[i].setWidth(windowbg.getWidth() * 0.2f);
             combatants[i].setHeight(buttons[0].getHeight() * 0.3f);
         }
@@ -63,16 +67,23 @@ public class PartyWindow extends GameWindow {
             case 0:
                 break;
             case 1:
+                if (selected >= 0) {
+                    Demographic temp = Main.player.getParty().pop.get(selected);
+                    temp.setPopulation(1);
+                    Main.player.getParty().sub(temp);
+                    selected = -1;
+                    genCombatants();
+                }
                 break;
             case 2:
                 Main.gui.clearMenu();
                 break;
         }
-        if(buttonDex>2 && buttonDex<combatants.length+3){
-            if(selected>=0) {
+        if (buttonDex > 2 && buttonDex < combatants.length + 3) {
+            if (selected >= 0) {
                 combatants[selected].setChecked(false);
             }
-            selected = buttonDex-3;
+            selected = buttonDex - 3;
             combatants[selected].setChecked(true);
         } else {
             super.activateButton(buttonDex);
@@ -84,10 +95,10 @@ public class PartyWindow extends GameWindow {
         super.drawMenu(batch, cam);
 
         buttons[0].setX((cam.viewportWidth - windowbg.getWidth()) / 2);
-        buttons[1].setX(((cam.viewportWidth - windowbg.getWidth()) / 2)+buttons[0].getWidth());
-        buttons[2].setX(((cam.viewportWidth - windowbg.getWidth()) / 2)+(2*buttons[0].getWidth()));
+        buttons[1].setX(((cam.viewportWidth - windowbg.getWidth()) / 2) + buttons[0].getWidth());
+        buttons[2].setX(((cam.viewportWidth - windowbg.getWidth()) / 2) + (2 * buttons[0].getWidth()));
 
-        if(combatants.length>0) {
+        if (combatants.length > 0) {
             float listLen = 0f;
             combatants[0].setY(windowbg.getHeight() * 0.93f);
             combatants[0].setX(buttons[2].getX());
@@ -103,23 +114,27 @@ public class PartyWindow extends GameWindow {
                 }
             }
         }
-        drawAgentInfo(batch,cam);
+        drawAgentInfo(selected, batch, cam);
+
     }
 
-    protected void drawAgentInfo(SpriteBatch batch, Camera cam) {
-        if(!(selected>=0)){
+    protected void drawAgentInfo(int sel, SpriteBatch batch, Camera cam) {
+        if (sel < 0) {
             return;
         }
-        int xleft = (int)(cam.viewportWidth-windowbg.getWidth())/2;
-        int ybot = (int)(cam.viewportHeight-windowbg.getHeight())/2;
+        int xleft = (int) (cam.viewportWidth - windowbg.getWidth()) / 2;
+        int ybot = (int) (cam.viewportHeight - windowbg.getHeight()) / 2;
         int scalefac = 10;
-        Demographic d = Main.player.getParty().pop.get(selected);
-        int texID = d.texID;
-        batch.draw(Main.texLoader.texUnits.get(d.theme).heroes.get(texID), xleft+windowbg.getWidth()*0.05f, ybot+windowbg.getHeight()*0.5f, 20*scalefac, 20*scalefac);
-        font.getData().setScale(2f);
-        int partySize = d.population;
-        GlyphLayout layout = new GlyphLayout(font, d.getName() + "\n" +
-                "#:"+partySize);
-        font.draw(batch, layout, (xleft+windowbg.getWidth()*0.43f), (ybot+windowbg.getHeight()*.93f));
+        int popSize = Main.player.getParty().pop.size();
+        if(sel<popSize) {
+            Demographic d = Main.player.getParty().pop.get(sel);
+            int texID = d.texID;
+            batch.draw(Main.texLoader.texUnits.get(d.theme).heroes.get(texID), xleft + windowbg.getWidth() * 0.05f, ybot + windowbg.getHeight() * 0.5f, 20 * scalefac, 20 * scalefac);
+            font.getData().setScale(2f);
+            int partySize = d.population;
+            GlyphLayout layout = new GlyphLayout(font, d.getName() + "\n" +
+                    "#:" + partySize);
+            font.draw(batch, layout, (xleft + windowbg.getWidth() * 0.43f), (ybot + windowbg.getHeight() * .93f));
+        }
     }
 }

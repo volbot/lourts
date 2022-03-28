@@ -19,10 +19,16 @@ public class Population {
 
     public void sub (ArrayList<Demographic> list) {
         for(Demographic d : list){
-            for(Demographic d2 : pop) {
+            for(int i = 0; i < pop.size(); i++) {
+                Demographic d2 = pop.get(i);
                 if(d.getOrigin().equals(d2.getOrigin())){
                     if(d.getLevel()==d2.getLevel()){
-                        d2.setPopulation(d2.getPopulation()-d.getPopulation());
+                        int dem = pop.get(i).population - d.getPopulation();
+                        if(dem<=0){
+                            pop.remove(d2);
+                        } else {
+                            d2.setPopulation(dem);
+                        }
                     }
                 }
             }
