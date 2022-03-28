@@ -25,8 +25,8 @@ public class Demographic {
         return origin;
     }
 
-    private Location origin;
-    private int level;
+    public Location origin;
+    public int level;
     public int population;
 
     public int getLevel() {

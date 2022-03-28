@@ -68,11 +68,16 @@ public class PartyWindow extends GameWindow {
                 break;
             case 1:
                 if (selected >= 0) {
-                    Demographic temp = Main.player.getParty().pop.get(selected);
-                    temp.setPopulation(1);
+                    Demographic copy = Main.player.getParty().pop.get(selected);
+                    int subSize = 1;
+                    Demographic temp = new Demographic(copy.getOrigin(), 1, copy.level);
+                    if (copy.population <= subSize) {
+                        selected = -1;
+                    }
                     Main.player.getParty().sub(temp);
-                    selected = -1;
-                    genCombatants();
+                    if (selected == -1) {
+                        genCombatants();
+                    }
                 }
                 break;
             case 2:
@@ -126,7 +131,7 @@ public class PartyWindow extends GameWindow {
         int ybot = (int) (cam.viewportHeight - windowbg.getHeight()) / 2;
         int scalefac = 10;
         int popSize = Main.player.getParty().pop.size();
-        if(sel<popSize) {
+        if (sel < popSize) {
             Demographic d = Main.player.getParty().pop.get(sel);
             int texID = d.texID;
             batch.draw(Main.texLoader.texUnits.get(d.theme).heroes.get(texID), xleft + windowbg.getWidth() * 0.05f, ybot + windowbg.getHeight() * 0.5f, 20 * scalefac, 20 * scalefac);
