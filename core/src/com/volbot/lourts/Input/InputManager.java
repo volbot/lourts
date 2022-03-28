@@ -236,6 +236,24 @@ public class InputManager implements InputProcessor {
                             }
                         }
                     }
+                    if (tempMenu instanceof PartyWindow){
+                        for (Button b : ((PartyWindow) tempMenu).combatants) {
+                            Vector3 bpos = new Vector3(
+                                    b.getX() - cam.position.x,
+                                    b.getY() - cam.position.y, 0);
+                            Vector3 bsize = new Vector3(
+                                    b.getWidth(),
+                                    b.getHeight(), 0);
+                            bpos.scl(1 / cam.zoom);
+                            if (touchLoc.x > bpos.x && touchLoc.x < bpos.x + bsize.x) {
+                                if (touchLoc.y > bpos.y && touchLoc.y < bpos.y + bsize.y) {
+                                    b.setChecked(true);
+                                    for (Button b2 : tempMenu.buttons) if (!b.equals(b2)) b2.setChecked(false);
+                                    returnval = true;
+                                }
+                            }
+                        }
+                    }
                     if (tempMenu instanceof NewGameMenu) {
                         for (TextField field : ((NewGameMenu) tempMenu).fields) {
                             Vector3 bpos = new Vector3(

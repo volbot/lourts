@@ -1,6 +1,5 @@
 package com.volbot.lourts.GUI;
 
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.volbot.lourts.Agents.Agent;
 import com.volbot.lourts.GUI.abstracts.GameMenu;
 import com.volbot.lourts.GUI.abstracts.GameWindow;
@@ -53,6 +52,13 @@ public class GUIManager {
             for (int i = 0; i < menu.buttons.length; i++) {
                 if (menu.buttons[i].isChecked()) {
                     menu.activateButton(i);
+                }
+            }
+            if(menu instanceof PartyWindow){
+                for(int i = 0; i < ((PartyWindow) menu).combatants.length; i++){
+                    if (((PartyWindow) menu).combatants[i].isChecked()) {
+                        menu.activateButton(i+3);
+                    }
                 }
             }
         }

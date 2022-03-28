@@ -1,13 +1,17 @@
 package com.volbot.lourts.GUI;
 
+import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.volbot.lourts.Agents.Combatant;
 import com.volbot.lourts.Agents.Demographic;
+import com.volbot.lourts.Agents.Location;
 import com.volbot.lourts.Agents.Population;
 import com.volbot.lourts.GUI.abstracts.GameWindow;
 import com.volbot.lourts.Main;
@@ -17,7 +21,9 @@ import java.util.Arrays;
 
 public class PartyWindow extends GameWindow {
 
-    private TextButton[] combatants;
+    public TextButton[] combatants;
+    private int selected = -1;
+    protected BitmapFont font = new BitmapFont();
 
     public PartyWindow() {
         windowbg = new Texture("GUI/windows/menublank.png");
@@ -62,7 +68,15 @@ public class PartyWindow extends GameWindow {
                 Main.gui.clearMenu();
                 break;
         }
-        super.activateButton(buttonDex);
+        if(buttonDex>2 && buttonDex<combatants.length+3){
+            if(selected>=0) {
+                combatants[selected].setChecked(false);
+            }
+            selected = buttonDex-3;
+            combatants[selected].setChecked(true);
+        } else {
+            super.activateButton(buttonDex);
+        }
     }
 
     @Override
@@ -84,11 +98,28 @@ public class PartyWindow extends GameWindow {
                 combatants[i].setY(combatants[i - 1].getHeight() - combatants[0].getHeight());
                 listLen += combatants[0].getHeight();
                 combatants[i].draw(batch, 1.0f);
-                System.out.println(combatants[i].getLabel());
                 if (listLen > windowbg.getHeight() * 0.6f) {
                     break;
                 }
             }
         }
+        drawAgentInfo(batch,cam);
+    }
+
+    protected void drawAgentInfo(SpriteBatch batch, Camera cam) {
+        if(!(selected>=0)){
+            return;
+        }
+        int xleft = (int)(cam.viewportWidth-windowbg.getWidth())/2;
+        int ybot = (int)(cam.viewportHeight-windowbg.getHeight())/2;
+        int scalefac = 10;
+        Demographic d = Main.player.getParty().pop.get(selected);
+        int texID = d.texID;
+        batch.draw(Main.texLoader.texUnits.get(d.theme).heroes.get(texID), xleft+windowbg.getWidth()*0.05f, ybot+windowbg.getHeight()*0.5f, 20*scalefac, 20*scalefac);
+        font.getData().setScale(2f);
+        int partySize = d.population;
+        GlyphLayout layout = new GlyphLayout(font, d.getName() + "\n" +
+                "#:"+partySize);
+        font.draw(batch, layout, (xleft+windowbg.getWidth()*0.43f), (ybot+windowbg.getHeight()*.93f));
     }
 }
