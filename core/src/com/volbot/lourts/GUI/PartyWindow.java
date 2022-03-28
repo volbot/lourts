@@ -111,7 +111,7 @@ public class PartyWindow extends GameWindow {
             combatants[0].draw(batch, 1.0f);
             for (int i = 1; i < combatants.length; i++) {
                 combatants[i].setX(buttons[2].getX());
-                combatants[i].setY(combatants[i - 1].getHeight() - combatants[0].getHeight());
+                combatants[i].setY(combatants[i - 1].getY() - combatants[0].getHeight());
                 listLen += combatants[0].getHeight();
                 combatants[i].draw(batch, 1.0f);
                 if (listLen > windowbg.getHeight() * 0.6f) {
